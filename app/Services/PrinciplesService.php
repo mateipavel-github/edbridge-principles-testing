@@ -8,6 +8,44 @@ use Illuminate\Support\Facades\Http;
 
 class PrinciplesService
 {
+    const ANSWER_DISAGREE_STRONGLY = 'disagree_strongly';
+    const ANSWER_DISAGREE = 'disagree';
+    const ANSWER_DISAGREE_SLIGHTLY = 'disagree_slightly';
+    const ANSWER_NEITHER_AGREE_NOR_DISAGREE = 'neither_agree_nor_disagree';
+    const ANSWER_AGREE_SLIGHTLY = 'agree_slightly';
+    const ANSWER_AGREE = 'agree';
+    const ANSWER_AGREE_STRONGLY = 'agree_strongly';
+    const QUESTION_POSSIBLE_ANSWERS = [
+        self::ANSWER_DISAGREE_STRONGLY => [
+            'label' => 'Disagree strongly',
+            'value' => 1,
+        ],
+        self::ANSWER_DISAGREE => [
+            'label' => 'Disagree',
+            'value' => 2,
+        ],
+        self::ANSWER_DISAGREE_SLIGHTLY  => [
+            'label' => 'Disagree slightly',
+            'value' => 3,
+        ],
+        self::ANSWER_NEITHER_AGREE_NOR_DISAGREE => [
+            'label' => 'Neither agree nor disagree',
+            'value' => 4,
+        ],
+        self::ANSWER_AGREE_SLIGHTLY => [
+            'label' => 'Agree slightly',
+            'value' => 5,
+        ],
+        self::ANSWER_AGREE => [
+            'label' => 'Agree',
+            'value' => 6,
+        ],
+        self::ANSWER_AGREE_STRONGLY => [
+            'label' => 'Agree strongly',
+            'value' => 7,
+        ]
+    ];
+
     /**
      * The base URL for the API.
      *
@@ -117,7 +155,7 @@ class PrinciplesService
      * Create a tenant in the Principles API.
      *
      * @param string $name
-     * @return void
+     * @return string
      * @throws PrinciplesApiException
      */
     public function createTenant(string $name): string
@@ -142,6 +180,175 @@ class PrinciplesService
         }
         catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to create the tenant in the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Get the next set of questions from the Principles API.
+     *
+     * @param string $accountUid
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function getNextQuestions(string $accountUid): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/assessment/questions"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the next set of questions from the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Store the answers to the personality test.
+     *
+     * @param string $accountUid
+     * @param array $answers
+     * @throws PrinciplesApiException
+     */
+    public function storeAnswers(string $accountUid, array $answers): void
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->post(
+                    "{$this->baseUrl}/api/v1/assessment/answers",
+                    [
+                        'answers' => $answers,
+                    ]
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to store the answers in the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Get the results of the personality test.
+     *
+     * @param string $accountUid
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function getResults(string $accountUid): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v2/assessment_results/{$accountUid}"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the results from the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Get the RIASEC results of the personality test.
+     *
+     * @param string $accountUid
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function getRiasecOccupations(string $accountUid): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/accounts/{$accountUid}/riasec_occupations"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Get the RIASEC scores of the personality test.
+     *
+     * @param string $accountUid
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function getRiasecScores(string $accountUid): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/accounts/{$accountUid}/riasec"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the RIASEC scores from the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    /**
+     * Get the PDF results.
+     *
+     * @param string $accountUid
+     * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+     * @throws PrinciplesApiException
+     */
+    public function getPdfResults(string $accountUid): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/assessment_results/{$accountUid}/pdf"
+                );
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the PDF generation from the Principles API: {$exception->getMessage()}");
         }
     }
 }

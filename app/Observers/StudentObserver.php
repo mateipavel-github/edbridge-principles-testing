@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Exceptions\PrinciplesApiException;
 use App\Models\Student;
 use App\Services\PrinciplesService;
+use Illuminate\Support\Str;
 
 class StudentObserver
 {
@@ -22,5 +22,11 @@ class StudentObserver
 
         $student->principles_account_uid = $response['account_id'];
         $student->principles_person_uid = $response['person_id'];
+
+        do {
+            $uid = Str::random(32);
+        } while (Student::where('uid', $uid)->exists());
+
+        $student->uid = $uid;
     }
 }

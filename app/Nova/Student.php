@@ -57,6 +57,11 @@ class Student extends Resource
                 ->sortable()
                 ->rules('required'),
 
+            Text::make('UID', 'uid')
+                ->sortable()
+                ->hideWhenCreating()
+                ->hideWhenUpdating(),
+
             Text::make('Principles Account UID', 'principles_account_uid')
                 ->sortable()
                 ->hideWhenCreating()
