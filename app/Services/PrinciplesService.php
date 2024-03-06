@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\PrinciplesApiException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class PrinciplesService
 {
@@ -205,7 +206,20 @@ class PrinciplesService
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
-            return $response->json();
+            $decodedResponse = $response->json();
+            $translationsArray = json_decode(Storage::get('principles-questions.json'));
+
+            return [
+                'assessmentProgress' => $decodedResponse['assessmentProgress'],
+                'questions' => collect($decodedResponse['questions'])->map(function ($question, $index) use ($translationsArray) {
+                    $translatedQuestion = collect($translationsArray)->where('number', $question['number'])->first();
+
+                    return [
+                        'text' => "{$translatedQuestion->roText} ({$question['text']})",
+                        'number' => $question['number'],
+                    ];
+                })
+            ];
         }
         catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the next set of questions from the Principles API: {$exception->getMessage()}");

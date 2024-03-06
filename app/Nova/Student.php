@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Exceptions\HelperNotSupported;
 use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -36,8 +37,9 @@ class Student extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param \Laravel\Nova\Http\Requests\NovaRequest $request
      * @return array
+     * @throws HelperNotSupported
      */
     public function fields(NovaRequest $request)
     {
@@ -47,7 +49,8 @@ class Student extends Resource
 
             Email::make('Email', 'email')
                 ->sortable()
-                ->rules('required', 'email'),
+                ->rules('required', 'email')
+                ->copyable(),
 
             Text::make('First Name', 'first_name')
                 ->sortable()
@@ -60,17 +63,25 @@ class Student extends Resource
             Text::make('UID', 'uid')
                 ->sortable()
                 ->hideWhenCreating()
-                ->hideWhenUpdating(),
+                ->hideWhenUpdating()
+                ->copyable(),
 
             Text::make('Principles Account UID', 'principles_account_uid')
                 ->sortable()
                 ->hideWhenCreating()
-                ->hideWhenUpdating(),
+                ->hideWhenUpdating()
+                ->copyable(),
 
             Text::make('Principles Person UID', 'principles_person_uid')
                 ->sortable()
+                ->hideFromIndex()
                 ->hideWhenCreating()
-                ->hideWhenUpdating(),
+                ->hideWhenUpdating()
+                ->copyable(),
+
+            Text::make('Student URL', function () {
+                return route('personality-test.index', ['studentUid' => $this->uid]);
+            })->copyable(),
         ];
     }
 

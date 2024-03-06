@@ -3,8 +3,17 @@
 @section('title', 'Personality Test - Questions')
 
 @section('content')
-    <div class="max-w-md">
-        <form method="POST" action="{{ route('personality-test.store', ['studentUid' => $student->uid]) }}">
+    <div class="max-w-md" x-data="{
+        requesting: false,
+
+        submitForm() {
+            if (!this.requesting) {
+                this.requesting = true;
+                this.$refs.form.submit();
+            }
+        }
+    }">
+        <form method="POST" action="{{ route('personality-test.store', ['studentUid' => $student->uid]) }}" x-ref="form" @submit.prevent="submitForm()">
             @csrf
 
 
@@ -51,8 +60,10 @@
                 @endforeach
 
                 <div class="max-w-xs mt-8 flex items-center justify-center">
-                    <button type="submit" class="bg-primary uppercase px-12 py-4 rounded-full font-bold text-gray-primary">
+                    <button :disabled="requesting" type="submit" class="bg-primary uppercase px-12 py-4 rounded-full font-bold text-gray-primary flex items-center justify-center">
                         CONTINUE
+
+                        <img x-show="requesting" src="{{ Vite::asset('resources/img/spinner.svg') }}" alt="spinner" class="ml-2" />
                     </button>
                 </div>
             </div>
