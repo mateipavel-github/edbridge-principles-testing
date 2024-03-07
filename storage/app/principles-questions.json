@@ -1,0 +1,1262 @@
+[
+    {
+        "text": "I am sensitive to others' emotions",
+        "roText": "Sunt sensibil la emo\u021biile celorlal\u021bi.",
+        "number": 5
+    },
+    {
+        "text": "When engaged in projects, I want to get everything \"just right\"",
+        "roText": "C\u00e2nd sunt implicat \u00een proiecte, vreau s\u0103 fac totul \u201cexact cum trebuie\u201d.",
+        "number": 6
+    },
+    {
+        "text": "I stay calm under pressure",
+        "roText": "Pot r\u0103m\u00e2ne calm sub presiune.",
+        "number": 11
+    },
+    {
+        "text": "I get stressed out easily",
+        "roText": "Ma stresez u\u0219or.",
+        "number": 12
+    },
+    {
+        "text": "I always follow through on my commitments",
+        "roText": "\u00centotdeauna \u00eemi respect angajamentele.",
+        "number": 22
+    },
+    {
+        "text": "I am able to recover quickly from most setbacks",
+        "roText": "Sunt capabil s\u0103 m\u0103 redresez rapid dup\u0103 majoritatea obstacolelor.",
+        "number": 24
+    },
+    {
+        "text": "When others around me feel sad, it makes me feel sad as well",
+        "roText": "C\u00e2nd cei din jurul meu se simt tri\u0219ti, \u0219i eu simt triste\u021be.",
+        "number": 25
+    },
+    {
+        "text": "The most meaningful way to succeed is to help others succeed",
+        "roText": "Modalitatea de a avea succes cu cea mai mare semnifica\u021bie pentru mine este a-i ajuta pe ceilal\u021bi s\u0103 aib\u0103 succes.",
+        "number": 26
+    },
+    {
+        "text": "I make decisions based on facts not feelings",
+        "roText": "Iau decizii bazate pe fapte, nu pe sentimente.",
+        "number": 42
+    },
+    {
+        "text": "I excel at identifying opportunities",
+        "roText": "Excelez \u00een identificarea oportunit\u0103\u021bilor.",
+        "number": 46
+    },
+    {
+        "text": "Once you become an adult it is extremely difficult to change your basic nature",
+        "roText": "Odat\u0103 ce devii adult, este extrem de dificil s\u0103 te schimbi fundamental ca om.",
+        "number": 48
+    },
+    {
+        "text": "I adapt easily to new situations",
+        "roText": "M\u0103 adaptez u\u0219or la situa\u021biile noi.",
+        "number": 57
+    },
+    {
+        "text": "I seek adventure",
+        "roText": "Caut aventura.",
+        "number": 67
+    },
+    {
+        "text": "When I talk seriously with other people I often find their life stories to be fascinating",
+        "roText": "C\u00e2nd vorbesc serios cu alte persoane, adesea consider c\u0103 pove\u0219tile lor de via\u021b\u0103 sunt fascinante.",
+        "number": 71
+    },
+    {
+        "text": "I am highly organized in my work",
+        "roText": "Sunt foarte organizat(\u0103) \u00een munca mea.",
+        "number": 75
+    },
+    {
+        "text": "I am highly systematic in my work",
+        "roText": "Sunt extrem de sistematic\/\u0103 \u00een munca mea.",
+        "number": 76
+    },
+    {
+        "text": "I would probably make a good actor",
+        "roText": "Probabil c\u0103 a\u0219 fi un bun actor\/ o bun\u0103 actri\u021b\u0103.",
+        "number": 80
+    },
+    {
+        "text": "I'm ready and willing to tell people what they did wrong",
+        "roText": "Sunt preg\u0103tit(\u0103) \u0219i dispus(\u0103) s\u0103 le spun oamenilor ce au f\u0103cut gre\u0219it.",
+        "number": 84
+    },
+    {
+        "text": "Others seek me out for advice on personal problems",
+        "roText": "Al\u021bii m\u0103 caut\u0103 pentru sfaturi \u00een problemele personale.",
+        "number": 85
+    },
+    {
+        "text": "I am easily discouraged",
+        "roText": "M\u0103 descurajez u\u0219or.",
+        "number": 93
+    },
+    {
+        "text": "I tend to avoid interpersonal conflict",
+        "roText": "Tind s\u0103 evit conflictul interpersonal.",
+        "number": 106
+    },
+    {
+        "text": "I occasionally hold back my opinions",
+        "roText": "\u00cen unele situa\u021bii, evit s\u0103 \u00eemi exprim p\u0103rerea.",
+        "number": 112
+    },
+    {
+        "text": "I get angry easily",
+        "roText": "M\u0103 enervez u\u0219or.",
+        "number": 121
+    },
+    {
+        "text": "By learning from my mistakes, I have significantly changed the kind of person I am",
+        "roText": "Prin \u00eenv\u0103\u021barea din gre\u0219elile mele, m-am schimbat fundamental ca persoan\u0103.",
+        "number": 122
+    },
+    {
+        "text": "When something confuses me, I often find it fascinating",
+        "roText": "C\u00e2nd ceva m\u0103 confuzeaz\u0103, adesea m\u0103 simt fascinat de a cel lucru.",
+        "number": 125
+    },
+    {
+        "text": "I'm basically a rebel",
+        "roText": "Sunt \u00een esen\u021b\u0103 un rebel\/ o rebel\u0103.",
+        "number": 130
+    },
+    {
+        "text": "I love a good fight",
+        "roText": "\u00cemi place o lupt\u0103 bun\u0103.",
+        "number": 131
+    },
+    {
+        "text": "I'm often the life of the party",
+        "roText": "Adesea sunt sufletul petrecerii.",
+        "number": 141
+    },
+    {
+        "text": "I am able to keep my cool when others are losing theirs",
+        "roText": "Sunt capabil(\u0103) s\u0103-mi p\u0103strez calmul c\u00e2nd ceilal\u021bi \u00ee\u0219i pierd cump\u0103tul.",
+        "number": 143
+    },
+    {
+        "text": "I get upset easily",
+        "roText": "M\u0103 enervez u\u0219or.",
+        "number": 148
+    },
+    {
+        "text": "A core value for me is creating something new",
+        "roText": "O valoare de baz\u0103 pentru mine, \u00een via\u021b\u0103, este s\u0103 creez ceva nou.",
+        "number": 151
+    },
+    {
+        "text": "I want every detail taken care of",
+        "roText": "Vreau ca fiecare detaliu s\u0103 fie avut \u00een vedere.",
+        "number": 153
+    },
+    {
+        "text": "I sometimes find it difficult to get down to work",
+        "roText": "Uneori \u00eemi este dificil s\u0103 m\u0103 apuc de treab\u0103.",
+        "number": 155
+    },
+    {
+        "text": "I am always looking for experiences that challenge how I think about myself and the world",
+        "roText": "Mereu sunt \u00een c\u0103utare de experien\u021be care pun la \u00eencercare modul \u00een care m\u0103 percep pe mine \u0219i lumea din jurul meu.",
+        "number": 157
+    },
+    {
+        "text": "I'm more a creature of habit than a bold adventurer",
+        "roText": "Sunt mai degrab\u0103 tipul de persoan\u0103 care r\u0103m\u00e2ne la obiceiurile proprii dec\u00e2t un aventurier\/o aventurier\u0103.",
+        "number": 161
+    },
+    {
+        "text": "I like to keep to a strict schedule instead of winging things",
+        "roText": "\u00cemi place s\u0103 respect un program strict \u00een loc s\u0103 las lucrurile s\u0103 decurg\u0103 spontan.",
+        "number": 165
+    },
+    {
+        "text": "It's important to me to avoid wasting time",
+        "roText": "Este important pentru mine s\u0103 evit s\u0103 pierd timpul.",
+        "number": 166
+    },
+    {
+        "text": "I usually go with my gut rather than spending a lot of time analyzing decisions",
+        "roText": "De obicei, merg pe intui\u021bie \u00een loc s\u0103 petrec mult timp analiz\u00e2nd decizii.",
+        "number": 168
+    },
+    {
+        "text": "In different roles and with different people I often act like very different persons",
+        "roText": "\u00cen diferite roluri \u0219i cu diferite persoane, adesea ac\u021bionez ca \u0219i cum a\u0219 fi o persoan\u0103 total diferit\u0103.",
+        "number": 173
+    },
+    {
+        "text": "I strive to be as impartial as I can be in dealing with contentious issues",
+        "roText": "M\u0103 str\u0103duiesc s\u0103 fiu c\u00e2t mai impar\u021bial(\u0103) \u00een tratarea problemelor conflictuale.",
+        "number": 181
+    },
+    {
+        "text": "I love to think of new ways of doing things",
+        "roText": "\u00cemi place s\u0103 g\u00e2ndesc noi modalit\u0103\u021bi de a face lucrurile.",
+        "number": 182
+    },
+    {
+        "text": "I avoid drawing attention to myself",
+        "roText": "Evit s\u0103 atrag aten\u021bia asupra mea.",
+        "number": 183
+    },
+    {
+        "text": "I tend to talk a lot in social situations",
+        "roText": "Tind s\u0103 vorbesc mult \u00een situa\u021biile sociale.",
+        "number": 187
+    },
+    {
+        "text": "Achieving excellence is a driving principle of my life",
+        "roText": "Atingerea excelen\u021bei este un principiu fundamental al vie\u021bii mele.",
+        "number": 193
+    },
+    {
+        "text": "I like being the center of attention",
+        "roText": "\u00cemi place s\u0103 fiu \u00een centrul aten\u021biei.\"",
+        "number": 206
+    },
+    {
+        "text": "I love to break with convention",
+        "roText": "\u00cemi place s\u0103 sfidez regulile.",
+        "number": 207
+    },
+    {
+        "text": "I never hesitate to call out nonsense when necessary",
+        "roText": "Nu ezit niciodat\u0103 s\u0103 demasc absurdit\u0103\u021bile c\u00e2nd este necesar.",
+        "number": 216
+    },
+    {
+        "text": "Helping others is a core value for me",
+        "roText": "Ajutorarea celorlal\u021bi este o valoare fundamental\u0103 pentru mine.",
+        "number": 219
+    },
+    {
+        "text": "I tell people the truth even when it hurts",
+        "roText": "Le spun oamenilor adev\u0103rul chiar \u0219i atunci c\u00e2nd doare.",
+        "number": 223
+    },
+    {
+        "text": "I like turning problems into opportunities",
+        "roText": "\u00cemi place s\u0103 transform problemele \u00een oportunit\u0103\u021bi.",
+        "number": 224
+    },
+    {
+        "text": "I don't always finish what I start",
+        "roText": "Nu \u00eentotdeauna termin ceea ce \u00eencep.",
+        "number": 229
+    },
+    {
+        "text": "People describe me as an extremely dependable person",
+        "roText": "Oamenii m\u0103 descriu ca o persoan\u0103 \u00een care pot avea mare \u00eencredere.",
+        "number": 233
+    },
+    {
+        "text": "Logical reasoning is really overrated; intuition and imagination are more important",
+        "roText": "Ra\u021bionamentul logic este supraevaluat; intui\u021bia \u0219i imagina\u021bia sunt mai importante.",
+        "number": 235
+    },
+    {
+        "text": "I tend to make decisions deliberately rather than spontaneously",
+        "roText": "Tind s\u0103 iau decizii \u00een mod deliberat \u00een loc s\u0103 o fac spontan.",
+        "number": 244
+    },
+    {
+        "text": "I can usually achieve what I want if I work hard for it",
+        "roText": "De obicei, pot ob\u021bine ceea ce \u00eemi doresc dac\u0103 muncesc din greu pentru asta.",
+        "number": 18
+    },
+    {
+        "text": "I love to get critical feedback",
+        "roText": "\u00cemi place s\u0103 primesc feedback critic.",
+        "number": 35
+    },
+    {
+        "text": "I hold people accountable for results",
+        "roText": "Cer oamenilor s\u0103 fie responsabili pentru rezultatele lor.",
+        "number": 41
+    },
+    {
+        "text": "I've been told I'm a good motivator",
+        "roText": "Mi s-a spus c\u0103 sunt un bun motivator.",
+        "number": 43
+    },
+    {
+        "text": "I like to be told what to do",
+        "roText": "\u00cemi place s\u0103 mi se spun\u0103 ce s\u0103 fac.",
+        "number": 49
+    },
+    {
+        "text": "I'm likely to show off if I get the chance",
+        "roText": "Probabil c\u0103 m-a\u0219 l\u0103uda dac\u0103 a\u0219 avea ocazia.",
+        "number": 51
+    },
+    {
+        "text": "People describe me as an inspiring leader",
+        "roText": "Oamenii m\u0103 descriu ca un lider inspira\u021bional.",
+        "number": 53
+    },
+    {
+        "text": "I don't hesitate to assume leadership in groups",
+        "roText": "Nu ezit s\u0103 preiau conducerea \u00een grupuri.",
+        "number": 56
+    },
+    {
+        "text": "I want to find out how good I really can be at my work",
+        "roText": "Vreau s\u0103 aflu c\u00e2t de bun(\u0103) pot fi cu adev\u0103rat \u00een munca mea.",
+        "number": 107
+    },
+    {
+        "text": "I set specific goals for people to achieve",
+        "roText": "Stabilesc obiective specifice pentru ca oamenii s\u0103 le ating\u0103.",
+        "number": 127
+    },
+    {
+        "text": "I assume personal accountability for successes and failures in life",
+        "roText": "Asum responsabilitatea personal\u0103 pentru succesul \u0219i e\u0219ecurile din via\u021b\u0103.",
+        "number": 149
+    },
+    {
+        "text": "I prefer to hide my failures rather than to have them exposed",
+        "roText": "Prefer s\u0103-mi ascund e\u0219ecurile \u00een loc s\u0103 le expun.",
+        "number": 172
+    },
+    {
+        "text": "I like having a boss who tells me what I need to do",
+        "roText": "\u00cemi place s\u0103 am un \u0219ef care \u00eemi spune ce trebuie s\u0103 fac.",
+        "number": 175
+    },
+    {
+        "text": "I am not shy about telling people how good I am at something",
+        "roText": "Nu mi-e ru\u0219ine s\u0103 le spun oamenilor c\u00e2t de bun(\u0103) sunt la ceva.",
+        "number": 180
+    },
+    {
+        "text": "I want my work to provide me with opportunities for increasing my knowledge and skills",
+        "roText": "Vreau ca munca mea s\u0103 \u00eemi ofere oportunit\u0103\u021bi de a-mi dezvolta cuno\u0219tin\u021bele \u0219i abilit\u0103\u021bile.",
+        "number": 197
+    },
+    {
+        "text": "People think of me as a \"take charge\" individual",
+        "roText": "Oamenii m\u0103 consider\u0103 o persoan\u0103 cu ini\u021biativ\u0103.",
+        "number": 215
+    },
+    {
+        "text": "I like hearing other points of view that are different from mine",
+        "roText": "\u00cemi place s\u0103 aud alte puncte de vedere care sunt diferite de ale mele\"",
+        "number": 217
+    },
+    {
+        "text": "I love a disagreement in which I learn and change my mind",
+        "roText": "\u00cemi place o dezbatere \u00een care \u00eenv\u0103\u021b \u0219i \u00eemi schimb p\u0103rerea.",
+        "number": 247
+    },
+    {
+        "text": "Compared to others I have no difficulty controlling my anger",
+        "roText": "Comparativ cu al\u021bii, nu am dificult\u0103\u021bi \u00een controlul furiei.",
+        "number": 1
+    },
+    {
+        "text": "I am easily distracted",
+        "roText": "Sunt distras\/\u0103 u\u0219or.",
+        "number": 2
+    },
+    {
+        "text": "It's important to me that others see me as very successful",
+        "roText": "Pentru mine este important ca al\u021bii s\u0103 m\u0103 vad\u0103 ca fiind foarte de succes.",
+        "number": 3
+    },
+    {
+        "text": "Seeking a deeper meaning in things comes naturally to me",
+        "roText": "C\u0103utarea unui sens mai profund \u00een lucruri \u00eemi vine de la sine.",
+        "number": 4
+    },
+    {
+        "text": "I believe that by working hard a person can achieve virtually anything",
+        "roText": "Eu cred c\u0103 muncind din greu o persoan\u0103 poate realiza aproape orice.",
+        "number": 7
+    },
+    {
+        "text": "I would love to imagine things that never existed and build them",
+        "roText": "Mi-ar pl\u0103cea s\u0103 \u00eemi imaginez lucruri care nu au existat niciodat\u0103 \u0219i s\u0103 le construiesc.",
+        "number": 8
+    },
+    {
+        "text": "I would find it uncomfortable and inappropriate to challenge my boss on how s\/he is doing something",
+        "roText": "Mi-ar fi incomod \u0219i ar fi nepotrivit s\u0103-mi contrazic \u0219eful despre cum face el\/ea ceva.",
+        "number": 9
+    },
+    {
+        "text": "I think most success depends more on natural talent than on learned skill",
+        "roText": "Cred c\u0103 cel mai mare succes depinde mai mult de talentul natural dec\u00e2t de abilit\u0103\u021bile \u00eenv\u0103\u021bate.",
+        "number": 10
+    },
+    {
+        "text": "I have little respect for people who don't face reality objectively",
+        "roText": "Am pu\u021bin respect pentru oamenii care nu \u00eenfrunt\u0103 realitatea \u00een mod obiectiv.",
+        "number": 13
+    },
+    {
+        "text": "Even when I disagree with others, I can recognize that they have sound points",
+        "roText": "Chiar \u0219i atunci c\u00e2nd nu sunt de acord cu al\u021bii, pot recunoa\u0219te c\u0103 au argumente bune.",
+        "number": 14
+    },
+    {
+        "text": "I am not as active and engaged as most people",
+        "roText": "Nu sunt la fel de activ \u0219i implicat ca majoritatea oamenilor",
+        "number": 15
+    },
+    {
+        "text": "When it comes to negative feedback I'm pretty thick-skinned about it",
+        "roText": "C\u00e2nd vine vorba de feedback negativ, sunt destul de infiderent.",
+        "number": 16
+    },
+    {
+        "text": "I laugh a lot",
+        "roText": "R\u00e2d mult.",
+        "number": 17
+    },
+    {
+        "text": "I tend to carry conversations to a higher level",
+        "roText": "Tind s\u0103 duc conversa\u021biile la un nivel superior.",
+        "number": 19
+    },
+    {
+        "text": "I like when others admire me and I feel badly when they think badly of me",
+        "roText": "\u00cemi place c\u00e2nd al\u021bii m\u0103 admir\u0103 \u0219i m\u0103 simt prost c\u00e2nd se g\u00eendesc \u00eentr-un mod negativ la mine.",
+        "number": 20
+    },
+    {
+        "text": "I would rather be a bit rigid than be a chameleon",
+        "roText": "A\u0219 prefera s\u0103 fiu pu\u021bin rigid\/\u0103 dec\u00e2t s\u0103 fiu cameleonic\/\u0103.",
+        "number": 21
+    },
+    {
+        "text": "I'm more comfortable when I can set my own goals",
+        "roText": "M\u0103 simt mai confortabil\/\u0103 c\u00e2nd \u00eemi pot stabili propriile obiective.",
+        "number": 23
+    },
+    {
+        "text": "People should actively search for reasons why their beliefs are wrong",
+        "roText": "Oamenii ar trebui s\u0103 caute \u00een mod activ motivele pentru care convingerile lor sunt gre\u0219ite.",
+        "number": 27
+    },
+    {
+        "text": "People describe me as driven to accomplish great things",
+        "roText": "Oamenii m\u0103 descriu ca fiind motivat\/\u0103 s\u0103 realizez lucruri m\u0103re\u021be.",
+        "number": 28
+    },
+    {
+        "text": "My favorite projects are ones that have clear direction",
+        "roText": "Proiectele mele preferate sunt cele care au o direc\u021bie clar\u0103.",
+        "number": 29
+    },
+    {
+        "text": "I always stick to the facts",
+        "roText": "M\u0103 raportez mereu la dovezi, la fapte.",
+        "number": 31
+    },
+    {
+        "text": "I feel comfortable stretching my personality to the demands of the task at hand",
+        "roText": "M\u0103 simt confortabil s\u0103-mi \u201cprovoc\u201d tr\u0103s\u0103turile de personalitate \u00eentr-o sarcin\u0103 pe care o am de f\u0103cut.",
+        "number": 32
+    },
+    {
+        "text": "I have never used flattery to get ahead",
+        "roText": "Nu am folosit niciodat\u0103 lingu\u015firea pentru a merge \u00eenainte, pentru a progresa.",
+        "number": 253
+    },
+    {
+        "text": "I tend to structure activities into reasonable time frames",
+        "roText": "Am tendin\u021ba de a structura activit\u0103\u021bile \u00een intervale de timp rezonabile.",
+        "number": 33
+    },
+    {
+        "text": "It's better to just say what you really think than to worry much about how you say it",
+        "roText": "Este mai bine s\u0103 spui doar ceea ce g\u00e2nde\u0219ti cu adev\u0103rat dec\u00e2t s\u0103-\u021bi faci griji cu privire la modul \u00een care o spui.",
+        "number": 34
+    },
+    {
+        "text": "Even when I may feel anxious, I don't let it show",
+        "roText": "Chiar \u0219i atunci c\u00e2nd s-ar putea s\u0103 simt anxietate, nu las s\u0103 se vad\u0103.",
+        "number": 36
+    },
+    {
+        "text": "I would rather have a down to earth discussion than one that is abstract and theoretical",
+        "roText": "Prefer s\u0103 am o discu\u021bie despre chestiuni concrete dec\u00e2t despre concepte abstracte \u0219i teoretice.",
+        "number": 37
+    },
+    {
+        "text": "I often get choked up when hearing about others' problems",
+        "roText": "De multe ori m\u0103 simt foarte \u00eencordat\/\u0103 c\u00e2nd aud despre problemele altora.",
+        "number": 38
+    },
+    {
+        "text": "When someone gives me an assignment, I like to decide for myself where and how to do it",
+        "roText": "C\u00e2nd cineva \u00eemi d\u0103 o sarcin\u0103, \u00eemi place s\u0103 decid singur\/\u0103 unde \u0219i cum s\u0103 o fac.",
+        "number": 39
+    },
+    {
+        "text": "I'm known for being very practical",
+        "roText": "Sunt cunoscut\/\u0103 ca fiind foarte practic\/\u0103.",
+        "number": 40
+    },
+    {
+        "text": "I wait for others to lead the way",
+        "roText": "A\u0219tept ca al\u021bii s\u0103 conduc\u0103, s\u0103 fie lideri.",
+        "number": 44
+    },
+    {
+        "text": "When problems arise, I think of them as learning opportunities rather than failures",
+        "roText": "C\u00e2nd apar probleme, le consider mai degrab\u0103 oportunit\u0103\u021bi de \u00eenv\u0103\u021bare dec\u00e2t e\u0219ecuri.",
+        "number": 45
+    },
+    {
+        "text": "I do things methodically",
+        "roText": "Fac lucrurile metodic.",
+        "number": 47
+    },
+    {
+        "text": "I am an anti-establishment person",
+        "roText": "Sunt o persoan\u0103 care mereu face lucrurile altfel dec\u00e2t norma.",
+        "number": 50
+    },
+    {
+        "text": "I hate wasting time",
+        "roText": "Ur\u0103sc s\u0103 pierd timpul.",
+        "number": 52
+    },
+    {
+        "text": "No matter what the outcome of a project, I am satisfied if I feel I gained a new experience",
+        "roText": "Indiferent de rezultatul unui proiect, sunt mul\u021bumit\/\u0103 dac\u0103 simt c\u0103 am c\u00e2\u0219tigat o nou\u0103 experien\u021b\u0103.",
+        "number": 54
+    },
+    {
+        "text": "I talk to a lot of different people at parties",
+        "roText": "Vorbesc cu o mul\u021bime de oameni la petreceri.",
+        "number": 55
+    },
+    {
+        "text": "I get frustrated with people who always try to think things through in a strictly logical way",
+        "roText": "Sunt frustrat\/\u0103 de oameni care \u00eencearc\u0103 \u00eentotdeauna s\u0103 g\u00e2ndeasc\u0103 lucrurile \u00eentr-un mod strict, logic.",
+        "number": 58
+    },
+    {
+        "text": "I'm deeply motivated to make order out of chaos",
+        "roText": "Sunt profund motivat\/\u0103 s\u0103 fac ordine \u00een haos.",
+        "number": 59
+    },
+    {
+        "text": "I actively seek out information about my shortcomings",
+        "roText": "Caut activ informa\u021bii despre punctele mele slabe.",
+        "number": 60
+    },
+    {
+        "text": "It's better to be realistic than idealistic",
+        "roText": "Este mai bine s\u0103 fii realist dec\u00e2t idealist.",
+        "number": 255
+    },
+    {
+        "text": "I keep my emotions under control",
+        "roText": "\u00cemi \u021bin emo\u021biile sub control.",
+        "number": 62
+    },
+    {
+        "text": "I have been obsessed with a certain idea or project for a short time but later lost interest",
+        "roText": "S-a \u00eent\u00e2mplat s\u0103 fiu obsedat cu o idee sau proiect pentru o perioad\u0103 scurt\u0103 de timp iar apoi s\u0103-mi pierd interesul.",
+        "number": 63
+    },
+    {
+        "text": "My perfectionism sometimes annoys other people",
+        "roText": "Perfec\u021bionismul meu \u00eei enerveaz\u0103 uneori pe al\u021bii.",
+        "number": 64
+    },
+    {
+        "text": "When I am personally attacked, I respond thoughtfully and respectfully",
+        "roText": "C\u00e2nd sunt atacat\/\u0103 personal, r\u0103spund cu grij\u0103 \u0219i respect.",
+        "number": 65
+    },
+    {
+        "text": "I like to impress other people and be very successful",
+        "roText": "\u00cemi place s\u0103 impresionez al\u021bi oameni \u0219i s\u0103 am mare succes.",
+        "number": 66
+    },
+    {
+        "text": "People look to me to establish a sense of purpose",
+        "roText": "Oamenii vin la mine pentru a dob\u00e2ndi sens \u0219i claritate \u00een scopurile lor.",
+        "number": 68
+    },
+    {
+        "text": "I am usually the first to take the reins",
+        "roText": "De obicei sunt primul care preia fr\u00e2iele.",
+        "number": 69
+    },
+    {
+        "text": "I am able to cut through diversions and get to the source of problems",
+        "roText": "Sunt capabil s\u0103 trec de conflicte \u0219i s\u0103 ajung la sursa problemelor.",
+        "number": 70
+    },
+    {
+        "text": "I don't worry about things that have already happened",
+        "roText": "Nu \u00eemi fac griji pentru lucrurile care s-au \u00eent\u00e2mplat deja.",
+        "number": 72
+    },
+    {
+        "text": "Achieving my personal best is more important than beating others",
+        "roText": "Ob\u021binerea celui mai bun rezultat personal este mai important\u0103 dec\u00e2t \u00eenvingerea celorlal\u021bi.",
+        "number": 73
+    },
+    {
+        "text": "It frustrates me to have to change direction in the middle of a project",
+        "roText": "M\u0103 frustraz\u0103 s\u0103 trebuiasc\u0103 s\u0103 schimb strategia \u00een mijlocul unui proiect.",
+        "number": 77
+    },
+    {
+        "text": "If I believe in an idea, no obstacle will prevent me from making it happen",
+        "roText": "Dac\u0103 cred \u00eentr-o idee, niciun obstacol nu m\u0103 va \u00eempiedica s\u0103 o pun \u00een practic\u0103.",
+        "number": 78
+    },
+    {
+        "text": "I am usually the person who sets a motivating goal for the team",
+        "roText": "Sunt de obicei persoana care stabile\u0219te un obiectiv motivant pentru echip\u0103.",
+        "number": 79
+    },
+    {
+        "text": "I really admire people who have a clear, logical way of approaching issues",
+        "roText": "Admir \u00een mod deosebit persoanele care abordeaz\u0103 problemele \u00eentr-un mod clar \u0219i logic.",
+        "number": 81
+    },
+    {
+        "text": "I am fascinated by the sights, sounds and smells of exotic destinations",
+        "roText": "Sunt fascinat\/\u0103 de priveli\u0219tile, sunetele \u0219i mirosurile destina\u021biilor exotice.",
+        "number": 82
+    },
+    {
+        "text": "I have great stamina",
+        "roText": "Am o rezisten\u021b\u0103 remarcabil\u0103.",
+        "number": 83
+    },
+    {
+        "text": "It's more important for something to be useful than beautiful",
+        "roText": "Este mai important ca ceva s\u0103 fie util dec\u00e2t frumos.",
+        "number": 256
+    },
+    {
+        "text": "I am a light-hearted and rather whimsical person",
+        "roText": "Sunt o persoan\u0103 cu inim\u0103 u\u0219oar\u0103 \u0219i destul de plin\u0103 de fantezie.",
+        "number": 87
+    },
+    {
+        "text": "If it's true that I'm lousy at something, I'd want to know it",
+        "roText": "Dac\u0103 este adev\u0103rat c\u0103 nu sunt bun\/\u0103 la ceva, a\u0219 vrea s\u0103 \u0219tiu.\"",
+        "number": 88
+    },
+    {
+        "text": "I make plans and stick to them",
+        "roText": "\u00cemi fac planuri \u0219i le respect.",
+        "number": 89
+    },
+    {
+        "text": "Others would describe me as more cautious than daring",
+        "roText": "Al\u021bii m-ar descrie ca fiind mai precaut\/\u0103 dec\u00e2t \u00eendr\u0103zne\u021b\/\u0103.",
+        "number": 90
+    },
+    {
+        "text": "I am not easily annoyed",
+        "roText": "Nu m\u0103 enervez u\u0219or.",
+        "number": 91
+    },
+    {
+        "text": "People who go with their gut instead of reasoning things out usually regret it",
+        "roText": "Oamenii care se ghideaz\u0103 dup\u0103 instinct \u00een loc s\u0103 g\u00e2ndeasc\u0103 logic de obicei regret\u0103 acest lucru.\"",
+        "number": 92
+    },
+    {
+        "text": "Have been told that I neglect other important parts of my life because I work so hard",
+        "roText": "Mi s-a spus c\u0103 neglijez alte aspecte importante ale vie\u021bii mele pentru c\u0103 lucrez at\u00e2t de mult.",
+        "number": 94
+    },
+    {
+        "text": "It is important for me to be able to do what I most enjoy",
+        "roText": "Este important pentru mine s\u0103 pot face ceea ce \u00eemi place cel mai mult.",
+        "number": 95
+    },
+    {
+        "text": "I don't like challenging authority",
+        "roText": "Nu-mi place s\u0103 contest autoritatea.",
+        "number": 96
+    },
+    {
+        "text": "I am good at giving impromptu speeches",
+        "roText": "Sunt bun\/\u0103 la sus\u021binerea discursurilor improvizate.",
+        "number": 97
+    },
+    {
+        "text": "I consider myself more casual than rigorous",
+        "roText": "M\u0103 consider mai degrab\u0103 relaxat\/\u0103 dec\u00e2t riguros\/\u0103.",
+        "number": 98
+    },
+    {
+        "text": "I worry that if others see my weaknesses it will have negative consequences for me",
+        "roText": "M\u0103 \u00eengrijoreaz\u0103 faptul c\u0103, dac\u0103 ceilal\u021bi observ\u0103 sl\u0103biciunile mele, ar putea avea consecin\u021be negative pentru mine.",
+        "number": 99
+    },
+    {
+        "text": "I love excitement",
+        "roText": "\u00cemi place entuziasmul.",
+        "number": 100
+    },
+    {
+        "text": "When people need something done, they come to me",
+        "roText": "C\u00e2nd oamenii au nevoie s\u0103 rezolve ceva, vin la mine.",
+        "number": 101
+    },
+    {
+        "text": "I often take as much joy in other people's success as I do in my own",
+        "roText": "Adesea, m\u0103 bucur la fel de mult de succesul altora precum m\u0103 bucur de al meu.",
+        "number": 102
+    },
+    {
+        "text": "I worry about things",
+        "roText": "M\u0103 ingrijorez legat de lucruri.",
+        "number": 103
+    },
+    {
+        "text": "I enjoy philosophical discussions",
+        "roText": "\u00cemi plac discu\u021biile filozofice.",
+        "number": 104
+    },
+    {
+        "text": "When people disappoint me, I sometimes struggle to let them know",
+        "roText": "C\u00e2nd oamenii m\u0103 dezam\u0103gesc, uneori \u00eemi este dificil s\u0103 le spun.",
+        "number": 105
+    },
+    {
+        "text": "I find tasks requiring careful attention to detail highly attractive",
+        "roText": "G\u0103sesc sarcinile care necesit\u0103 aten\u021bie la detalii foarte atractive.",
+        "number": 108
+    },
+    {
+        "text": "When I confront a big decision, I reflect on similar decisions I've made in the past",
+        "roText": "C\u00e2nd m\u0103 confrunt cu o decizie important\u0103, reflectez asupra deciziilor similare pe care le-am luat \u00een trecut.",
+        "number": 109
+    },
+    {
+        "text": "I'd rather be productive than philosophical",
+        "roText": "Prefer s\u0103 fiu productiv\/\u0103 dec\u00e2t filosofic\/\u0103.",
+        "number": 257
+    },
+    {
+        "text": "Too many people take life too seriously: Better to lighten up",
+        "roText": "Prea mul\u021bi oameni iau via\u021ba prea \u00een serios; mai bine s\u0103 o iei mai u\u0219or.",
+        "number": 111
+    },
+    {
+        "text": "I am more likely to engage directly with my problems than turn away from them",
+        "roText": "E mai probabil s\u0103 m\u0103 confrunt direct cu problemele mele dec\u00e2t s\u0103 le evit.",
+        "number": 113
+    },
+    {
+        "text": "I give people the advice they need to hear, even if they don't want to hear it",
+        "roText": "Ofer oamenilor sfaturile pe care au nevoie s\u0103 le aud\u0103, chiar dac\u0103 nu vor s\u0103 le asculte.",
+        "number": 114
+    },
+    {
+        "text": "I tend to be late for appointments",
+        "roText": "Am tendin\u021ba s\u0103 \u00eent\u00e2rzii la \u00eent\u00e2lniri.",
+        "number": 115
+    },
+    {
+        "text": "I typically choose pleasing others over being honest with them",
+        "roText": "De obicei, aleg s\u0103 \u00eei fac pe ceilal\u021bi ferici\u021bi \u00een loc s\u0103 fiu sincer\/\u0103 cu ei.",
+        "number": 116
+    },
+    {
+        "text": "I am a highly enthusiastic person",
+        "roText": "Sunt o persoan\u0103 extrem de entuziasmat\u0103.",
+        "number": 117
+    },
+    {
+        "text": "I find it difficult to stand up to leaders when I disagree with them",
+        "roText": "\u00cemi este dificil s\u0103 m\u0103 opun liderilor atunci c\u00e2nd sunt \u00een dezacord cu ei.",
+        "number": 118
+    },
+    {
+        "text": "I'm a self-starter",
+        "roText": "Sunt o persoan\u0103 auto-motivat\u0103.",
+        "number": 119
+    },
+    {
+        "text": "I don't like talking about abstract ideas",
+        "roText": "Nu-mi place s\u0103 vorbesc despre idei abstracte.",
+        "number": 120
+    },
+    {
+        "text": "Before important decisions, I test my thinking with people who are more knowledgeable than I am",
+        "roText": "\u00cenainte de deciziile importante, \u00eemi testez g\u00e2ndirea cu persoane care au o cunoa\u0219tere mai mare dec\u00e2t mine.",
+        "number": 123
+    },
+    {
+        "text": "I'm definitely not a perfectionist",
+        "roText": "Cu siguranta nu sunt perfec\u021bionist\/\u0103.",
+        "number": 124
+    },
+    {
+        "text": "When putting together a team, it's helpful if there's at least one funny person in the room",
+        "roText": "C\u00e2nd se formeaz\u0103 o echip\u0103, este util s\u0103 existe cel pu\u021bin o persoan\u0103 amuzant\u0103 \u00een aceasta.",
+        "number": 126
+    },
+    {
+        "text": "I often worry that criticism will hurt people's feelings",
+        "roText": "M\u0103 \u00eengrijoreaz\u0103 adesea c\u0103 critica ar putea r\u0103ni sentimentele oamenilor.",
+        "number": 128
+    },
+    {
+        "text": "I often feel sluggish and unmotivated",
+        "roText": "Adesea m\u0103 simt apatic\/\u0103 \u0219i lipsit\/\u0103 de motiva\u021bie.",
+        "number": 129
+    },
+    {
+        "text": "It matters greatly to me that I am liked and loved",
+        "roText": "Este foarte important pentru mine s\u0103 fiu pl\u0103cut\/\u0103 \u0219i iubit\/\u0103.",
+        "number": 132
+    },
+    {
+        "text": "I find people who don't take risks rather boring",
+        "roText": "G\u0103sesc plictisitoare persoanele care nu \u00ee\u0219i asum\u0103 riscuri.",
+        "number": 133
+    },
+    {
+        "text": "There are aspects of my personality that I am open to changing or developing",
+        "roText": "Exist\u0103 aspecte ale personalit\u0103\u021bii mele la care sunt deschis\/\u0103 s\u0103 lucrez \u0219i s\u0103 le dezvolt sau schimb.",
+        "number": 134
+    },
+    {
+        "text": "I like to entertain others",
+        "roText": "\u00cemi place s\u0103-i distrez pe ceilal\u021bi.",
+        "number": 135
+    },
+    {
+        "text": "I really value my independence and resist being micro-managed",
+        "roText": "Apreciez foarte mult independen\u021ba mea \u0219i rezist la a fi \u00eentrumat\/\u0103 \u00een leg\u0103tur\u0103 cu cele mai mici detalii.",
+        "number": 136
+    },
+    {
+        "text": "I like to Google people first if I am going to meet them for the first time",
+        "roText": "\u00cemi place s\u0103 caut informa\u021bii despre oameni pe Google \u00eenainte s\u0103 \u00eei \u00eent\u00e2lnesc pentru prima dat\u0103.",
+        "number": 137
+    },
+    {
+        "text": "When someone says they have double-checked their work, I like to check it anyway",
+        "roText": "C\u00e2nd cineva spune c\u0103 \u0219i-a verificat munca de dou\u0103 ori, \u00eemi place s\u0103 o verific \u0219i eu oricum.",
+        "number": 138
+    },
+    {
+        "text": "I'm not that interested in talking about philosophical ideas",
+        "roText": "Nu sunt prea interesat\/\u0103 s\u0103 vorbesc despre idei filosofice.",
+        "number": 139
+    },
+    {
+        "text": "I tire out quickly",
+        "roText": "Obosesc rapid.",
+        "number": 140
+    },
+    {
+        "text": "I don't follow a tight schedule",
+        "roText": "Nu urmez un program strict.",
+        "number": 142
+    },
+    {
+        "text": "I don't really care that much about other people's problems",
+        "roText": "Nu \u00eemi pas\u0103 foarte mult de problemele altora.",
+        "number": 144
+    },
+    {
+        "text": "I prefer compromise to having a heated debate",
+        "roText": "Prefer compromisul \u00een locul unui dezbateri aprinse.",
+        "number": 145
+    },
+    {
+        "text": "Sometimes I'm more concerned with proving myself than improving myself",
+        "roText": "Uneori, sunt mai preocupat\/\u0103 s\u0103 dovedesc c\u0103 sunt competent\/\u0103 dec\u00e2t de a m\u0103 dezvolta pe mine.",
+        "number": 146
+    },
+    {
+        "text": "I don't like to stay in the background",
+        "roText": "Nu-mi place s\u0103 stau \u00een umbr\u0103.",
+        "number": 147
+    },
+    {
+        "text": "I occasionally strike up conversations with people who seem to be down on their luck",
+        "roText": "Uneori ini\u021biez conversa\u021bii cu oameni care par s\u0103 aib\u0103 ghinion \u00een via\u021b\u0103.",
+        "number": 150
+    },
+    {
+        "text": "I will do my utmost to help and retain a person who is struggling in their job",
+        "roText": "M\u0103 voi str\u0103dui din greu s\u0103 ajut \u0219i s\u0103 p\u0103strez o persoan\u0103 care are dificult\u0103\u021bi la locul s\u0103u de munc\u0103.",
+        "number": 152
+    },
+    {
+        "text": "I often put work above pleasure",
+        "roText": "Adesea pun munca mai presus de pl\u0103cere.",
+        "number": 154
+    },
+    {
+        "text": "Other people tell me I have a great sense of humor",
+        "roText": "Al\u021bi oameni \u00eemi spun c\u0103 am un sim\u021b al umorului foarte bun.",
+        "number": 156
+    },
+    {
+        "text": "I rarely put people under pressure",
+        "roText": "Rareori pun presiune asupra oamenilor.",
+        "number": 158
+    },
+    {
+        "text": "I like to introduce myself to others",
+        "roText": "\u00cemi place s\u0103 m\u0103 prezint celorlal\u021bi.",
+        "number": 159
+    },
+    {
+        "text": "I avoid crowds",
+        "roText": "Evit mul\u021bimile.",
+        "number": 160
+    },
+    {
+        "text": "I like to fight to get the right answer",
+        "roText": "\u00cemi place s\u0103 lupt pentru a ob\u021bine r\u0103spunsul corect.",
+        "number": 162
+    },
+    {
+        "text": "I enjoy giving more than I get",
+        "roText": "M\u0103 bucur s\u0103 ofer mai mult dec\u00e2t s\u0103 primesc.",
+        "number": 163
+    },
+    {
+        "text": "I find other people and their life stories rather boring",
+        "roText": "G\u0103sesc al\u021bi oameni \u0219i pove\u0219tile vie\u021bilor lor destul de plictisitoare.",
+        "number": 164
+    },
+    {
+        "text": "I'm usually the first person to jump at a new opportunity",
+        "roText": "De obicei, sunt prima persoan\u0103 care profit\u0103 de o nou\u0103 oportunitate.",
+        "number": 167
+    },
+    {
+        "text": "I like exploring topics that I don't know anything about",
+        "roText": "\u00cemi place s\u0103 explorez subiecte despre care nu \u0219tiu nimic.",
+        "number": 169
+    },
+    {
+        "text": "Modesty is not something I really value",
+        "roText": "Modestia nu este ceva ce valorizez \u00een mod deosebit.",
+        "number": 170
+    },
+    {
+        "text": "I am not easily bothered by things",
+        "roText": "Nu devin u\u0219or deranjat\/\u0103 de lucruri.",
+        "number": 171
+    },
+    {
+        "text": "My major accomplishments are largely due to my hard work and ability",
+        "roText": "Realiz\u0103rile mele majore se datoreaz\u0103 \u00een mare parte muncii mele asidue \u0219i abilit\u0103\u021bilor.",
+        "number": 174
+    },
+    {
+        "text": "I always know why I do things",
+        "roText": "Sunt mereu constient\/\u0103 de motivul pentru care fac ceea ce fac.",
+        "number": 249
+    },
+    {
+        "text": "I'd rather make mistakes and learn than not make mistakes",
+        "roText": "Prefer s\u0103 fac gre\u0219eli \u0219i s\u0103 \u00eenv\u0103\u021b dec\u00e2t s\u0103 nu fac gre\u0219eli deloc.",
+        "number": 176
+    },
+    {
+        "text": "It is important to me to keep my appointments",
+        "roText": "Este important pentru mine s\u0103 respect programarile pe care le-am facut.",
+        "number": 177
+    },
+    {
+        "text": "It's not worth spending much time thinking about ideas that aren't practical",
+        "roText": "Nu merit\u0103 s\u0103 petreci mult timp g\u00e2ndindu-te la idei care nu sunt practice.",
+        "number": 258
+    },
+    {
+        "text": "I would rather lead people toward a common goal than to follow someone else's goal",
+        "roText": "Prefer s\u0103 conduc oamenii c\u0103tre un scop comun dec\u00e2t s\u0103 urm\u0103resc scopul altcuiva.",
+        "number": 179
+    },
+    {
+        "text": "Progress is only possible if we break the rules",
+        "roText": "Progresul este posibil doar dac\u0103 \u00eenc\u0103lc\u0103m regulile.",
+        "number": 184
+    },
+    {
+        "text": "I hold myself accountable for the outcomes I experience",
+        "roText": "M\u0103 consider responsabil pentru rezultatele pe care le ob\u021bin\/",
+        "number": 185
+    },
+    {
+        "text": "I am usually active and bursting with energy",
+        "roText": "De obicei sunt activ\/\u0103 \u0219i plin\/\u0103 de energie.",
+        "number": 186
+    },
+    {
+        "text": "If I see something I don't like, I fix it",
+        "roText": "Dac\u0103 v\u0103d ceva ce nu-mi place, \u00eel repar.",
+        "number": 188
+    },
+    {
+        "text": "I really throw myself into something once committed to it",
+        "roText": "Odat\u0103 ce mi-am luat angajamentul legat de ceva anume, merg spre acel ceva \u201ccu capul \u00eenainte\u201d.",
+        "number": 189
+    },
+    {
+        "text": "People who know me in different aspects of my life would describe me very differently",
+        "roText": "Oamenii care m\u0103 cunosc \u00een diferite aspecte ale vie\u021bii mele m-ar descrie foarte diferit.",
+        "number": 190
+    },
+    {
+        "text": "I am a chronic procrastinator",
+        "roText": "Sunt un procrastinator cronic.",
+        "number": 191
+    },
+    {
+        "text": "Creating something truly original would be a thrill for me",
+        "roText": "A crea ceva cu adev\u0103rat original ar fi ceva grozav pentru mine.",
+        "number": 192
+    },
+    {
+        "text": "I always tell the truth",
+        "roText": "\u00centotdeauna spun adev\u0103rul.",
+        "number": 251
+    },
+    {
+        "text": "Being in the spotlight is often embarrassing to me",
+        "roText": "A fi \u00een centrul aten\u021biei este adesea jenant, ru\u0219inos pentru mine.",
+        "number": 194
+    },
+    {
+        "text": "I get energized by the chance to have a positive impact on others",
+        "roText": "Sunt energizat de \u0219ansa de a avea un impact pozitiv asupra celorlal\u021bi.",
+        "number": 195
+    },
+    {
+        "text": "I do not have an assertive personality",
+        "roText": "Nu am o personalitate asertiv\u0103.",
+        "number": 196
+    },
+    {
+        "text": "I make decisions only after I have the relevant facts",
+        "roText": "Iau decizii numai dup\u0103 ce am datele relevante la dispozi\u021bie.",
+        "number": 198
+    },
+    {
+        "text": "I feel comfortable with myself",
+        "roText": "M\u0103 simt confortabil cu mine \u00eensumi.",
+        "number": 199
+    },
+    {
+        "text": "I am a blunt and straightforward communicator",
+        "roText": "Comunic lucrurile \u201cverde-n fa\u021b\u0103\u201d.",
+        "number": 200
+    },
+    {
+        "text": "I demand a lot from others",
+        "roText": "Cer multe de la ceilal\u021bi.",
+        "number": 201
+    },
+    {
+        "text": "I rarely lose my composure",
+        "roText": "Rareori \u00eemi pierd calmul.",
+        "number": 202
+    },
+    {
+        "text": "I like finding out where I'm wrong",
+        "roText": "\u00cemi place s\u0103 aflu unde gre\u0219esc.",
+        "number": 203
+    },
+    {
+        "text": "I genuinely share the joy that others are feeling",
+        "roText": "\u00cemp\u0103rt\u0103\u0219esc cu adev\u0103rat bucuria pe care o simt al\u021bii.",
+        "number": 204
+    },
+    {
+        "text": "I like tried and true ways of doing things",
+        "roText": "\u00cemi plac modurile testate de a face lucrurile.",
+        "number": 205
+    },
+    {
+        "text": "I readily notice the habits and quirks of people around me",
+        "roText": "Observ cu u\u0219urin\u021b\u0103 obiceiurile \u0219i ciudateniile oamenilor din jurul meu.",
+        "number": 208
+    },
+    {
+        "text": "If someone is doing a bad job, I won't hesitate to reprimand them",
+        "roText": "Dac\u0103 cineva face o treab\u0103 proast\u0103, nu voi ezita s\u0103-l mustrez.",
+        "number": 209
+    },
+    {
+        "text": "I prefer easy living to taking risks",
+        "roText": "Prefer o via\u021b\u0103 u\u0219oar\u0103 dec\u00e2t s\u0103-mi asum riscuri.",
+        "number": 210
+    },
+    {
+        "text": "When problems arise, I easily change my tactics to deal with them",
+        "roText": "C\u00e2nd apar probleme, \u00eemi schimb cu u\u0219urin\u021b\u0103 tactica pentru a le face fa\u021b\u0103.",
+        "number": 211
+    },
+    {
+        "text": "On vacations I prefer detailed planning over random exploration",
+        "roText": "\u00cen vacan\u021be prefer planificarea detaliat\u0103 dec\u00e2t explorarea aleatorie.",
+        "number": 212
+    },
+    {
+        "text": "I'm always looking for better ways to do things",
+        "roText": "\u00centotdeauna caut modalit\u0103\u021bi mai bune de a face lucrurile.",
+        "number": 213
+    },
+    {
+        "text": "I have a knack for understanding people and what motivates them",
+        "roText": "Am o abilitate deosebit\u0103 \u00een a \u00een\u021belege ce \u00eei motiveaz\u0103 pe oameni.",
+        "number": 214
+    },
+    {
+        "text": "I always practice what I preach",
+        "roText": "\u00centotdeauna fac ceea ce recomand \u0219i altora.",
+        "number": 250
+    },
+    {
+        "text": "It's better to be confident than humble",
+        "roText": "Este mai bine s\u0103 fii \u00eencrez\u0103tor dec\u00e2t modest, umil.",
+        "number": 218
+    },
+    {
+        "text": "I often don't understand why other people feel the way they do",
+        "roText": "De multe ori nu \u00een\u021beleg de ce se simt al\u021bii a\u0219a cum o simt.",
+        "number": 220
+    },
+    {
+        "text": "I make rewards available for people who exceed their targets",
+        "roText": "Pun recompense disponibile pentru persoanele care \u00ee\u0219i dep\u0103\u0219esc obiectivele.",
+        "number": 221
+    },
+    {
+        "text": "I wish people would just get out of my way and let me get on with my projects",
+        "roText": "Mi-a\u0219 dori ca oamenii s\u0103-mi ias\u0103 din cale \u0219i s\u0103 m\u0103 lase s\u0103-mi continui proiectele.",
+        "number": 222
+    },
+    {
+        "text": "I'm more pragmatic than idealistic",
+        "roText": "Sunt mai pragmatic dec\u00e2t idealist.",
+        "number": 259
+    },
+    {
+        "text": "Sometimes people are intimidated by me",
+        "roText": "Uneori oamenii sunt intimida\u021bi de mine.",
+        "number": 226
+    },
+    {
+        "text": "I seek quiet",
+        "roText": "Caut lini\u0219te.",
+        "number": 227
+    },
+    {
+        "text": "I believe that my success depends on ability rather than luck",
+        "roText": "Cred c\u0103 succesul meu depinde mai degrab\u0103 de abilitate dec\u00e2t de noroc.",
+        "number": 228
+    },
+    {
+        "text": "Keeping up appearances is very important to me",
+        "roText": "P\u0103strarea aparen\u021belor este foarte important\u0103 pentru mine.",
+        "number": 230
+    },
+    {
+        "text": "In discussions I'm more likely to tell people what I think than to ask them questions",
+        "roText": "\u00cen discu\u021bii, este mai probabil s\u0103 spun oamenilor ce cred eu dec\u00e2t s\u0103 le pun \u00eentreb\u0103ri.",
+        "number": 231
+    },
+    {
+        "text": "I prefer eating at the same restaurants I really like rather than trying new ones I may not",
+        "roText": "Prefer s\u0103 m\u0103n\u00e2nc la acelea\u0219i restaurante care \u00eemi plac mult dec\u00e2t s\u0103 \u00eencerc altele noi care poate nu mi-ar pl\u0103cea.",
+        "number": 232
+    },
+    {
+        "text": "I hate following rules",
+        "roText": "Ur\u0103sc s\u0103 urmez reguli.",
+        "number": 234
+    },
+    {
+        "text": "I'm sometimes afraid to say what I think",
+        "roText": "Uneori \u00eemi este fric\u0103 s\u0103 spun ceea ce g\u00e2ndesc.",
+        "number": 236
+    },
+    {
+        "text": "I like to be alone",
+        "roText": "Imi place sa stau singur\/\u0103.",
+        "number": 237
+    },
+    {
+        "text": "I use humor to help diffuse tense situations",
+        "roText": "Folosesc umorul pentru a gestiona situa\u021biile tensionate.",
+        "number": 238
+    },
+    {
+        "text": "I rarely complain",
+        "roText": "Rareori m\u0103 pl\u00e2ng.",
+        "number": 239
+    },
+    {
+        "text": "I'm always what I appear to be",
+        "roText": "Sunt \u00eentotdeauna ceea ce par a fi.",
+        "number": 254
+    },
+    {
+        "text": "Ambiguity causes me a lot of discomfort",
+        "roText": "Ambiguitatea \u00eemi provoac\u0103 mult disconfort.",
+        "number": 240
+    },
+    {
+        "text": "I tend to be the creative force behind projects",
+        "roText": "Tind s\u0103 fiu for\u021ba creativ\u0103 din spatele proiectelor.",
+        "number": 241
+    },
+    {
+        "text": "People think that I am rather vain and egotistical",
+        "roText": "Oamenii cred c\u0103 sunt mai degrab\u0103 vanitos\/vanitoas\u0103 \u0219i egosit\/egoist\u0103.",
+        "number": 242
+    },
+    {
+        "text": "I find it intriguing to learn new information",
+        "roText": "Mi se pare intrigant s\u0103 aflu informa\u021bii noi.",
+        "number": 243
+    },
+    {
+        "text": "There is never an excuse for lying",
+        "roText": "Nu exist\u0103 niciodat\u0103 o scuz\u0103 pentru a min\u021bi.",
+        "number": 252
+    },
+    {
+        "text": "I stay with my own beliefs even when they conflict with the independent judgments of experts",
+        "roText": "R\u0103m\u00e2n cu propriile mele convingeri chiar \u0219i atunci c\u00e2nd acestea sunt \u00een conflict cu p\u0103rerile independente ale exper\u021bilor.",
+        "number": 245
+    },
+    {
+        "text": "More often than not, if I take the lead, others tend to follow",
+        "roText": "De cele mai multe ori, dac\u0103 eu preiau conducerea, al\u021bii tind s\u0103 urmeze.",
+        "number": 246
+    },
+    {
+        "text": "I'm not really known for my subtlety and nuance",
+        "roText": "Nu sunt chiar cunoscut pentru subtilitate \u0219i nuan\u021b\u0103 \u00een ceea ce spun.",
+        "number": 248
+    }
+]

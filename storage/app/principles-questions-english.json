@@ -1,0 +1,1010 @@
+[
+    {
+        "number": 5,
+        "text": "I am sensitive to others' emotions"
+    },
+    {
+        "number": 6,
+        "text": "When engaged in projects, I want to get everything \"just right\""
+    },
+    {
+        "number": 11,
+        "text": "I stay calm under pressure"
+    },
+    {
+        "number": 12,
+        "text": "I get stressed out easily"
+    },
+    {
+        "number": 22,
+        "text": "I always follow through on my commitments"
+    },
+    {
+        "number": 24,
+        "text": "I am able to recover quickly from most setbacks"
+    },
+    {
+        "number": 25,
+        "text": "When others around me feel sad, it makes me feel sad as well"
+    },
+    {
+        "number": 26,
+        "text": "The most meaningful way to succeed is to help others succeed"
+    },
+    {
+        "number": 42,
+        "text": "I make decisions based on facts not feelings"
+    },
+    {
+        "number": 46,
+        "text": "I excel at identifying opportunities"
+    },
+    {
+        "number": 48,
+        "text": "Once you become an adult it is extremely difficult to change your basic nature"
+    },
+    {
+        "number": 57,
+        "text": "I adapt easily to new situations"
+    },
+    {
+        "number": 67,
+        "text": "I seek adventure"
+    },
+    {
+        "number": 71,
+        "text": "When I talk seriously with other people I often find their life stories to be fascinating"
+    },
+    {
+        "number": 75,
+        "text": "I am highly organized in my work"
+    },
+    {
+        "number": 76,
+        "text": "I am highly systematic in my work"
+    },
+    {
+        "number": 80,
+        "text": "I would probably make a good actor"
+    },
+    {
+        "number": 84,
+        "text": "I'm ready and willing to tell people what they did wrong"
+    },
+    {
+        "number": 85,
+        "text": "Others seek me out for advice on personal problems"
+    },
+    {
+        "number": 93,
+        "text": "I am easily discouraged"
+    },
+    {
+        "number": 106,
+        "text": "I tend to avoid interpersonal conflict"
+    },
+    {
+        "number": 112,
+        "text": "I occasionally hold back my opinions"
+    },
+    {
+        "number": 121,
+        "text": "I get angry easily"
+    },
+    {
+        "number": 122,
+        "text": "By learning from my mistakes, I have significantly changed the kind of person I am"
+    },
+    {
+        "number": 125,
+        "text": "When something confuses me, I often find it fascinating"
+    },
+    {
+        "number": 130,
+        "text": "I'm basically a rebel"
+    },
+    {
+        "number": 131,
+        "text": "I love a good fight"
+    },
+    {
+        "number": 141,
+        "text": "I'm often the life of the party"
+    },
+    {
+        "number": 143,
+        "text": "I am able to keep my cool when others are losing theirs"
+    },
+    {
+        "number": 148,
+        "text": "I get upset easily"
+    },
+    {
+        "number": 151,
+        "text": "A core value for me is creating something new"
+    },
+    {
+        "number": 153,
+        "text": "I want every detail taken care of"
+    },
+    {
+        "number": 155,
+        "text": "I sometimes find it difficult to get down to work"
+    },
+    {
+        "number": 157,
+        "text": "I am always looking for experiences that challenge how I think about myself and the world"
+    },
+    {
+        "number": 161,
+        "text": "I'm more a creature of habit than a bold adventurer"
+    },
+    {
+        "number": 165,
+        "text": "I like to keep to a strict schedule instead of winging things"
+    },
+    {
+        "number": 166,
+        "text": "It's important to me to avoid wasting time"
+    },
+    {
+        "number": 168,
+        "text": "I usually go with my gut rather than spending a lot of time analyzing decisions"
+    },
+    {
+        "number": 173,
+        "text": "In different roles and with different people I often act like very different persons"
+    },
+    {
+        "number": 181,
+        "text": "I strive to be as impartial as I can be in dealing with contentious issues"
+    },
+    {
+        "number": 182,
+        "text": "I love to think of new ways of doing things"
+    },
+    {
+        "number": 183,
+        "text": "I avoid drawing attention to myself"
+    },
+    {
+        "number": 187,
+        "text": "I tend to talk a lot in social situations"
+    },
+    {
+        "number": 193,
+        "text": "Achieving excellence is a driving principle of my life"
+    },
+    {
+        "number": 206,
+        "text": "I like being the center of attention"
+    },
+    {
+        "number": 207,
+        "text": "I love to break with convention"
+    },
+    {
+        "number": 216,
+        "text": "I never hesitate to call out nonsense when necessary"
+    },
+    {
+        "number": 219,
+        "text": "Helping others is a core value for me"
+    },
+    {
+        "number": 223,
+        "text": "I tell people the truth even when it hurts"
+    },
+    {
+        "number": 224,
+        "text": "I like turning problems into opportunities"
+    },
+    {
+        "number": 229,
+        "text": "I don't always finish what I start"
+    },
+    {
+        "number": 233,
+        "text": "People describe me as an extremely dependable person"
+    },
+    {
+        "number": 235,
+        "text": "Logical reasoning is really overrated; intuition and imagination are more important"
+    },
+    {
+        "number": 244,
+        "text": "I tend to make decisions deliberately rather than spontaneously"
+    },
+    {
+        "number": 18,
+        "text": "I can usually achieve what I want if I work hard for it"
+    },
+    {
+        "number": 35,
+        "text": "I love to get critical feedback"
+    },
+    {
+        "number": 41,
+        "text": "I hold people accountable for results"
+    },
+    {
+        "number": 43,
+        "text": "I've been told I'm a good motivator"
+    },
+    {
+        "number": 49,
+        "text": "I like to be told what to do"
+    },
+    {
+        "number": 51,
+        "text": "I'm likely to show off if I get the chance"
+    },
+    {
+        "number": 53,
+        "text": "People describe me as an inspiring leader"
+    },
+    {
+        "number": 56,
+        "text": "I don't hesitate to assume leadership in groups"
+    },
+    {
+        "number": 107,
+        "text": "I want to find out how good I really can be at my work"
+    },
+    {
+        "number": 127,
+        "text": "I set specific goals for people to achieve"
+    },
+    {
+        "number": 149,
+        "text": "I assume personal accountability for successes and failures in life"
+    },
+    {
+        "number": 172,
+        "text": "I prefer to hide my failures rather than to have them exposed"
+    },
+    {
+        "number": 175,
+        "text": "I like having a boss who tells me what I need to do"
+    },
+    {
+        "number": 180,
+        "text": "I am not shy about telling people how good I am at something"
+    },
+    {
+        "number": 197,
+        "text": "I want my work to provide me with opportunities for increasing my knowledge and skills"
+    },
+    {
+        "number": 215,
+        "text": "People think of me as a \"take charge\" individual"
+    },
+    {
+        "number": 217,
+        "text": "I like hearing other points of view that are different from mine"
+    },
+    {
+        "number": 247,
+        "text": "I love a disagreement in which I learn and change my mind"
+    },
+    {
+        "number": 1,
+        "text": "Compared to others I have no difficulty controlling my anger"
+    },
+    {
+        "number": 2,
+        "text": "I am easily distracted"
+    },
+    {
+        "number": 3,
+        "text": "It's important to me that others see me as very successful"
+    },
+    {
+        "number": 4,
+        "text": "Seeking a deeper meaning in things comes naturally to me"
+    },
+    {
+        "number": 7,
+        "text": "I believe that by working hard a person can achieve virtually anything"
+    },
+    {
+        "number": 8,
+        "text": "I would love to imagine things that never existed and build them"
+    },
+    {
+        "number": 9,
+        "text": "I would find it uncomfortable and inappropriate to challenge my boss on how s\/he is doing something"
+    },
+    {
+        "number": 10,
+        "text": "I think most success depends more on natural talent than on learned skill"
+    },
+    {
+        "number": 13,
+        "text": "I have little respect for people who don't face reality objectively"
+    },
+    {
+        "number": 14,
+        "text": "Even when I disagree with others, I can recognize that they have sound points"
+    },
+    {
+        "number": 15,
+        "text": "I am not as active and engaged as most people"
+    },
+    {
+        "number": 16,
+        "text": "When it comes to negative feedback I'm pretty thick-skinned about it"
+    },
+    {
+        "number": 17,
+        "text": "I laugh a lot"
+    },
+    {
+        "number": 19,
+        "text": "I tend to carry conversations to a higher level"
+    },
+    {
+        "number": 20,
+        "text": "I like when others admire me and I feel badly when they think badly of me"
+    },
+    {
+        "number": 21,
+        "text": "I would rather be a bit rigid than be a chameleon"
+    },
+    {
+        "number": 23,
+        "text": "I'm more comfortable when I can set my own goals"
+    },
+    {
+        "number": 27,
+        "text": "People should actively search for reasons why their beliefs are wrong"
+    },
+    {
+        "number": 28,
+        "text": "People describe me as driven to accomplish great things"
+    },
+    {
+        "number": 29,
+        "text": "My favorite projects are ones that have clear direction"
+    },
+    {
+        "number": 31,
+        "text": "I always stick to the facts"
+    },
+    {
+        "number": 32,
+        "text": "I feel comfortable stretching my personality to the demands of the task at hand"
+    },
+    {
+        "number": 253,
+        "text": "I have never used flattery to get ahead"
+    },
+    {
+        "number": 33,
+        "text": "I tend to structure activities into reasonable time frames"
+    },
+    {
+        "number": 34,
+        "text": "It's better to just say what you really think than to worry much about how you say it"
+    },
+    {
+        "number": 36,
+        "text": "Even when I may feel anxious, I don't let it show"
+    },
+    {
+        "number": 37,
+        "text": "I would rather have a down to earth discussion than one that is abstract and theoretical"
+    },
+    {
+        "number": 38,
+        "text": "I often get choked up when hearing about others' problems"
+    },
+    {
+        "number": 39,
+        "text": "When someone gives me an assignment, I like to decide for myself where and how to do it"
+    },
+    {
+        "number": 40,
+        "text": "I'm known for being very practical"
+    },
+    {
+        "number": 44,
+        "text": "I wait for others to lead the way"
+    },
+    {
+        "number": 45,
+        "text": "When problems arise, I think of them as learning opportunities rather than failures"
+    },
+    {
+        "number": 47,
+        "text": "I do things methodically"
+    },
+    {
+        "number": 50,
+        "text": "I am an anti-establishment person"
+    },
+    {
+        "number": 52,
+        "text": "I hate wasting time"
+    },
+    {
+        "number": 54,
+        "text": "No matter what the outcome of a project, I am satisfied if I feel I gained a new experience"
+    },
+    {
+        "number": 55,
+        "text": "I talk to a lot of different people at parties"
+    },
+    {
+        "number": 58,
+        "text": "I get frustrated with people who always try to think things through in a strictly logical way"
+    },
+    {
+        "number": 59,
+        "text": "I'm deeply motivated to make order out of chaos"
+    },
+    {
+        "number": 60,
+        "text": "I actively seek out information about my shortcomings"
+    },
+    {
+        "number": 255,
+        "text": "It's better to be realistic than idealistic"
+    },
+    {
+        "number": 62,
+        "text": "I keep my emotions under control"
+    },
+    {
+        "number": 63,
+        "text": "I have been obsessed with a certain idea or project for a short time but later lost interest"
+    },
+    {
+        "number": 64,
+        "text": "My perfectionism sometimes annoys other people"
+    },
+    {
+        "number": 65,
+        "text": "When I am personally attacked, I respond thoughtfully and respectfully"
+    },
+    {
+        "number": 66,
+        "text": "I like to impress other people and be very successful"
+    },
+    {
+        "number": 68,
+        "text": "People look to me to establish a sense of purpose"
+    },
+    {
+        "number": 69,
+        "text": "I am usually the first to take the reins"
+    },
+    {
+        "number": 70,
+        "text": "I am able to cut through diversions and get to the source of problems"
+    },
+    {
+        "number": 72,
+        "text": "I don't worry about things that have already happened"
+    },
+    {
+        "number": 73,
+        "text": "Achieving my personal best is more important than beating others"
+    },
+    {
+        "number": 77,
+        "text": "It frustrates me to have to change direction in the middle of a project"
+    },
+    {
+        "number": 78,
+        "text": "If I believe in an idea, no obstacle will prevent me from making it happen"
+    },
+    {
+        "number": 79,
+        "text": "I am usually the person who sets a motivating goal for the team"
+    },
+    {
+        "number": 81,
+        "text": "I really admire people who have a clear, logical way of approaching issues"
+    },
+    {
+        "number": 82,
+        "text": "I am fascinated by the sights, sounds and smells of exotic destinations"
+    },
+    {
+        "number": 83,
+        "text": "I have great stamina"
+    },
+    {
+        "number": 256,
+        "text": "It's more important for something to be useful than beautiful"
+    },
+    {
+        "number": 87,
+        "text": "I am a light-hearted and rather whimsical person"
+    },
+    {
+        "number": 88,
+        "text": "If it's true that I'm lousy at something, I'd want to know it"
+    },
+    {
+        "number": 89,
+        "text": "I make plans and stick to them"
+    },
+    {
+        "number": 90,
+        "text": "Others would describe me as more cautious than daring"
+    },
+    {
+        "number": 91,
+        "text": "I am not easily annoyed"
+    },
+    {
+        "number": 92,
+        "text": "People who go with their gut instead of reasoning things out usually regret it"
+    },
+    {
+        "number": 94,
+        "text": "Have been told that I neglect other important parts of my life because I work so hard"
+    },
+    {
+        "number": 95,
+        "text": "It is important for me to be able to do what I most enjoy"
+    },
+    {
+        "number": 96,
+        "text": "I don't like challenging authority"
+    },
+    {
+        "number": 97,
+        "text": "I am good at giving impromptu speeches"
+    },
+    {
+        "number": 98,
+        "text": "I consider myself more casual than rigorous"
+    },
+    {
+        "number": 99,
+        "text": "I worry that if others see my weaknesses it will have negative consequences for me"
+    },
+    {
+        "number": 100,
+        "text": "I love excitement"
+    },
+    {
+        "number": 101,
+        "text": "When people need something done, they come to me"
+    },
+    {
+        "number": 102,
+        "text": "I often take as much joy in other people's success as I do in my own"
+    },
+    {
+        "number": 103,
+        "text": "I worry about things"
+    },
+    {
+        "number": 104,
+        "text": "I enjoy philosophical discussions"
+    },
+    {
+        "number": 105,
+        "text": "When people disappoint me, I sometimes struggle to let them know"
+    },
+    {
+        "number": 108,
+        "text": "I find tasks requiring careful attention to detail highly attractive"
+    },
+    {
+        "number": 109,
+        "text": "When I confront a big decision, I reflect on similar decisions I've made in the past"
+    },
+    {
+        "number": 257,
+        "text": "I'd rather be productive than philosophical"
+    },
+    {
+        "number": 111,
+        "text": "Too many people take life too seriously: Better to lighten up"
+    },
+    {
+        "number": 113,
+        "text": "I am more likely to engage directly with my problems than turn away from them"
+    },
+    {
+        "number": 114,
+        "text": "I give people the advice they need to hear, even if they don't want to hear it"
+    },
+    {
+        "number": 115,
+        "text": "I tend to be late for appointments"
+    },
+    {
+        "number": 116,
+        "text": "I typically choose pleasing others over being honest with them"
+    },
+    {
+        "number": 117,
+        "text": "I am a highly enthusiastic person"
+    },
+    {
+        "number": 118,
+        "text": "I find it difficult to stand up to leaders when I disagree with them"
+    },
+    {
+        "number": 119,
+        "text": "I'm a self-starter"
+    },
+    {
+        "number": 120,
+        "text": "I don't like talking about abstract ideas"
+    },
+    {
+        "number": 123,
+        "text": "Before important decisions, I test my thinking with people who are more knowledgeable than I am"
+    },
+    {
+        "number": 124,
+        "text": "I'm definitely not a perfectionist"
+    },
+    {
+        "number": 126,
+        "text": "When putting together a team, it's helpful if there's at least one funny person in the room"
+    },
+    {
+        "number": 128,
+        "text": "I often worry that criticism will hurt people's feelings"
+    },
+    {
+        "number": 129,
+        "text": "I often feel sluggish and unmotivated"
+    },
+    {
+        "number": 132,
+        "text": "It matters greatly to me that I am liked and loved"
+    },
+    {
+        "number": 133,
+        "text": "I find people who don't take risks rather boring"
+    },
+    {
+        "number": 134,
+        "text": "There are aspects of my personality that I am open to changing or developing"
+    },
+    {
+        "number": 135,
+        "text": "I like to entertain others"
+    },
+    {
+        "number": 136,
+        "text": "I really value my independence and resist being micro-managed"
+    },
+    {
+        "number": 137,
+        "text": "I like to Google people first if I am going to meet them for the first time"
+    },
+    {
+        "number": 138,
+        "text": "When someone says they have double-checked their work, I like to check it anyway"
+    },
+    {
+        "number": 139,
+        "text": "I'm not that interested in talking about philosophical ideas"
+    },
+    {
+        "number": 140,
+        "text": "I tire out quickly"
+    },
+    {
+        "number": 142,
+        "text": "I don't follow a tight schedule"
+    },
+    {
+        "number": 144,
+        "text": "I don't really care that much about other people's problems"
+    },
+    {
+        "number": 145,
+        "text": "I prefer compromise to having a heated debate"
+    },
+    {
+        "number": 146,
+        "text": "Sometimes I'm more concerned with proving myself than improving myself"
+    },
+    {
+        "number": 147,
+        "text": "I don't like to stay in the background"
+    },
+    {
+        "number": 150,
+        "text": "I occasionally strike up conversations with people who seem to be down on their luck"
+    },
+    {
+        "number": 152,
+        "text": "I will do my utmost to help and retain a person who is struggling in their job"
+    },
+    {
+        "number": 154,
+        "text": "I often put work above pleasure"
+    },
+    {
+        "number": 156,
+        "text": "Other people tell me I have a great sense of humor"
+    },
+    {
+        "number": 158,
+        "text": "I rarely put people under pressure"
+    },
+    {
+        "number": 159,
+        "text": "I like to introduce myself to others"
+    },
+    {
+        "number": 160,
+        "text": "I avoid crowds"
+    },
+    {
+        "number": 162,
+        "text": "I like to fight to get the right answer"
+    },
+    {
+        "number": 163,
+        "text": "I enjoy giving more than I get"
+    },
+    {
+        "number": 164,
+        "text": "I find other people and their life stories rather boring"
+    },
+    {
+        "number": 167,
+        "text": "I'm usually the first person to jump at a new opportunity"
+    },
+    {
+        "number": 169,
+        "text": "I like exploring topics that I don't know anything about"
+    },
+    {
+        "number": 170,
+        "text": "Modesty is not something I really value"
+    },
+    {
+        "number": 171,
+        "text": "I am not easily bothered by things"
+    },
+    {
+        "number": 174,
+        "text": "My major accomplishments are largely due to my hard work and ability"
+    },
+    {
+        "number": 249,
+        "text": "I always know why I do things"
+    },
+    {
+        "number": 176,
+        "text": "I'd rather make mistakes and learn than not make mistakes"
+    },
+    {
+        "number": 177,
+        "text": "It is important to me to keep my appointments"
+    },
+    {
+        "number": 258,
+        "text": "It's not worth spending much time thinking about ideas that aren't practical"
+    },
+    {
+        "number": 179,
+        "text": "I would rather lead people toward a common goal than to follow someone else's goal"
+    },
+    {
+        "number": 184,
+        "text": "Progress is only possible if we break the rules"
+    },
+    {
+        "number": 185,
+        "text": "I hold myself accountable for the outcomes I experience"
+    },
+    {
+        "number": 186,
+        "text": "I am usually active and bursting with energy"
+    },
+    {
+        "number": 188,
+        "text": "If I see something I don't like, I fix it"
+    },
+    {
+        "number": 189,
+        "text": "I really throw myself into something once committed to it"
+    },
+    {
+        "number": 190,
+        "text": "People who know me in different aspects of my life would describe me very differently"
+    },
+    {
+        "number": 191,
+        "text": "I am a chronic procrastinator"
+    },
+    {
+        "number": 192,
+        "text": "Creating something truly original would be a thrill for me"
+    },
+    {
+        "number": 251,
+        "text": "I always tell the truth"
+    },
+    {
+        "number": 194,
+        "text": "Being in the spotlight is often embarrassing to me"
+    },
+    {
+        "number": 195,
+        "text": "I get energized by the chance to have a positive impact on others"
+    },
+    {
+        "number": 196,
+        "text": "I do not have an assertive personality"
+    },
+    {
+        "number": 198,
+        "text": "I make decisions only after I have the relevant facts"
+    },
+    {
+        "number": 199,
+        "text": "I feel comfortable with myself"
+    },
+    {
+        "number": 200,
+        "text": "I am a blunt and straightforward communicator"
+    },
+    {
+        "number": 201,
+        "text": "I demand a lot from others"
+    },
+    {
+        "number": 202,
+        "text": "I rarely lose my composure"
+    },
+    {
+        "number": 203,
+        "text": "I like finding out where I'm wrong"
+    },
+    {
+        "number": 204,
+        "text": "I genuinely share the joy that others are feeling"
+    },
+    {
+        "number": 205,
+        "text": "I like tried and true ways of doing things"
+    },
+    {
+        "number": 208,
+        "text": "I readily notice the habits and quirks of people around me"
+    },
+    {
+        "number": 209,
+        "text": "If someone is doing a bad job, I won't hesitate to reprimand them"
+    },
+    {
+        "number": 210,
+        "text": "I prefer easy living to taking risks"
+    },
+    {
+        "number": 211,
+        "text": "When problems arise, I easily change my tactics to deal with them"
+    },
+    {
+        "number": 212,
+        "text": "On vacations I prefer detailed planning over random exploration"
+    },
+    {
+        "number": 213,
+        "text": "I'm always looking for better ways to do things"
+    },
+    {
+        "number": 214,
+        "text": "I have a knack for understanding people and what motivates them"
+    },
+    {
+        "number": 250,
+        "text": "I always practice what I preach"
+    },
+    {
+        "number": 218,
+        "text": "It's better to be confident than humble"
+    },
+    {
+        "number": 220,
+        "text": "I often don't understand why other people feel the way they do"
+    },
+    {
+        "number": 221,
+        "text": "I make rewards available for people who exceed their targets"
+    },
+    {
+        "number": 222,
+        "text": "I wish people would just get out of my way and let me get on with my projects"
+    },
+    {
+        "number": 259,
+        "text": "I'm more pragmatic than idealistic"
+    },
+    {
+        "number": 226,
+        "text": "Sometimes people are intimidated by me"
+    },
+    {
+        "number": 227,
+        "text": "I seek quiet"
+    },
+    {
+        "number": 228,
+        "text": "I believe that my success depends on ability rather than luck"
+    },
+    {
+        "number": 230,
+        "text": "Keeping up appearances is very important to me"
+    },
+    {
+        "number": 231,
+        "text": "In discussions I'm more likely to tell people what I think than to ask them questions"
+    },
+    {
+        "number": 232,
+        "text": "I prefer eating at the same restaurants I really like rather than trying new ones I may not"
+    },
+    {
+        "number": 234,
+        "text": "I hate following rules"
+    },
+    {
+        "number": 236,
+        "text": "I'm sometimes afraid to say what I think"
+    },
+    {
+        "number": 237,
+        "text": "I like to be alone"
+    },
+    {
+        "number": 238,
+        "text": "I use humor to help diffuse tense situations"
+    },
+    {
+        "number": 239,
+        "text": "I rarely complain"
+    },
+    {
+        "number": 254,
+        "text": "I'm always what I appear to be"
+    },
+    {
+        "number": 240,
+        "text": "Ambiguity causes me a lot of discomfort"
+    },
+    {
+        "number": 241,
+        "text": "I tend to be the creative force behind projects"
+    },
+    {
+        "number": 242,
+        "text": "People think that I am rather vain and egotistical"
+    },
+    {
+        "number": 243,
+        "text": "I find it intriguing to learn new information"
+    },
+    {
+        "number": 252,
+        "text": "There is never an excuse for lying"
+    },
+    {
+        "number": 245,
+        "text": "I stay with my own beliefs even when they conflict with the independent judgments of experts"
+    },
+    {
+        "number": 246,
+        "text": "More often than not, if I take the lead, others tend to follow"
+    },
+    {
+        "number": 248,
+        "text": "I'm not really known for my subtlety and nuance"
+    }
+]
