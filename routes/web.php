@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PersonalityTestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/tools/personality-test/{studentUid}/{showQuestions?}', [PersonalityTestController::class, 'index'])
+    ->name('personality-test.index');
+
+Route::post('/tools/personality-test/{studentUid}', [PersonalityTestController::class, 'store'])
+    ->name('personality-test.store');
+
+Route::get('/tools/personality-test/{studentUid}/pdf/download', [PersonalityTestController::class, 'showPdf'])
+    ->name('personality-test.show-pdf');
