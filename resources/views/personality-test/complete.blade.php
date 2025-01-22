@@ -24,7 +24,7 @@
                     </div>
                 @endforeach
             @else
-                <p>Loading RIASEC scores...</p>
+                <p style="color: red;">Career RIASEC scores failed to load. We are working on fixing this issue and will be in touch with you shortly.</p>
             @endif
         </div>
 
@@ -39,7 +39,7 @@
                     </div>
                 @endforeach
             @else
-                <p>Loading occupations...</p>
+                <p style="color: red;">Matching careers failed to load. We are working on fixing this issue and will be in touch with you shortly.</p>
             @endif
         </div>
     </div>
