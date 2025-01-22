@@ -40,13 +40,30 @@ class PersonalityTestController extends Controller
         $assessmentComplete = $nextQuestions['assessmentProgress']['assessmentComplete'];
 
         if( $assessmentComplete ) {
-            $riasecOccupations = $this->principlesService->getRiasecOccupations($student->principles_account_uid);
+            try {
+                $riasecOccupations = $this->principlesService->getRiasecOccupations($student->principles_account_uid);
+            } catch (PrinciplesApiException $exception) {
+                $riasecOccupations = ['riasecOccupations' => []];
+                //echo 'Riasec occupations not found '.$exception->getMessage();
+            }
             usort($riasecOccupations['riasecOccupations'], function($a, $b) {
                 return $a['errorMargin'] <=> $b['errorMargin'];
             });
             $firstSixOccupations = array_slice($riasecOccupations['riasecOccupations'], 0, 6);
 
-            $riasecScores = $this->principlesService->getRiasecScores($student->principles_account_uid);
+            try {
+                $riasecScores = $this->principlesService->getRiasecScores($student->principles_account_uid);
+            } catch (PrinciplesApiException $exception) {
+                $riasecScores = [
+                    "realistic" => 0,
+                    "investigative" => 0,
+                    "artistic" => 0,
+                    "social" => 0,
+                    "enterprising" => 0,
+                    "conventional" => 0
+                ];
+                // echo 'Riasec scores not found '.$exception->getMessage();
+            }
 
             return view('personality-test.complete', [
                 'student' => $student,

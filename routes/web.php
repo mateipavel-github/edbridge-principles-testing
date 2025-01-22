@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PersonalityTestController;
+use App\Http\Controllers\PrinciplesInfoController;
+use App\Http\Controllers\DinosaurController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +28,7 @@ Route::get('/tools/personality-test/{studentUid}/pdf/download', [PersonalityTest
 Route::get('/test', function() {
     return 'Hello World';
 });
+
+Route::get('/principles-info', [PrinciplesInfoController::class, 'showInfo']);
+
+Route::get('/dinosaur', [DinosaurController::class, 'show']);

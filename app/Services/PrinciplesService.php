@@ -74,10 +74,10 @@ class PrinciplesService
      * @throws PrinciplesApiException
      */
     private function getBearerToken(): string
-    {
+    {   
         try {
             $token = Cache::get('principles-bearer-token');
-
+            
             if( $token === null ) {
                 $response = Http::asForm()->withBasicAuth(
                     config('principles.clientId'),
@@ -193,6 +193,7 @@ class PrinciplesService
      */
     public function getNextQuestions(string $accountUid): array
     {
+
         try {
             $response = Http::withToken($this->bearerToken)
                 ->withHeaders([
