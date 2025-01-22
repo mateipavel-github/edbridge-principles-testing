@@ -22,3 +22,7 @@ Route::post('/tools/personality-test/{studentUid}', [PersonalityTestController::
 
 Route::get('/tools/personality-test/{studentUid}/pdf/download', [PersonalityTestController::class, 'showPdf'])
     ->name('personality-test.show-pdf');
+
+Route::get('/test', function() {
+    return 'Hello World';
+});

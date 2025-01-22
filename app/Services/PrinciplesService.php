@@ -365,4 +365,26 @@ class PrinciplesService
             throw new PrinciplesApiException("Failed to get the PDF generation from the Principles API: {$exception->getMessage()}");
         }
     }
+
+    /**
+     * Get information about the current user.
+     *
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function info(): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->get("{$this->baseUrl}/api/v2/me");
+
+            if ($response->status() !== 200) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        } catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the user info from the Principles API: {$exception->getMessage()}");
+        }
+    }
 }
