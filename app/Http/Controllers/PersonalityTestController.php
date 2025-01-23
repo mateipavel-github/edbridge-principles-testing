@@ -41,34 +41,30 @@ class PersonalityTestController extends Controller
 
         if( $assessmentComplete ) {
             try {
-                $riasecOccupations = $this->principlesService->getRiasecOccupations($student->principles_account_uid);
+                $ppmOccupations = $this->principlesService->getPpmOccupations($student->principles_account_uid);
             } catch (PrinciplesApiException $exception) {
-                $riasecOccupations = ['riasecOccupations' => []];
-                //echo 'Riasec occupations not found '.$exception->getMessage();
+                $ppmOccupations = ['ppmOccupations' => []];
             }
-            usort($riasecOccupations['riasecOccupations'], function($a, $b) {
-                return $a['errorMargin'] <=> $b['errorMargin'];
-            });
-            $firstSixOccupations = array_slice($riasecOccupations['riasecOccupations'], 0, 6);
+            // usort($ppmOccupations['occupations'], function($a, $b) {
+            //     return $a['errorMargin'] <=> $b['errorMargin'];
+            // });
+            $top10Occupations = array_slice($ppmOccupations['occupations'], 0, 10);
+
+            $top10Occupations = array_map(function($occupation) {
+                $occupation['onet_url'] = "https://www.onetonline.org/link/summary/" . $occupation['socCode'];
+                return $occupation;
+            }, $top10Occupations);
 
             try {
-                $riasecScores = $this->principlesService->getRiasecScores($student->principles_account_uid);
+                $ppmScores = $this->principlesService->getPpmScores($student->principles_account_uid);
             } catch (PrinciplesApiException $exception) {
-                $riasecScores = [
-                    "realistic" => 0,
-                    "investigative" => 0,
-                    "artistic" => 0,
-                    "social" => 0,
-                    "enterprising" => 0,
-                    "conventional" => 0
-                ];
-                // echo 'Riasec scores not found '.$exception->getMessage();
+                echo 'PPM scores not found '.$exception->getMessage();
             }
 
             return view('personality-test.complete', [
                 'student' => $student,
-                'occupations' => $firstSixOccupations,
-                'riasecScores' => $riasecScores,
+                'occupations' => $top10Occupations,
+                'ppmScores' => $ppmScores['ppmScore']
             ]);
         }
 

@@ -8,7 +8,7 @@
             <span class="font-bold">Hello, {{ $student->first_name . ' ' . $student->last_name }}</span>
 
             <p class="mt-2">
-                This test will take approximately 40-45 minutes. Upon completion, you will receive a detailed personality report, a RIASEC score and a list of potentially interesting careers that match your personality profile.
+                This test will take approximately 40-45 minutes. Upon completion, you will receive a detailed personality report, a PPM (formerly RIASEC) score and a list of potentially interesting careers that match your personality profile.
             </p>
         </div>
 

@@ -293,6 +293,49 @@ class PrinciplesService
      * @return array
      * @throws PrinciplesApiException
      */
+    
+    public function getPpmOccupations(string $accountUid): array {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/occupations?pageSize=50"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
+        }
+    }
+
+    public function getPpmScores(string $accountUid): array {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                ])
+                ->get(
+                    "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/score"
+                );
+
+            if( $response->status() !== 200 ) {
+                throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
+            }
+
+            return $response->json();
+        }
+        catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
+        }
+    }
+    
     public function getRiasecOccupations(string $accountUid): array
     {
         try {
