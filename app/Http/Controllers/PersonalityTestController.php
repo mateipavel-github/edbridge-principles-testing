@@ -48,7 +48,7 @@ class PersonalityTestController extends Controller
             // usort($ppmOccupations['occupations'], function($a, $b) {
             //     return $a['errorMargin'] <=> $b['errorMargin'];
             // });
-            $top10Occupations = array_slice($ppmOccupations['occupations'], 0, 10);
+            $top10Occupations = array_slice($ppmOccupations['occupations'], 0, 20);
 
             $top10Occupations = array_map(function($occupation) {
                 $occupation['onet_url'] = "https://www.onetonline.org/link/summary/" . $occupation['socCode'];
