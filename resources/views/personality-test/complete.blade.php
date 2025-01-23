@@ -20,7 +20,7 @@
         @foreach($ppmScores as $topic => $score)
             <div class="flex items-center text-left justify-between mt-3 w-full">
                 <span>{{ ucfirst($topic) }}</span>
-                <span class="ml-4">{{ round($score['percentile'], 2) }}%</span>
+                <span class="ml-4">{{ round($score['rawScore'], 2) }} ({{ round($score['rawScore']/7*100, 2) }}%)</span>
             </div>
         @endforeach
     </div>
