@@ -9,7 +9,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Http\Requests\NovaRequest;
-
+use App\Nova\Filters\AssessmentStatus;
 class Student extends Resource
 {
     /**
@@ -50,7 +50,7 @@ class Student extends Resource
 
             Boolean::make('Completed', attribute: 'assessment_complete'),
 
-            Boolean::make('Completed', attribute: 'shortscale_complete'),
+            Boolean::make('Shortscale Completed', attribute: 'shortscale_complete'),
             
             Email::make('Email', 'email')
                 ->sortable()
@@ -109,7 +109,9 @@ class Student extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new AssessmentStatus,
+        ];
     }
 
     /**
