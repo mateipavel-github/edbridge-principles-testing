@@ -25,6 +25,9 @@ class ToolServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) {
             //
         });
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+    
     }
 
     /**
@@ -42,7 +45,7 @@ class ToolServiceProvider extends ServiceProvider
             ->group(__DIR__.'/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/GeneralTools')
+            ->prefix('nova/GeneralTools')
             ->group(__DIR__.'/../routes/api.php');
     }
 

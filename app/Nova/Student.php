@@ -7,6 +7,7 @@ use Laravel\Nova\Exceptions\HelperNotSupported;
 use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Student extends Resource
@@ -31,7 +32,7 @@ class Student extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'email','first_name','last_name','uid','principles_account_uid','principles_person_uid'
     ];
 
     /**
@@ -47,6 +48,10 @@ class Student extends Resource
             ID::make()
                 ->sortable(),
 
+            Boolean::make('Completed', attribute: 'assessment_complete'),
+
+            Boolean::make('Completed', attribute: 'shortscale_complete'),
+            
             Email::make('Email', 'email')
                 ->sortable()
                 ->rules('required', 'email')

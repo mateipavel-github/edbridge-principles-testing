@@ -29,7 +29,7 @@ class GeneralTools extends Tool
     public function menu(Request $request)
     {
         return MenuSection::make('General Tools')
-            ->path('/general-tools')
+            ->path('/GeneralTools')
             ->icon('server');
     }
 }
