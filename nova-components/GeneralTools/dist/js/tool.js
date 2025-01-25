@@ -13,17 +13,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      loading: false
+    };
+  },
   methods: {
     updateAssessments: function updateAssessments() {
       var _this = this;
+      this.loading = true;
       Nova.request().post('GeneralTools/update-assessments').then(function (response) {
-        _this.$toasted.show(response.data.message, {
-          type: 'success'
-        });
+        Nova.success(response.data.message);
       })["catch"](function (error) {
-        _this.$toasted.show('Failed to update assessments.', {
-          type: 'error'
-        });
+        Nova.error('Failed to update assessments.');
+      })["finally"](function () {
+        _this.loading = false;
       });
     }
   }
@@ -44,13 +48,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "vue");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
+var _hoisted_1 = ["disabled"];
+var _hoisted_2 = {
+  key: 0
+};
+var _hoisted_3 = {
+  key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "General Tools", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [_cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+    "class": "text-2xl font-bold mb-4"
+  }, "General Tools", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.updateAssessments && $options.updateAssessments.apply($options, arguments);
     }),
-    "class": "btn btn-default"
-  }, "Update Assessments")]);
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+      'opacity-50 cursor-not-allowed': $data.loading
+    }, "btn btn-default bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"]),
+    disabled: $data.loading
+  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_2, "Updating...")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_3, "Update Assessments"))], 10 /* CLASS, PROPS */, _hoisted_1)]);
 }
 
 /***/ }),
