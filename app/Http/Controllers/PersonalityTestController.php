@@ -145,6 +145,12 @@ class PersonalityTestController extends Controller
 
         return response()->streamDownload(function() use ($pdfResults) {
             echo $pdfResults;
-        }, 'personality-test-results.pdf');
+        }, 'personality-assessment-results.pdf', [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="personality-test-results.pdf"',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ]);
     }
 }
