@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CareerReportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/save-career-report-template', [CareerReportController::class, 'storeJson']);
+Route::get('/career-report/{accountId}/{careerTitle}', [CareerReportController::class, 'generateCareerReport']);

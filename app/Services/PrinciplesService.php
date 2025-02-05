@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\PrinciplesApiException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PrinciplesService
@@ -25,7 +26,7 @@ class PrinciplesService
             'label' => 'Disagree',
             'value' => 2,
         ],
-        self::ANSWER_DISAGREE_SLIGHTLY  => [
+        self::ANSWER_DISAGREE_SLIGHTLY => [
             'label' => 'Disagree slightly',
             'value' => 3,
         ],
@@ -74,31 +75,47 @@ class PrinciplesService
      * @throws PrinciplesApiException
      */
     private function getBearerToken(): string
-    {   
+    {
         try {
+            Log::info('Checking for existing token in cache.');
             $token = Cache::get('principles-bearer-token');
-            
-            if( $token === null ) {
-                $response = Http::asForm()->withBasicAuth(
-                    config('principles.clientId'),
-                    config('principles.clientSecret'),
-                )->post(config('principles.authUrl'), [
-                    'grant_type' => 'client_credentials',
-                    'scope' => 'com.principles.kernel/integration_account:use',
-                ]);
 
-                $decodedResponse = $response->json();
-
-                Cache::put('principles-bearer-token', $decodedResponse['access_token'], $decodedResponse['expires_in'] / 60);
-
-                return $decodedResponse['access_token'];
+            if ($token !== null) {
+                Log::info('Token found in cache.');
+                return $token;
             }
+
+            Log::info('No token found in cache, requesting new token from API.');
+            $response = Http::asForm()->withBasicAuth(
+                config('principles.clientId'),
+                config('principles.clientSecret')
+            )->post(config('principles.authUrl'), [
+                'grant_type' => 'client_credentials',
+                'scope' => 'com.principles.kernel/integration_account:use',
+            ]);
+
+            Log::info('API Response: ' . $response->body());
+
+            if ($response->failed()) {
+                throw new PrinciplesApiException("API returned an error: " . $response->status());
+            }
+
+            $decodedResponse = $response->json();
+            if (!isset($decodedResponse['access_token'])) {
+                throw new PrinciplesApiException("API response does not contain an access token.");
+            }
+
+            Cache::put('principles-bearer-token', $decodedResponse['access_token'], $decodedResponse['expires_in'] / 60);
+
+            Log::info('New token stored in cache.');
+
+            return $decodedResponse['access_token'];
         } catch (\Exception $exception) {
+            Log::error("Failed to get the bearer token: {$exception->getMessage()}");
             throw new PrinciplesApiException("Failed to get the bearer token from the Principles API: {$exception->getMessage()}");
         }
-
-        return $token;
     }
+
 
     /**
      * Create a student in the context of the tenant.
@@ -112,16 +129,16 @@ class PrinciplesService
     {
         try {
             $response = Http::withToken($this->bearerToken)->post(
-                    "{$this->baseUrl}/api/v1/integration_account_tenants/{$this->getTenant()}/users",
-                    [
-                        'email' => $email,
-                        'displayName' => $displayName,
-                    ]
-                );
+                "{$this->baseUrl}/api/v1/integration_account_tenants/{$this->getTenant()}/users",
+                [
+                    'email' => $email,
+                    'displayName' => $displayName,
+                ]
+            );
 
             $decodedResponse = $response->json();
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$decodedResponse['message']}");
             }
 
@@ -129,8 +146,7 @@ class PrinciplesService
                 'account_id' => $decodedResponse['tenantUser']['account']['accountId'],
                 'person_id' => $decodedResponse['tenantUser']['person']['personId'],
             ];
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to create the student in the Principles API: {$exception->getMessage()}");
         }
     }
@@ -173,13 +189,12 @@ class PrinciplesService
 
             $decodedResponse = $response->json();
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$decodedResponse['message']}");
             }
 
             return $decodedResponse['tenant']['tenantId'];
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to create the tenant in the Principles API: {$exception->getMessage()}");
         }
     }
@@ -203,7 +218,7 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v1/assessment/questions"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
@@ -221,8 +236,7 @@ class PrinciplesService
                     ];
                 })
             ];
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the next set of questions from the Principles API: {$exception->getMessage()}");
         }
     }
@@ -248,11 +262,10 @@ class PrinciplesService
                     ]
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to store the answers in the Principles API: {$exception->getMessage()}");
         }
     }
@@ -275,13 +288,45 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v2/assessment_results/{$accountUid}"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
             return $response->json();
+        } catch (\Exception $exception) {
+            throw new PrinciplesApiException("Failed to get the results from the Principles API: {$exception->getMessage()}");
         }
-        catch (\Exception $exception) {
+    }
+
+    /**
+     * Get the results of the personality test.
+     *
+     * @param string $accountUid
+     * @param array $occupationWeightings
+     * @return array
+     * @throws PrinciplesApiException
+     */
+    public function getCareerCompatibilityScore(string $accountUid, array $occupationWeightings): array
+    {
+        try {
+            $response = Http::withToken($this->bearerToken)
+                ->withHeaders([
+                    'x-on-behalf-of' => $accountUid,
+                    'Accept' => 'application/json',
+                ])
+                ->post(
+                    "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/custom_occupations_error_margins",
+                    [
+                        'occupationWeightings' => $occupationWeightings
+                    ]
+                );
+
+            if ($response->status() !== 200) {
+                throw new PrinciplesApiException("API response: {$response->status()} " . json_encode($response->json()));
+            }
+
+            return $response->json();
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the results from the Principles API: {$exception->getMessage()}");
         }
     }
@@ -293,8 +338,9 @@ class PrinciplesService
      * @return array
      * @throws PrinciplesApiException
      */
-    
-    public function getPpmOccupations(string $accountUid): array {
+
+    public function getPpmOccupations(string $accountUid): array
+    {
         try {
             $response = Http::withToken($this->bearerToken)
                 ->withHeaders([
@@ -304,18 +350,18 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/occupations?pageSize=50"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
             return $response->json();
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
         }
     }
 
-    public function getPpmScores(string $accountUid): array {
+    public function getPpmScores(string $accountUid): array
+    {
         try {
             $response = Http::withToken($this->bearerToken)
                 ->withHeaders([
@@ -325,17 +371,16 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/score"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
             return $response->json();
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
         }
     }
-    
+
     public function getRiasecOccupations(string $accountUid): array
     {
         try {
@@ -347,13 +392,12 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v1/accounts/{$accountUid}/riasec_occupations"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
             return $response->json();
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");
         }
     }
@@ -376,13 +420,12 @@ class PrinciplesService
                     "{$this->baseUrl}/api/v1/accounts/{$accountUid}/riasec"
                 );
 
-            if( $response->status() !== 200 ) {
+            if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
 
             return $response->json();
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the RIASEC scores from the Principles API: {$exception->getMessage()}");
         }
     }
@@ -404,8 +447,7 @@ class PrinciplesService
                 ->get(
                     "{$this->baseUrl}/api/v1/assessment_results/{$accountUid}/pdf"
                 );
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the PDF generation from the Principles API: {$exception->getMessage()}");
         }
     }
