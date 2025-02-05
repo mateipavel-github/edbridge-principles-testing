@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Onet;
+use App\Jobs\GenerateCareerReportJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -35,21 +37,31 @@ class CareerReportController extends Controller
     /**
      * Generate a career report PDF and provide it for download.
      */
-    public function generateCareerReport($accountId, $careerTitle): BinaryFileResponse|JsonResponse
+    public function generateCareerReport($accountId, $careerTitle): JsonResponse
     {
-        $exitCode = Artisan::call('app:generate-career-report', [
-            'accountId' => $accountId,
-            'careerTitle' => $careerTitle
+        // Dispatch the Artisan command as a queued job
+        dispatch(new GenerateCareerReportJob($accountId, $careerTitle));
+
+        $socCode = Onet::getOnetSocCode($careerTitle);
+
+        return response()->json([
+            'message' => 'Career report generation has been queued.',
+            'download_url' => url("/storage/reports/career_report_{$accountId}_{$socCode}.pdf")
         ]);
+    }
 
-        if ($exitCode !== 0) {
-            return response()->json(['error' => 'Failed to generate career report'], 500);
-        }
+    /**
+     * Allow users to download the generated PDF.
+     */
+    public function downloadCareerReport($accountId, $careerTitle): BinaryFileResponse|JsonResponse
+    {
+        $careerTitle = str_replace('_', ' ', $careerTitle);
+        $socCode = Onet::getOnetSocCode($careerTitle);
 
-        $filePath = "public/reports/career_report_{$accountId}.pdf";
+        $filePath = "/public/reports/career_report_{$accountId}_{$socCode}.pdf";
 
         if (!Storage::exists($filePath)) {
-            return response()->json(['error' => 'Report not found'], 404);
+            return response()->json(['error' => 'Report not ready yet. Try again later.'], 404);
         }
 
         return Response::download(storage_path("app/{$filePath}"));
