@@ -66,4 +66,30 @@ class CareerReportController extends Controller
 
         return Response::download(storage_path("app/{$filePath}"));
     }
+
+    /**
+     * Get a JSON file with the specified name.
+     *
+     * @param string $name
+     * @return JsonResponse
+     */
+    public function getJson(string $name): JsonResponse
+    {
+        $fileName = "{$name}.json";
+        $filePath = "json/{$fileName}";
+
+        if (!Storage::exists($filePath)) {
+            return response()->json([
+                'error' => 'Template not found'
+            ], 404);
+        }
+
+        $content = Storage::get($filePath);
+        $data = json_decode($content, true);
+
+        return response()->json([
+            'name' => $name,
+            'data' => $data
+        ]);
+    }
 }

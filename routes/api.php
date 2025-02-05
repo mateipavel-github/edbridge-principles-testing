@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/save-career-report-template', [CareerReportController::class, 'storeJson']);
+Route::get('/get-career-report-template/{name}', [CareerReportController::class, 'getJson']);
 Route::get('/career-report/{accountId}/{careerTitle}', [CareerReportController::class, 'generateCareerReport']);
 Route::get('/career-report/{accountId}/{careerTitle}/download', [CareerReportController::class, 'downloadCareerReport']);
