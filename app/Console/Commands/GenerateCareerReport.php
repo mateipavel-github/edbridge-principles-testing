@@ -61,6 +61,8 @@ class GenerateCareerReport extends Command
         $careerTitle = $this->argument('careerTitle');
         $accountId = $this->argument('accountId');
 
+        $careerTitle = str_replace("_", " ", $careerTitle);
+
 
         // Check if uploaded JSON exists
         $jsonFilePath = storage_path("app/json/{$accountId}.json");
