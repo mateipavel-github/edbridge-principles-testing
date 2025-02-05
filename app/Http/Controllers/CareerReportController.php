@@ -19,12 +19,10 @@ class CareerReportController extends Controller
     public function storeJson(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string',
             'data' => 'required|array'
         ]);
 
-        $fileName = $request->input('name') . '.json';
-        $filePath = "json/{$fileName}";
+        $filePath = "json/career_report_template.json";
 
         Storage::put($filePath, json_encode($request->input('data'), JSON_PRETTY_PRINT));
 
@@ -73,10 +71,9 @@ class CareerReportController extends Controller
      * @param string $name
      * @return JsonResponse
      */
-    public function getJson(string $name): JsonResponse
+    public function getJson(): JsonResponse
     {
-        $fileName = "{$name}.json";
-        $filePath = "json/{$fileName}";
+        $filePath = "json/career_report_template.json";
 
         if (!Storage::exists($filePath)) {
             return response()->json([
@@ -88,7 +85,6 @@ class CareerReportController extends Controller
         $data = json_decode($content, true);
 
         return response()->json([
-            'name' => $name,
             'data' => $data
         ]);
     }

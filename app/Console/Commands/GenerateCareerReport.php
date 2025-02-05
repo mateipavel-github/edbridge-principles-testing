@@ -65,7 +65,7 @@ class GenerateCareerReport extends Command
 
 
         // Check if uploaded JSON exists
-        $jsonFilePath = storage_path("app/json/{$accountId}.json");
+        $jsonFilePath = storage_path("app/json/career_report_template.json");
         if (file_exists($jsonFilePath)) {
             $jsonContent = file_get_contents($jsonFilePath);
             $this->promptTemplates = json_decode($jsonContent, true);
@@ -233,7 +233,7 @@ class GenerateCareerReport extends Command
     protected function formatPpmScore($ppmScores): string
     {
         return collect($ppmScores['ppmScore'])
-            ->map(fn($values, $key) => "$key - {$values['rawScore']};")
+            ->map(fn($values, $key) => (string)$key . " - {$values['rawScore']};")
             ->implode(' ');
     }
 
