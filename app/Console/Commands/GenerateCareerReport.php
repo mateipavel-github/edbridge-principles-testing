@@ -222,9 +222,10 @@ class GenerateCareerReport extends Command
 
     protected function generatePdf(string $careerTitle, string $accountId, array $responses): void
     {
+        $socCode = Onet::getOnetSocCode($careerTitle);
         $pdfData = ['careerTitle' => $careerTitle, 'responses' => $responses];
         $pdf = PDF\Pdf::loadView('pdfs.career_report', $pdfData);
-        $fileName = "career_report_{$accountId}.pdf";
+        $fileName = "career_report_{$accountId}_{$socCode}.pdf";
         Storage::put("public/reports/{$fileName}", $pdf->output());
         $this->info("Career report generated: storage/app/public/reports/{$fileName}");
     }

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Onet
 {
-    private static function getOnetSocCode(string $careerTitle)
+    public static function getOnetSocCode(string $careerTitle)
     {
         return DB::table('onet__occupation_data')
             ->where('title', $careerTitle)
