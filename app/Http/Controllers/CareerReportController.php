@@ -37,14 +37,22 @@ class CareerReportController extends Controller
      */
     public function generateCareerReport($accountId, $careerTitle): JsonResponse
     {
-        // Dispatch the Artisan command as a queued job
-        dispatch(new GenerateCareerReportJob($accountId, $careerTitle));
-
         $socCode = Onet::getOnetSocCode($careerTitle);
+        $filePath = storage_path("app/public/reports/career_report_{$accountId}_{$socCode}.pdf");
+
+        // Remove the file if it exists
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Dispatch the Artisan command as a queued job
+        $job = dispatch(new GenerateCareerReportJob($accountId, $careerTitle));
+
 
         return response()->json([
             'message' => 'Career report generation has been queued.',
-            'download_url' => url("/storage/reports/career_report_{$accountId}_{$socCode}.pdf")
+            'download_url' => url("/storage/reports/career_report_{$accountId}_{$socCode}.pdf"),
+            'job' => $job,
         ]);
     }
 
