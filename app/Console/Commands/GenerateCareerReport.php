@@ -77,7 +77,7 @@ class GenerateCareerReport extends Command
 
         // Prepare prompts
         $preparedPrompts = $this->preparePrompts($careerTitle, $accountId);
-
+        $this->storePrompts($careerTitle, $accountId, $preparedPrompts);
         // Initialize OpenAI thread
         $context = isset($this->context) ? str_replace(
             array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
@@ -221,10 +221,22 @@ class GenerateCareerReport extends Command
     {
         $socCode = Onet::getOnetSocCode($careerTitle);
         $pdfData = ['careerTitle' => $careerTitle, 'responses' => $responses];
-        $pdf = PDF\Pdf::loadView('pdfs.career_report', $pdfData);
+        
+        $pdf = PDF\Pdf::loadView('pdfs.career_report', $pdfData)
+            ->setOption('encoding', 'UTF-8')
+            ->setOption('enable-local-file-access', true);
+        
         $fileName = "career_report_{$accountId}_{$socCode}.pdf";
         Storage::put("public/reports/{$fileName}", $pdf->output());
         $this->info("Career report generated: storage/app/public/reports/{$fileName}");
+    }
+
+    protected function storePrompts(string $careerTitle, string $accountId, array $preparedPrompts): void
+    {
+        $socCode = Onet::getOnetSocCode($careerTitle);
+        $fileName = "career_report_{$accountId}_{$socCode}.json";
+        $content = json_encode($preparedPrompts, JSON_PRETTY_PRINT);
+        Storage::put("public/reports/{$fileName}", $content);
     }
 
     protected function formatPpmScore($ppmScores): string

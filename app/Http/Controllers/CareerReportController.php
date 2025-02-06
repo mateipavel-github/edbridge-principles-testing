@@ -77,6 +77,18 @@ class CareerReportController extends Controller
         return Response::download(storage_path("app/{$filePath}"));
     }
 
+    public function downloadPrompts($accountId, $careerTitle): JsonResponse|BinaryFileResponse
+    {
+        $socCode = Onet::getOnetSocCode($careerTitle);
+        $filePath = "public/reports/career_report_{$accountId}_{$socCode}.json";
+
+        if (!Storage::exists($filePath)) {
+            return response()->json(['error' => 'Prompts not ready yet. Try again later.'], 404);
+        }
+
+        return Response::download(storage_path("app/{$filePath}"));
+    }
+
     /**
      * Get a JSON file with the specified name.
      *
