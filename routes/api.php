@@ -23,3 +23,4 @@ Route::post('/save-career-report-template', [CareerReportController::class, 'sto
 Route::get('/get-career-report-template', [CareerReportController::class, 'getJson']);
 Route::get('/career-report/{accountId}/{careerTitle}/generate', [CareerReportController::class, 'generateCareerReport']);
 Route::get('/career-report/{accountId}/{careerTitle}/download', [CareerReportController::class, 'downloadCareerReport']);
+Route::get('/career-report/{accountId}/{careerTitle}/prompts', [CareerReportController::class, 'downloadPrompts']);
