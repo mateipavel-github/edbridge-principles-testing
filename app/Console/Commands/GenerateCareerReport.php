@@ -75,9 +75,15 @@ class GenerateCareerReport extends Command
             Log::info("Using default prompt templates.");
         }
 
+        Log::info(json_encode($this->promptTemplates , JSON_PRETTY_PRINT));
+
         // Prepare prompts
-        $preparedPrompts = $this->preparePrompts($careerTitle, $accountId);
+        // Log prepared prompts
+        Log::info(json_encode($preparedPrompts , JSON_PRETTY_PRINT));
+
+        // Store prompts
         $this->storePrompts($careerTitle, $accountId, $preparedPrompts);
+
         // Initialize OpenAI thread
         $context = isset($this->context) ? str_replace(
             array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
@@ -88,6 +94,8 @@ class GenerateCareerReport extends Command
         $threadId = $this->openAIService->createThread($context);
 
         $responses = [];
+
+        Log::info("Prompt has " . count($preparedPrompts) . " entries");
 
         foreach ($preparedPrompts as $index => $promptData) {
             Log::info("Prompt $index of " . count($preparedPrompts));
