@@ -90,9 +90,6 @@ class GenerateCareerReport extends Command
         $responses = [];
 
         foreach ($preparedPrompts as $index => $promptData) {
-            if ($index === 0) {
-                continue;
-            }
             Log::info("Prompt $index of " . count($preparedPrompts) - 1);
 
             $response = '';
