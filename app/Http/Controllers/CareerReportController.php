@@ -56,7 +56,7 @@ class CareerReportController extends Controller
         return response()->json([
             'message' => 'Career report generation has been queued.',
             'download_url' => url("/api/career-report/{$accountId}/{$careerTitleForURL}/download"),
-            'jobId' => $jobId,
+            'job_id' => $jobId,
         ]);
     }
 
