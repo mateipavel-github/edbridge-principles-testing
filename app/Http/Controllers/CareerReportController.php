@@ -7,6 +7,7 @@ use App\Jobs\GenerateCareerReportJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -46,13 +47,16 @@ class CareerReportController extends Controller
         }
 
         // Dispatch the Artisan command as a queued job
-        $job = dispatch(new GenerateCareerReportJob($accountId, $careerTitle));
+        $job = new GenerateCareerReportJob($accountId, $careerTitle);
+        $jobId = Bus::dispatch($job);
 
+
+        $careerTitleForURL = str_replace(' ', '_', $careerTitle);
 
         return response()->json([
             'message' => 'Career report generation has been queued.',
-            'download_url' => url("/storage/reports/career_report_{$accountId}_{$socCode}.pdf"),
-            'job' => $job,
+            'download_url' => url("/api/career-report/{$accountId}/{$careerTitleForURL}/download"),
+            'jobId' => $jobId,
         ]);
     }
 
@@ -76,7 +80,6 @@ class CareerReportController extends Controller
     /**
      * Get a JSON file with the specified name.
      *
-     * @param string $name
      * @return JsonResponse
      */
     public function getJson(): JsonResponse
