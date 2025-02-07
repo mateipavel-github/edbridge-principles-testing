@@ -79,6 +79,7 @@ class GenerateCareerReport extends Command
 
         // Prepare prompts
         // Log prepared prompts
+        $preparedPrompts = $this->preparePrompts($careerTitle, $accountId);
         Log::info(json_encode($preparedPrompts , JSON_PRETTY_PRINT));
 
         // Store prompts
