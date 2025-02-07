@@ -84,4 +84,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         //
     }
+
+    public function resources()
+    {
+        Nova::resources([
+            // ... other resources
+            \App\Nova\Job::class,
+        ]);
+    }
 }
