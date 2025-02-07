@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Support\Facades\Redis;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,27 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 Route::get('/', function (NovaRequest $request) {
     return inertia('GeneralTools');
+});
+
+Route::get('/jobs', function (NovaRequest $request) {
+    $jobs = collect();
+    $queues = ['default', 'high', 'low'];
+
+    foreach ($queues as $queue) {
+        $pendingJobs = Redis::lrange("queues:{$queue}", 0, -1);
+        foreach ($pendingJobs as $job) {
+            $payload = json_decode($job);
+            $jobs->push([
+                'id' => $payload->uuid ?? uniqid(),
+                'queue' => $queue,
+                'status' => 'pending',
+                'created_at' => $payload->time ?? now(),
+                'payload' => $job
+            ]);
+        }
+    }
+
+    return inertia('QueueJobs', [
+        'jobs' => $jobs
+    ]);
 });

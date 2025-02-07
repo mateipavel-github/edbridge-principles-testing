@@ -4,6 +4,7 @@ namespace Principles\GeneralTools;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuSection;
+use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
 
@@ -28,8 +29,10 @@ class GeneralTools extends Tool
      */
     public function menu(Request $request)
     {
-        return MenuSection::make('General Tools')
-            ->path('/GeneralTools')
+        return MenuSection::make('General Tools', [
+            MenuItem::make('Update assessments', '/GeneralTools'),
+            MenuItem::make('Queue Jobs', '/GeneralTools/jobs'),
+        ])
             ->icon('server');
     }
 }

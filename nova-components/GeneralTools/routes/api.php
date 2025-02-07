@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentAssessmentController;
+use App\Http\Controllers\RedisJobsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ use App\Http\Controllers\StudentAssessmentController;
 // });
 
 Route::post('/update-assessments', [StudentAssessmentController::class, 'updateAssessments']);
+Route::get('/redis-jobs', [RedisJobsController::class, 'index']);
