@@ -10,7 +10,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Database\Eloquent\Builder;
 
 class Job extends Resource
 {
@@ -32,29 +31,24 @@ class Job extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return new Builder(new class {
-            public function get()
-            {
-                $jobs = collect();
-                $queues = ['default', 'high', 'low'];
+        $jobs = collect();
+        $queues = ['default', 'high', 'low'];
 
-                foreach ($queues as $queue) {
-                    $pendingJobs = Redis::lrange("queues:{$queue}", 0, -1);
-                    foreach ($pendingJobs as $job) {
-                        $payload = json_decode($job);
-                        $jobs->push((object)[
-                            'id' => $payload->uuid ?? uniqid(),
-                            'queue' => $queue,
-                            'status' => 'pending',
-                            'created_at' => $payload->time ?? now(),
-                            'payload' => $job
-                        ]);
-                    }
-                }
-
-                return $jobs;
+        foreach ($queues as $queue) {
+            $pendingJobs = Redis::lrange("queues:{$queue}", 0, -1);
+            foreach ($pendingJobs as $job) {
+                $payload = json_decode($job);
+                $jobs->push(new \App\Models\Job([
+                    'id' => $payload->uuid ?? uniqid(),
+                    'queue' => $queue,
+                    'status' => 'pending',
+                    'created_at' => $payload->time ?? now(),
+                    'payload' => $job
+                ]));
             }
-        });
+        }
+
+        return $jobs;
     }
 
     public static function detailQuery(NovaRequest $request, $query)
