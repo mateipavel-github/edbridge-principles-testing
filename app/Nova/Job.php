@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
@@ -11,17 +10,11 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Support\Facades\Redis;
-
-class RedisJob extends Model
-{
-    protected $guarded = [];
-    public $timestamps = false;
-    public $incrementing = false;
-}
+use Illuminate\Database\Eloquent\Builder;
 
 class Job extends Resource
 {
-    public static $model = RedisJob::class;
+    public static $model = \App\Models\Job::class;
     public static $title = 'id';
     public static $search = ['id'];
     public static function label() { return 'Queue Jobs'; }
@@ -39,24 +32,33 @@ class Job extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        $model = static::newModel();
-        $jobs = collect();
-        $queues = ['default', 'high', 'low'];
+        return new Builder(new class {
+            public function get()
+            {
+                $jobs = collect();
+                $queues = ['default', 'high', 'low'];
 
-        foreach ($queues as $queue) {
-            $pendingJobs = Redis::lrange("queues:{$queue}", 0, -1);
-            foreach ($pendingJobs as $job) {
-                $payload = json_decode($job);
-                $jobs->push(new RedisJob([
-                    'id' => $payload->uuid ?? uniqid(),
-                    'queue' => $queue,
-                    'status' => 'pending',
-                    'created_at' => $payload->time ?? now(),
-                    'payload' => $job
-                ]));
+                foreach ($queues as $queue) {
+                    $pendingJobs = Redis::lrange("queues:{$queue}", 0, -1);
+                    foreach ($pendingJobs as $job) {
+                        $payload = json_decode($job);
+                        $jobs->push((object)[
+                            'id' => $payload->uuid ?? uniqid(),
+                            'queue' => $queue,
+                            'status' => 'pending',
+                            'created_at' => $payload->time ?? now(),
+                            'payload' => $job
+                        ]);
+                    }
+                }
+
+                return $jobs;
             }
-        }
+        });
+    }
 
-        return $model->newQuery()->setModel($model)->whereKey($jobs->pluck('id'));
+    public static function detailQuery(NovaRequest $request, $query)
+    {
+        return static::indexQuery($request, $query);
     }
 } 
