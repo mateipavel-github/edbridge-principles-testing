@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Traits\ForwardsCalls;
+use Illuminate\Pagination\Paginator;
 
 class Job
 {
@@ -130,6 +131,21 @@ class Job
     }
 
     public function loadCount($relations)
+    {
+        return $this;
+    }
+
+    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        return new Paginator([], $perPage);
+    }
+
+    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        return new Paginator([], $perPage);
+    }
+
+    public function forPage($page, $perPage = 15)
     {
         return $this;
     }
