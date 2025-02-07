@@ -149,4 +149,24 @@ class Job
     {
         return $this;
     }
+
+    public function toBase()
+    {
+        return $this;
+    }
+
+    public function getConnection()
+    {
+        return null;
+    }
+
+    public function getMorphClass()
+    {
+        return static::class;
+    }
+
+    public function getIncrementing()
+    {
+        return false;
+    }
 } 
