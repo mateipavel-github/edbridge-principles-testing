@@ -3,6 +3,7 @@
 use App\Http\Controllers\PersonalityTestController;
 use App\Http\Controllers\PrinciplesInfoController;
 use App\Http\Controllers\DinosaurController;
+use App\Http\Controllers\FileDownloadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,3 +33,11 @@ Route::get('/test', function() {
 Route::get('/principles-info', [PrinciplesInfoController::class, 'showInfo']);
 
 Route::get('/dinosaur', [DinosaurController::class, 'show']);
+
+Route::get('download/pdf/{filename}', [FileDownloadController::class, 'downloadPdf'])
+    ->where('filename', '.*') // Allow slashes in filename for nested paths
+    ->name('download.pdf');
+
+Route::get('download/stats/{filename}', [FileDownloadController::class, 'getStats'])
+    ->where('filename', '.*')
+    ->name('download.stats');
