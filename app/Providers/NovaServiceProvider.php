@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Laravel\Nova\Menu\MenuSection;
+use Laravel\Nova\Menu\MenuItem;
 use Principles\GeneralTools\GeneralTools;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
@@ -88,8 +90,24 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function resources()
     {
         Nova::resources([
+            \App\Nova\User::class,
+            \App\Nova\Student::class,
             // ... other resources
-            // \App\Nova\Job::class, // Commented out or removed
         ]);
+    }
+
+    protected function menu()
+    {
+        return [
+            MenuSection::make('Resources', [
+                MenuItem::resource(\App\Nova\Student::class),
+                MenuItem::resource(\App\Nova\User::class),
+            ])->icon('users')->collapsable(),
+
+            // Keep existing menu items
+            MenuSection::make('Tools', [
+                MenuItem::make('General Tools'),
+            ])->icon('tools'),
+        ];
     }
 }
