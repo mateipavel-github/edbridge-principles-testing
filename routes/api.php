@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CareerReportController;
+use App\Http\Controllers\JcrTemplateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,10 @@ Route::get('/get-career-report-template', [CareerReportController::class, 'getJs
 Route::get('/career-report/{accountId}/{careerTitle}/generate', [CareerReportController::class, 'generateCareerReport']);
 Route::get('/career-report/{accountId}/{careerTitle}/download', [CareerReportController::class, 'downloadCareerReport']);
 Route::get('/career-report/{accountId}/{careerTitle}/prompts', [CareerReportController::class, 'downloadPrompts']);
+
+Route::prefix('jcr-templates')->group(function () {
+    Route::get('/', [JcrTemplateController::class, 'index']);
+    Route::get('/{template}', [JcrTemplateController::class, 'show']);
+    Route::post('/', [JcrTemplateController::class, 'store']);
+    Route::put('/{template}', [JcrTemplateController::class, 'update']);
+});
