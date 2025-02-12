@@ -19,6 +19,12 @@ class JcrTemplateController extends Controller
     {
         return response()->json($template);
     }
+    public function deleteTemplate(JcrTemplate $template)
+    {
+        $template->delete();
+        
+        return response()->json(null, 204);
+    }
 
     public function createTemplate(Request $request)
     {
