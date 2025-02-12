@@ -13,7 +13,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
+use App\Helpers\Onet;
 class PersonalityTestController extends Controller
 {
     protected PrinciplesService $principlesService;
@@ -41,20 +41,29 @@ class PersonalityTestController extends Controller
 
         if( $assessmentComplete ) {
             try {
-                $ppmOccupations = $this->principlesService->getPpmOccupations($student->principles_account_uid);
+                $aux = $this->principlesService->getPpmOccupations($student->principles_account_uid);
+                $ppmOccupations = $aux['occupations'];
+                
+                // Get job titles and descriptions from Onet
+                $jobTitles = Onet::getJobTitles(array_column($ppmOccupations, 'socCode'));
+                
+                // Add logging to see what we get from Onet
+                \Log::info('Onet job titles:', ['titles' => $jobTitles]);
+
+                $ppmOccupations = array_map(function($occupation) use ($jobTitles) {
+                    $occupation['jobTitles'] = $jobTitles[$occupation['socCode']] ?? [];
+                    $occupation['onet_url'] = "https://www.onetonline.org/link/summary/" . $occupation['socCode'];
+                    return $occupation;
+                }, $ppmOccupations);
+                
+                $totalOccupations = count($ppmOccupations);
+                $top50 = array_slice($ppmOccupations, 0, 50);
+                $bottom50 = array_slice($ppmOccupations, max(0, $totalOccupations - 50), 50);
+
             } catch (PrinciplesApiException $exception) {
                 $ppmOccupations = ['ppmOccupations' => []];
             }
-            // usort($ppmOccupations['occupations'], function($a, $b) {
-            //     return $a['errorMargin'] <=> $b['errorMargin'];
-            // });
-            $top10Occupations = array_slice($ppmOccupations['occupations'], 0, 20);
-
-            $top10Occupations = array_map(function($occupation) {
-                $occupation['onet_url'] = "https://www.onetonline.org/link/summary/" . $occupation['socCode'];
-                return $occupation;
-            }, $top10Occupations);
-
+            
             try {
                 $ppmScores = $this->principlesService->getPpmScores($student->principles_account_uid);
             } catch (PrinciplesApiException $exception) {
@@ -63,7 +72,8 @@ class PersonalityTestController extends Controller
 
             return view('personality-test.complete', [
                 'student' => $student,
-                'occupations' => $top10Occupations,
+                'top50occupations' => $top50,
+                'bottom50occupations' => $bottom50,
                 'ppmScores' => $ppmScores['ppmScore']
             ]);
         }

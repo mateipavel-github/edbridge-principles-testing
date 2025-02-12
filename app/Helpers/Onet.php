@@ -8,6 +8,37 @@ use Illuminate\Support\Facades\DB;
 
 class Onet
 {
+
+    public static function getJobTitles(array $socCodes) {
+        $alternateTitles = DB::table('onet__alternate_titles')
+            ->whereIn('onetsoc_code', $socCodes)
+            ->get(['onetsoc_code', 'alternate_title as title'])
+            ->groupBy('onetsoc_code')
+            ->map(function($titles) {
+                return $titles->pluck('title')->toArray();
+            });
+
+        $reportedTitles = DB::table('onet__sample_of_reported_titles')
+            ->whereIn('onetsoc_code', $socCodes)
+            ->get(['onetsoc_code', 'reported_job_title as title'])
+            ->groupBy('onetsoc_code')
+            ->map(function($titles) {
+                return $titles->pluck('title')->toArray();
+            });
+
+        $result = [];
+        foreach ($socCodes as $socCode) {
+            $result[$socCode] = array_unique(
+                array_merge(
+                    $alternateTitles[$socCode] ?? [],
+                    $reportedTitles[$socCode] ?? []
+                )
+            );
+        }
+
+        return $result;
+    }
+
     public static function getOnetSocCode(string $careerTitle)
     {
         return DB::table('onet__occupation_data')

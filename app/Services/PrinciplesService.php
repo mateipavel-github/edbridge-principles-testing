@@ -347,7 +347,7 @@ class PrinciplesService
                     'x-on-behalf-of' => $accountUid,
                 ])
                 ->get(
-                    "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/occupations?pageSize=50"
+                    "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/occupations?pageSize=1500"
                 );
 
             if ($response->status() !== 200) {
