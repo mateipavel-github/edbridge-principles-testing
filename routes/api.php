@@ -29,4 +29,5 @@ Route::get('/career-report/{accountId}/{careerTitle}/prompts', [CareerReportCont
 Route::get('/jcr-templates', [JcrTemplateController::class, 'index']);
 Route::get('/jcr-templates/{template}', [JcrTemplateController::class, 'show']);
 Route::post('/jcr-templates', [JcrTemplateController::class, 'createTemplate']);
-Route::put('/jcr-templates/{template}', [JcrTemplateController::class, 'update']);
+Route::put('/jcr-templates/{template}', [JcrTemplateController::class, 'updateTemplate']);
+Route::delete('/jcr-templates/{template}', [JcrTemplateController::class, 'deleteTemplate']);

@@ -37,7 +37,7 @@ class JcrTemplateController extends Controller
         return response()->json($template, 201);
     }
 
-    public function update(Request $request, JcrTemplate $template)
+    public function updateTemplate(Request $request, JcrTemplate $template)
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
