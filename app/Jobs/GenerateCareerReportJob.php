@@ -10,31 +10,41 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\CareerReport;
 class GenerateCareerReportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public string $accountId;
-    public string $careerTitle;
+    public int $careerReportId;
 
-    public function __construct(string $accountId, string $careerTitle)
+    public function __construct(int $careerReportId)
     {
-        $this->accountId = $accountId;
-        $this->careerTitle = $careerTitle;
+        $this->careerReportId = $careerReportId;
     }
 
     public function handle(): void
     {
-        Log::info("Starting report generation for Account ID: {$this->accountId}, Career: {$this->careerTitle}");
+        $careerReport = CareerReport::find($this->careerReportId);
+        $student = $careerReport->student;
 
-        Artisan::call('app:generate-career-report', [
-            'accountId' => $this->accountId,
-            'careerTitle' => $this->careerTitle
-        ]);
+        DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'processing']);
+        Log::info("JOB {$this->job->getJobId()} started: Account ID: {$student->principles_account_uid}, Career: {$careerReport->onet_soc_code}");
 
+        try {
+            Artisan::call('app:generate-career-report', [
+                'accountId' => $student->principles_account_uid,
+                'careerCode' => $careerReport->onet_soc_code
+            ]);
 
-        Log::info("Report generation completed for Account ID: {$this->accountId}");
+            DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'completed']);
+            Log::info("JOB {$this->job->getJobId()} completed");
+        } catch (\Exception $e) {
+            DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'failed']);
+            Log::error("JOB {$this->job->getJobId()} failed: {$e->getMessage()}");
+            throw $e;
+        }
+
     }
 
 }

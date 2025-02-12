@@ -11,40 +11,48 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use App\Models\JcrTemplate;
+use App\Models\CareerReport;
+use App\Models\Student;
 
 class CareerReportController extends Controller
 {
     /**
-     * Store a JSON file with the provided prompts.
+     * Generate a career report job.
      */
-    public function storeJson(Request $request): JsonResponse
+    public function generateCareerReport(Request $request): JsonResponse
     {
-        $request->validate([
-            'data' => 'required|array'
-        ]);
-
-        $filePath = "json/career_report_template.json";
-
-        Storage::put($filePath, json_encode($request->input('data'), JSON_PRETTY_PRINT));
-
-        return response()->json([
-            'message' => 'File saved successfully',
-            'path' => $filePath
-        ]);
-    }
-
-    /**
-     * Generate a career report PDF and provide it for download.
-     */
-    public function generateCareerReport($accountId, $careerTitle): JsonResponse
-    {
-        $socCode = Onet::getOnetSocCode($careerTitle);
-        $filePath = storage_path("app/public/reports/career_report_{$accountId}_{$socCode}.pdf");
-
-        // Remove the file if it exists
-        if (file_exists($filePath)) {
-            unlink($filePath);
+        $accountId = $request->input('accountId');
+        $student = Student::where('principles_account_uid', $accountId)->first();
+        if (!$student) {
+            return response()->json(['error' => 'Student not found'], 404);
         }
+
+        $careerTitle = $request->input('careerTitle');
+        $templateId = $request->input('templateId');
+        $sections = $request->input('sections');
+
+        $template = JcrTemplate::find($templateId);
+        if (!$template) {
+            return response()->json(['error' => 'Template not found'], 404);
+        }
+
+        $templateSections = collect($template->content);
+        
+        if ($sections) {
+            $templateSections = $templateSections->filter(function ($section) use ($sections) {
+                return in_array($section['id'], $sections);
+            })->values();
+        }
+
+        $socCode = Onet::getOnetSocCode($careerTitle);
+
+        $careerReport = CareerReport::create([
+            'student_id' => $student->id,
+            'onet_soc_code' => $socCode,
+            'report_template' => $templateSections,
+            'content' => []
+        ]);
 
         // Dispatch the Artisan command as a queued job
         $job = new GenerateCareerReportJob($accountId, $careerTitle);
