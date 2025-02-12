@@ -26,9 +26,7 @@ Route::get('/career-report/{accountId}/{careerTitle}/generate', [CareerReportCon
 Route::get('/career-report/{accountId}/{careerTitle}/download', [CareerReportController::class, 'downloadCareerReport']);
 Route::get('/career-report/{accountId}/{careerTitle}/prompts', [CareerReportController::class, 'downloadPrompts']);
 
-Route::prefix('jcr-templates')->group(function () {
-    Route::get('/', [JcrTemplateController::class, 'index']);
-    Route::get('/{template}', [JcrTemplateController::class, 'show']);
-    Route::post('/', [JcrTemplateController::class, 'store']);
-    Route::put('/{template}', [JcrTemplateController::class, 'update']);
-});
+Route::get('/jcr-templates', [JcrTemplateController::class, 'index']);
+Route::get('/jcr-templates/{template}', [JcrTemplateController::class, 'show']);
+Route::post('/jcr-templates', [JcrTemplateController::class, 'createTemplate']);
+Route::put('/jcr-templates/{template}', [JcrTemplateController::class, 'update']);

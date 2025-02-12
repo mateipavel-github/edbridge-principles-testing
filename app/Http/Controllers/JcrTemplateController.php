@@ -20,17 +20,17 @@ class JcrTemplateController extends Controller
         return response()->json($template);
     }
 
-    public function store(Request $request)
+    public function createTemplate(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'content' => 'required|json',
-            'is_default' => 'boolean'
+            'content' => 'sometimes|json',
+            'is_default' => 'sometimes|boolean'
         ]);
 
         $template = JcrTemplate::create([
             'name' => $validated['name'],
-            'content' => json_decode($validated['content'], true),
+            'content' => isset($validated['content']) ? json_decode($validated['content'], true) : null,
             'is_default' => $validated['is_default'] ?? false
         ]);
 
