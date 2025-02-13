@@ -12,40 +12,41 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\CareerReport;
+
 class GenerateCareerReportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $careerReportId;
+    private CareerReport $report;
 
-    public function __construct(int $careerReportId)
+    public function __construct(CareerReport $report)
     {
-        $this->careerReportId = $careerReportId;
+        $this->report = $report;
     }
 
     public function handle(): void
     {
-        $careerReport = CareerReport::find($this->careerReportId);
-        $student = $careerReport->student;
-
-        DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'processing']);
-        Log::info("JOB {$this->job->getJobId()} started: Account ID: {$student->principles_account_uid}, Career: {$careerReport->onet_soc_code}");
+        $this->report->updateStatus('processing');
+        Log::info("JOB {$this->job->getJobId()} started: Account ID: {$this->report->student->principles_account_uid}, Career: {$this->report->onet_soc_code}");
 
         try {
             Artisan::call('app:generate-career-report', [
-                'accountId' => $student->principles_account_uid,
-                'careerCode' => $careerReport->onet_soc_code
+                'reportId' => $this->report->id
             ]);
 
-            DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'completed']);
+            $this->report->updateStatus('completed');
             Log::info("JOB {$this->job->getJobId()} completed");
         } catch (\Exception $e) {
-            DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'failed']);
+            $this->report->updateStatus('failed');
             Log::error("JOB {$this->job->getJobId()} failed: {$e->getMessage()}");
             throw $e;
         }
-
     }
 
+    public function failed(\Throwable $exception)
+    {
+        DB::table('jobs')->where('id', $this->job->getJobId())->update(['status' => 'failed']);
+        Log::error("JOB {$this->job->getJobId()} failed: {$exception->getMessage()}");
+    }
 }
 

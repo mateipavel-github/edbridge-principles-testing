@@ -12,22 +12,21 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\CareerReport;
 class GenerateCareerReport extends Command
 {
-    protected $signature = 'app:generate-career-report {accountId?} {careerTitle?}';
-    protected $description = 'Generates a career report for users with a specific job title. Optionally for a single user.';
+    protected $signature = 'app:generate-career-report {reportId}';
+    protected $description = 'Generates a career report based on a CareerReport record ID';
 
     public PrinciplesService $principlesService;
     public array $data;
     /**
      * @var array|string[]
      */
-    private array $customParagraphs;
     /**
      * @var array|array[]
      */
-    private array $promptTemplates;
+    private array $reportSections;
     private OpenAIService $openAIService;
     private $context;
     private array $personality_profile;
@@ -40,17 +39,9 @@ class GenerateCareerReport extends Command
     {
         parent::__construct();
         $this->principlesService = $principlesService;
-
         $this->openAIService = $openAIService;
-
         $this->context = "You are an expert career coach and researcher with 20 years of experience helping young people discover careers they enjoy and can thrive in. ";
-
-        $this->promptTemplates = [];
-
-        $this->customParagraphs = [
-            2 => "This career is known for its dynamic nature and continuous evolution, making it an exciting choice.",
-            5 => "Individuals pursuing this path often find themselves adapting to new trends and technologies."
-        ];
+        $this->reportSections = [];
     }
 
     /**
@@ -58,90 +49,72 @@ class GenerateCareerReport extends Command
      */
     public function handle(): void
     {
-        $careerTitle = $this->argument('careerTitle');
-        $accountId = $this->argument('accountId');
 
+        Log::info("STARTING CAREER REPORT GENERATION");
+
+        $reportId = $this->argument('reportId');
+        $report = CareerReport::find($reportId);        
+        
+        $student = $report->student;
+        $accountId = $student->principles_account_uid;
+
+        $careerTitle = $report->onet_soc_code;
         $careerTitle = str_replace("_", " ", $careerTitle);
 
-
+        Log::info("Report ID: $reportId");
         // Check if uploaded JSON exists
-        $jsonFilePath = storage_path("app/json/career_report_template.json");
-        if (file_exists($jsonFilePath)) {
-            $jsonContent = file_get_contents($jsonFilePath);
-            $this->promptTemplates = json_decode($jsonContent, true);
-            Log::info("Using uploaded JSON: {$jsonFilePath}");
-        } else {
-            $this->promptTemplates = $this->defaultPromptTemplates();
-            Log::info("Using default prompt templates.");
-        }
+        $this->reportSections = $report->report_template;
 
-        Log::info(json_encode($this->promptTemplates , JSON_PRETTY_PRINT));
+        Log::info(json_encode($this->reportSections , JSON_PRETTY_PRINT));
 
-        // Prepare prompts
-        // Log prepared prompts
-        $preparedPrompts = $this->preparePrompts($careerTitle, $accountId);
-        Log::info(json_encode($preparedPrompts , JSON_PRETTY_PRINT));
+        // Prepare sections
+        $preparedSections = $this->prepareSections($careerTitle, $accountId);
+        $report->update(['processed_template' => $preparedSections]);
+        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
 
-        // Store prompts
-        $this->storePrompts($careerTitle, $accountId, $preparedPrompts);
-
-        // Initialize OpenAI thread
-        $context = isset($this->context) ? str_replace(
-            array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
-            array_values($this->data),
-            $this->context
-        ) : null;
-
-        $threadId = $this->openAIService->createThread($context);
+        // Store sections
+        $threadId = $this->openAIService->createThread();
 
         $responses = [];
 
-        Log::info("Prompt has " . count($preparedPrompts) . " entries");
+        Log::info("Report has " . count($preparedSections) . " entries");
 
-        foreach ($preparedPrompts as $index => $promptData) {
-            Log::info("Prompt $index of " . count($preparedPrompts));
+        foreach ($preparedSections as $sectionId => $sectionData) {
+            Log::info("Section $sectionId of " . count($preparedSections));
 
             $response = '';
 
             // Handle function-based description
-            if (isset($promptData['getDescription'])) {
-                $description = $promptData['getDescription']($this->data);
+            if (isset($sectionData['getDescription'])) {
+                $description = $sectionData['getDescription']($this->data);
             } else {
-                $description = $promptData['description'] ?? '';
+                $description = $sectionData['description'] ?? '';
             }
 
             // Handle prompt-based response
-            if (!empty($promptData['prompt'])) {
-                $runId = $this->openAIService->sendMessageToThread($threadId, $promptData['prompt'], $this->personality_profile);
+            if (!empty($sectionData['prompt'])) {
+                $runId = $this->openAIService->sendMessageToThread($threadId, $sectionData['prompt'], $this->personality_profile);
                 $response = $this->openAIService->getResponse($threadId, $runId);
             }
 
-            $responses[] = [
-                'title' => $promptData['title'] ?? '',
-                'sub_title' => $promptData['sub_title'] ?? '',
+            $report->addToContent($sectionId, [
+                'title' => $sectionData['title'] ?? '',
+                'sub_title' => $sectionData['sub_title'] ?? '',
                 'description' => $description,
-                'response' => $response
-            ];
-
-            if (isset($this->customParagraphs[$index + 1])) {
-                $responses[] = [
-                    'title' => 'Additional Insights',
-                    'description' => '',
-                    'response' => $this->customParagraphs[$index + 1]
-                ];
-            }
+                'response' => json_decode($response, true)
+            ]);
 
             sleep(10);
         }
 
-        $this->generatePdf($careerTitle, $accountId, $responses);
+        // $this->generatePdf($careerTitle, $accountId, $responses);
         $this->info("Career report generated successfully!");
     }
 
     /**
      * @throws PrinciplesApiException
      */
-    protected function preparePrompts(string $careerTitle, string $accountId): array
+    protected function prepareSections(string $careerTitle, string $accountId): array
     {
 
 //        $salary = Onet::getSalaryInfo($careerTitle);
@@ -193,37 +166,37 @@ class GenerateCareerReport extends Command
             'career_title' => $careerTitle,
         ];
 
-        return array_map(function ($promptData) {
-            $preparedPrompt = isset($promptData['prompt']) ? str_replace(
+        return array_map(function ($sectionData) {
+            $preparedSection = isset($sectionData['prompt']) ? str_replace(
                 array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
                 array_values($this->data),
-                $promptData['prompt']
+                $sectionData['prompt']
             ) : null;
 
-            $preparedTitle = isset($promptData['title']) ? str_replace(
+            $preparedTitle = isset($sectionData['title']) ? str_replace(
                 array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
                 array_values($this->data),
-                $promptData['title']
+                $sectionData['title']
             ) : null;
 
             // Handle dynamic description from function
             $preparedDescription = '';
-            if (isset($promptData['description'])) {
+            if (isset($sectionData['description'])) {
                 $preparedDescription = str_replace(
                     array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
                     array_values($this->data),
-                    $promptData['description']
+                    $sectionData['description']
                 );
-            } elseif (isset($promptData['getDescription'])) {
-                $preparedDescription = $promptData['getDescription']($this->data);
+            } elseif (isset($sectionData['getDescription'])) {
+                $preparedDescription = $sectionData['getDescription']($this->data);
             }
 
             return [
                 'title' => $preparedTitle,
                 'description' => $preparedDescription,
-                'prompt' => $preparedPrompt
+                'prompt' => $preparedSection
             ];
-        }, $this->promptTemplates);
+        }, $this->reportSections);
     }
 
     protected function generatePdf(string $careerTitle, string $accountId, array $responses): void
@@ -240,11 +213,11 @@ class GenerateCareerReport extends Command
         $this->info("Career report generated: storage/app/public/reports/{$fileName}");
     }
 
-    protected function storePrompts(string $careerTitle, string $accountId, array $preparedPrompts): void
+    protected function storeSections(string $careerTitle, string $accountId, array $preparedSections): void
     {
         $socCode = Onet::getOnetSocCode($careerTitle);
         $fileName = "career_report_{$accountId}_{$socCode}.json";
-        $content = json_encode($preparedPrompts, JSON_PRETTY_PRINT);
+        $content = json_encode($preparedSections, JSON_PRETTY_PRINT);
         Storage::put("public/reports/{$fileName}", $content);
     }
 
@@ -272,7 +245,7 @@ class GenerateCareerReport extends Command
         return $output;
     }
 
-    protected function defaultPromptTemplates(): array
+    protected function defaultReportSections(): array
     {
         return [
             [
@@ -662,14 +635,22 @@ Instructions:
 Each career level should include:
 🔹 Job Title (Clear and standardized, e.g., \"Apprentice Electrician\")
 Responsibilities: Briefly summarize key responsibilities at this stage.
-Progression Timeline: Estimated years required to advance to the next level.
-⚡ Specialization & Alternative Paths (Optional: If the career has multiple routes, include key specialization opportunities.)
+|
+| [Estimated Timeframe] (How long it takes before promotion.)
+|
+[Mid-Level Role] (More independent work, advanced skills, and responsibility.)
+Responsibilities: [Describe role expectations and skill development.]
+|
+| [Estimated Timeframe]
+|
+[Senior-Level Role] (Supervisory or highly skilled position.)
+Responsibilities: [Management, leadership, or high-stakes tasks.]
+|
+| [Estimated Timeframe]
+|
+[Top-Level Role / Specialization] (Highest level in the career or business ownership.)
+Responsibilities: [Entrepreneurial, executive, or niche-specialized roles.]
 
-2. Extract Reliable Career Data from:
-	•	Salary.com (For average career timelines and salary expectations.)
-	•	Other Industry-Specific Databases (If needed, refer to government or industry regulatory bodies.)
-
-3. End with a Career Growth Note:
 Note: Career progression can vary depending on [insert factors relevant to the career, such as licensing, specialization, industry growth, legislation in the country, freelance vs. corporate paths, etc.]
 
 

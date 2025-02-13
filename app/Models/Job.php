@@ -2,171 +2,64 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Traits\ForwardsCalls;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Job
+class Job extends Model
 {
-    use ForwardsCalls;
-
-    public $id;
-    public $queue;
-    public $status;
-    public $created_at;
-    public $payload;
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'jobs';
-    protected $primaryKey = 'id';
 
-    public function __construct($attributes = [])
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'queue',
+        'payload',
+        'attempts',
+        'reserved_at',
+        'available_at',
+        'created_at',
+        'status'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'payload' => 'array',
+        'reserved_at' => 'datetime',
+        'available_at' => 'datetime',
+        'created_at' => 'datetime',
+    ];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    public function careerReport(): HasOne
     {
-        foreach ($attributes as $key => $value) {
-            $this->$key = $value;
-        }
+        return $this->hasOne(CareerReport::class);
     }
 
-    public static function query()
+    public function isReserved(): bool
     {
-        return new static;
+        return !is_null($this->reserved_at);
     }
 
-    public function newQuery()
+    public function isAvailable(): bool
     {
-        return $this;
-    }
-
-    public function get()
-    {
-        return collect();
-    }
-
-    public function tap($callback)
-    {
-        $callback($this);
-        return $this;
-    }
-
-    public function getKeyName()
-    {
-        return 'id';
-    }
-
-    public function getKey()
-    {
-        return $this->id;
-    }
-
-    public function getQuery()
-    {
-        return $this;
-    }
-
-    public function getModel()
-    {
-        return $this;
-    }
-
-    public function getTable()
-    {
-        return $this->table;
-    }
-
-    public function orderBy($column, $direction = 'asc')
-    {
-        return $this;
-    }
-
-    public function where($column, $operator = null, $value = null)
-    {
-        return $this;
-    }
-
-    public function latest($column = 'created_at')
-    {
-        return $this;
-    }
-
-    public function take($value)
-    {
-        return $this;
-    }
-
-    public function limit($value)
-    {
-        return $this;
-    }
-
-    public function offset($value)
-    {
-        return $this;
-    }
-
-    public function getQualifiedKeyName()
-    {
-        return $this->getTable() . '.' . $this->getKeyName();
-    }
-
-    public function getKeyType()
-    {
-        return 'string';
-    }
-
-    public function usesTimestamps()
-    {
-        return false;
-    }
-
-    public function with($relations)
-    {
-        return $this;
-    }
-
-    public function withCount($relations)
-    {
-        return $this;
-    }
-
-    public function load($relations)
-    {
-        return $this;
-    }
-
-    public function loadCount($relations)
-    {
-        return $this;
-    }
-
-    public function simplePaginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
-    {
-        return new Paginator([], $perPage);
-    }
-
-    public function paginate($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
-    {
-        return new Paginator([], $perPage);
-    }
-
-    public function forPage($page, $perPage = 15)
-    {
-        return $this;
-    }
-
-    public function toBase()
-    {
-        return $this;
-    }
-
-    public function getConnection()
-    {
-        return null;
-    }
-
-    public function getMorphClass()
-    {
-        return static::class;
-    }
-
-    public function getIncrementing()
-    {
-        return false;
+        return !$this->isReserved() && $this->available_at <= now();
     }
 } 

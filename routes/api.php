@@ -20,12 +20,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/career-report/{accountId}/{careerTitle}/generate', [CareerReportController::class, 'generateCareerReport']);
-Route::get('/career-report/{accountId}/{careerTitle}/download', [CareerReportController::class, 'downloadCareerReport']);
-Route::get('/career-report/{accountId}/{careerTitle}/prompts', [CareerReportController::class, 'downloadPrompts']);
+Route::post('/career-reports/generate', [CareerReportController::class, 'generateCareerReport']);
+Route::get('/career-reports/{careerReport}/download', [CareerReportController::class, 'downloadCareerReport']);
+Route::get('/career-reports', [CareerReportController::class, 'listCareerReports']);
+
 
 Route::get('/jcr-templates', [JcrTemplateController::class, 'index']);
-Route::get('/jcr-templates/{template}', [JcrTemplateController::class, 'show']);
+Route::get('/jcr-templates/{template}', [JcrTemplateController::class, 'loadTemplate']);
 Route::post('/jcr-templates', [JcrTemplateController::class, 'createTemplate']);
 Route::post('/jcr-templates/{template}', [JcrTemplateController::class, 'updateTemplate']);
 Route::delete('/jcr-templates/{template}', [JcrTemplateController::class, 'deleteTemplate']);

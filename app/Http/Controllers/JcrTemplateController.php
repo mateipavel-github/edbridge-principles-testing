@@ -15,7 +15,7 @@ class JcrTemplateController extends Controller
         );
     }
 
-    public function show(JcrTemplate $template)
+    public function loadTemplate(JcrTemplate $template)
     {
         return response()->json($template);
     }
@@ -45,15 +45,16 @@ class JcrTemplateController extends Controller
 
     public function updateTemplate(Request $request, JcrTemplate $template)
     {
+
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'content' => ['sometimes', 'required', 'json'],
+            'content' => ['sometimes', 'required'],
             'is_default' => ['sometimes', 'boolean']
         ]);
 
         $template->update([
             'name' => $validated['name'] ?? $template->name,
-            'content' => isset($validated['content']) ? json_decode($validated['content'], true) : $template->content,
+            'content' => isset($validated['content']) ? $validated['content'] : $template->content,
             'is_default' => $validated['is_default'] ?? $template->is_default
         ]);
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('onet_soc_code', 10);
             $table->text('report_template');
             $table->text('content');
+            $table->foreignId('job_id')->nullable()->constrained('jobs')->nullOnDelete();
             $table->timestamps();
         });
     }

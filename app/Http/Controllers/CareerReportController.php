@@ -18,6 +18,19 @@ use App\Models\Student;
 class CareerReportController extends Controller
 {
     /**
+     * Get all career reports with their associated jobs.
+     *
+     * @return JsonResponse
+     */
+    public function listCareerReports(): JsonResponse
+    {
+        $reports = CareerReport::with(['job', 'student'])->orderByDesc('id')->get();
+        
+        return response()->json([
+            'reports' => $reports
+        ]);
+    }
+    /**
      * Generate a career report job.
      */
     public function generateCareerReport(Request $request): JsonResponse
@@ -25,20 +38,21 @@ class CareerReportController extends Controller
         $accountId = $request->input('accountId');
         $student = Student::where('principles_account_uid', $accountId)->first();
         if (!$student) {
-            return response()->json(['error' => 'Student not found'], 404);
+            return response()->json(['error' => 'Student not found'], 500);
         }
 
-        $careerTitle = $request->input('careerTitle');
+        $careerTitle = $request->input('occupation');
+        
+        // load the template from the database
         $templateId = $request->input('templateId');
-        $sections = $request->input('sections');
-
         $template = JcrTemplate::find($templateId);
         if (!$template) {
-            return response()->json(['error' => 'Template not found'], 404);
+            return response()->json(['error' => 'Template not found'], 500);
         }
-
         $templateSections = collect($template->content);
         
+        // check to see which sections the user wants to generate
+        $sections = $request->input('sections');
         if ($sections) {
             $templateSections = $templateSections->filter(function ($section) use ($sections) {
                 return in_array($section['id'], $sections);
@@ -46,7 +60,11 @@ class CareerReportController extends Controller
         }
 
         $socCode = Onet::getOnetSocCode($careerTitle);
+        if (!$socCode) {
+            return response()->json(['error' => 'Invalid occupation title'], 500);
+        }
 
+        // create a new career report
         $careerReport = CareerReport::create([
             'student_id' => $student->id,
             'onet_soc_code' => $socCode,
@@ -55,15 +73,17 @@ class CareerReportController extends Controller
         ]);
 
         // Dispatch the Artisan command as a queued job
-        $job = new GenerateCareerReportJob($accountId, $careerTitle);
+        $job = new GenerateCareerReportJob($careerReport);
         $jobId = Bus::dispatch($job);
 
+        \Log::info('Job ID: ' . $jobId);
 
-        $careerTitleForURL = str_replace(' ', '_', $careerTitle);
+        $careerReport->update([
+            'job_id' => $jobId
+        ]);
 
         return response()->json([
             'message' => 'Career report generation has been queued.',
-            'download_url' => url("/api/career-report/{$accountId}/{$careerTitleForURL}/download"),
             'job_id' => $jobId,
         ]);
     }
