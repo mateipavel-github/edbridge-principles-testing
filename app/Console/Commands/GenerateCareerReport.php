@@ -95,8 +95,17 @@ class GenerateCareerReport extends Command
             if (!empty($sectionData['prompt'])) {
                 $runId = $this->openAIService->sendMessageToThread($threadId, $sectionData['prompt'], $this->personality_profile);
                 $response = $this->openAIService->getResponse($threadId, $runId);
+                Log::info("Response: " . $response);
             }
-
+            // Trim JSON code block markers and whitespace if present
+            if (str_starts_with($response, '```json')) {
+                $response = substr($response, 7);
+            }
+            if (str_ends_with($response, '```')) {
+                $response = substr($response, 0, -3);
+            }
+            $response = trim($response);
+            
             $report->addToContent($sectionId, [
                 'title' => $sectionData['title'] ?? '',
                 'sub_title' => $sectionData['sub_title'] ?? '',

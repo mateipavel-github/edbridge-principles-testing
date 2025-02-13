@@ -5,7 +5,7 @@ use App\Http\Controllers\PrinciplesInfoController;
 use App\Http\Controllers\DinosaurController;
 use App\Http\Controllers\FileDownloadController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CareerReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,3 +41,6 @@ Route::get('download/pdf/{filename}', [FileDownloadController::class, 'downloadP
 Route::get('download/stats/{filename}', [FileDownloadController::class, 'getStats'])
     ->where('filename', '.*')
     ->name('download.stats');
+
+
+Route::get('/career-reports/{careerReport}', [CareerReportController::class, 'displayCareerReport']);

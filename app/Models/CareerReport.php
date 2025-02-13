@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\URL;
 
 class CareerReport extends Model
 {
@@ -23,6 +24,13 @@ class CareerReport extends Model
         'processed_template' => 'json',
         'generation_log' => 'json'
     ];
+
+    protected $appends = ['url'];  // This will automatically append the url to the model
+
+    public function getUrlAttribute(): string
+    {
+        return URL::to("/career-reports/{$this->id}");
+    }
 
     public function student(): BelongsTo
     {

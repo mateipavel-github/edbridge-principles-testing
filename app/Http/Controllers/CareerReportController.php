@@ -17,6 +17,32 @@ use App\Models\Student;
 
 class CareerReportController extends Controller
 {
+
+    public function displayCareerReport(CareerReport $careerReport)
+    {
+        
+        $fallbackTemplate = $careerReport->processed_template ?? $careerReport->report_template;
+        // Ensure all sections from processed_template exist in content
+        $content = $careerReport->content;
+        if ($fallbackTemplate) {
+            foreach ($fallbackTemplate as $sectionId => $section) {
+                if (!isset($careerReport->content[$sectionId])) {
+                    $content[$sectionId] = [
+                        'title' => $section['title'] ?? '',
+                        'sub_title' => $section['sub_title'] ?? '',
+                        'description' => $section['description'] ?? '',
+                        'response' => null
+                    ];
+                }
+            }
+        }
+
+        return view('career-reports.show', [
+            'careerReport' => $careerReport,
+            'content' => $content
+        ]);
+    }
+
     /**
      * Get all career reports with their associated jobs.
      *
@@ -49,14 +75,12 @@ class CareerReportController extends Controller
         if (!$template) {
             return response()->json(['error' => 'Template not found'], 500);
         }
-        $templateSections = collect($template->content);
+        $templateSections = $template->content;
         
         // check to see which sections the user wants to generate
-        $sections = $request->input('sections');
-        if ($sections) {
-            $templateSections = $templateSections->filter(function ($section) use ($sections) {
-                return in_array($section['id'], $sections);
-            })->values();
+        $selectedSectionIds = $request->input('sectionIds');
+        if ($selectedSectionIds) {
+            $templateSections = array_intersect_key($templateSections, array_flip($selectedSectionIds));
         }
 
         $socCode = Onet::getOnetSocCode($careerTitle);
@@ -105,38 +129,4 @@ class CareerReportController extends Controller
         return Response::download(storage_path("app/{$filePath}"));
     }
 
-    public function downloadPrompts($accountId, $careerTitle): JsonResponse|BinaryFileResponse
-    {
-        $socCode = Onet::getOnetSocCode($careerTitle);
-        $filePath = "public/reports/career_report_{$accountId}_{$socCode}.json";
-
-        if (!Storage::exists($filePath)) {
-            return response()->json(['error' => 'Prompts not ready yet. Try again later.'], 404);
-        }
-
-        return Response::download(storage_path("app/{$filePath}"));
-    }
-
-    /**
-     * Get a JSON file with the specified name.
-     *
-     * @return JsonResponse
-     */
-    public function getJson(): JsonResponse
-    {
-        $filePath = "json/career_report_template.json";
-
-        if (!Storage::exists($filePath)) {
-            return response()->json([
-                'error' => 'Template not found'
-            ], 404);
-        }
-
-        $content = Storage::get($filePath);
-        $data = json_decode($content, true);
-
-        return response()->json([
-            'data' => $data
-        ]);
-    }
 }
