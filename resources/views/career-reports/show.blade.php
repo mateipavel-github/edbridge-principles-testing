@@ -2,66 +2,37 @@
 @section('title', 'Career Report')
 @section('content')
 <div class="max-w-4xl mx-auto px-4 py-8">
-    @if(isset($content['haiku']))
-        <div class="mb-12 bg-white rounded-lg shadow-sm p-8">
-            <h2 class="text-2xl font-bold mb-6">{{ $content['haiku']['title'] }}</h2>
-            <div class="prose">
-                @if(empty($content['haiku']['response']))
-                    <div class="flex justify-center items-center py-8">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <span class="ml-2 text-gray-600">Generating content...</span>
-                    </div>
-                @else
-                    @foreach($content['haiku']['response']['lyrics'] as $line)
-                        <p class="text-lg italic text-gray-700">{{ $line }}</p>
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    @endif
+    <h1 class="text-4xl font-bold mb-6">Career Report</h1>
 
-    @if(isset($content['insights']))
-        <div class="bg-white rounded-lg shadow-sm p-8">
-            <h2 class="text-2xl font-bold mb-6">{{ $content['insights']['title'] }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @if(empty($content['insights']['response']))
-                    <div class="col-span-2 flex justify-center items-center py-8">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <span class="ml-2 text-gray-600">Generating insights...</span>
-                    </div>
-                @else
-                    @foreach($content['insights']['response'] as $insight)
-                        <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                            <div class="flex items-start space-x-4">
-                                <span class="text-2xl">{{ $insight['emoji'] }}</span>
-                                <div>
-                                    <h3 class="font-semibold text-lg mb-2">{{ $insight['insight_title'] }}</h3>
-                                    <p class="text-gray-600">{{ $insight['insight_description'] }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    @endif
+    @foreach($content as $sectionId => $section)
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4">{{ $section['title'] }}</h2>
+            
+            @if(!empty($section['description']))
+                <p class="mb-4 text-gray-600">{{ $section['description'] }}</p>
+            @endif
 
-    @if(isset($content['long_description']))
-        <div class="bg-white rounded-lg shadow-sm p-8">
-            <h2 class="text-2xl font-bold mb-6">{{ $content['long_description']['title'] }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @if(empty($content['long_description']['response']))
-                    <div class="col-span-2 flex justify-center items-center py-8">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <span class="ml-2 text-gray-600">Generating essay...</span>
-                    </div>
-                @else
-                    <article class="prose lg:prose-xl">
-                        {!! nl2br(e($content['long_description']['response']['essay'])) !!}
-                    </article>
+            @if(!empty($section['response']))
+                @if($sectionId === 'overview' && isset($section['response']['content']))
+                    <p class="text-gray-800">{{ $section['response']['content'] }}</p>
                 @endif
-            </div>
+
+                @if($sectionId === 'tasks_and_responsibilities' && isset($section['response']['responsibilities']))
+                    <ul class="list-disc list-inside space-y-2">
+                        @foreach($section['response']['responsibilities'] as $responsibility)
+                            <li class="text-gray-800">{{ $responsibility }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                @if($sectionId === 'compatibility_score')
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p class="text-xl font-medium text-gray-900">{{ $section['title'] }}</p>
+                    </div>
+                @endif
+            @endif
         </div>
-    @endif
+    @endforeach
+
 </div>
 @endsection
