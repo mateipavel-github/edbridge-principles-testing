@@ -45,5 +45,23 @@
             </div>
         </div>
     @endif
+
+    @if(isset($content['long_description']))
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <h2 class="text-2xl font-bold mb-6">{{ $content['insights']['title'] }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @if(empty($content['long_description']['response']))
+                    <div class="col-span-2 flex justify-center items-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                        <span class="ml-2 text-gray-600">Generating insights...</span>
+                    </div>
+                @else
+                    <article class="prose lg:prose-xl">
+                        {!! nl2br(e($content['long_description']['response']['essay'])) !!}
+                    </article>
+                @endif
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
