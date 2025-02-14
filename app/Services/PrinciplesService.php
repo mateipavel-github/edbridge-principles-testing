@@ -231,7 +231,8 @@ class PrinciplesService
                     $translatedQuestion = collect($translationsArray)->where('number', $question['number'])->first();
 
                     return [
-                        'text' => "{$translatedQuestion->roText} ({$question['text']})",
+                        'text' => "{$question['text']}",
+                        'explanation' => "{$translatedQuestion->explanation}",
                         'number' => $question['number'],
                     ];
                 })

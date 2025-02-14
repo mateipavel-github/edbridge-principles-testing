@@ -30,7 +30,10 @@
 
                 @foreach( $questions as $question )
                     <div class="w-full">
-                        <span class="font-bold">{{ $question['text'] }}</span>
+                        <div class="mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $question['text'] }}</h3>
+                            <p class="text-sm text-gray-600 italic">{{ $question['explanation'] }}</p>
+                        </div>
 
                         <div class="w-full flex justify-between items-start pt-6">
                             @foreach( $answers as $answer )
