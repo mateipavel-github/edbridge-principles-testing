@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CareerReport;
+
 class GenerateCareerReport extends Command
 {
     protected $signature = 'app:generate-career-report {reportId}';
@@ -53,8 +54,8 @@ class GenerateCareerReport extends Command
         Log::info("STARTING CAREER REPORT GENERATION");
 
         $reportId = $this->argument('reportId');
-        $report = CareerReport::find($reportId);        
-        
+        $report = CareerReport::find($reportId);
+
         $student = $report->student;
         $accountId = $student->principles_account_uid;
 
@@ -65,12 +66,12 @@ class GenerateCareerReport extends Command
         // Check if uploaded JSON exists
         $this->reportSections = $report->report_template;
 
-        Log::info(json_encode($this->reportSections , JSON_PRETTY_PRINT));
+//        Log::info(json_encode($this->reportSections , JSON_PRETTY_PRINT));
 
         // Prepare sections
         $preparedSections = $this->prepareSections($careerTitle, $accountId);
         $report->update(['processed_template' => $preparedSections]);
-        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
+//        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
 
         // Store sections
         $threadId = $this->openAIService->createThread();
@@ -105,7 +106,7 @@ class GenerateCareerReport extends Command
                 $response = substr($response, 0, -3);
             }
             $response = trim($response);
-            
+
             $report->addToContent($sectionId, [
                 'title' => $sectionData['title'] ?? '',
                 'sub_title' => $sectionData['sub_title'] ?? '',
@@ -212,11 +213,11 @@ class GenerateCareerReport extends Command
     {
         $socCode = Onet::getOnetSocCode($careerTitle);
         $pdfData = ['careerTitle' => $careerTitle, 'responses' => $responses];
-        
+
         $pdf = PDF\Pdf::loadView('pdfs.career_report', $pdfData)
             ->setOption('encoding', 'UTF-8')
             ->setOption('enable-local-file-access', true);
-        
+
         $fileName = "career_report_{$accountId}_{$socCode}.pdf";
         Storage::put("public/reports/{$fileName}", $pdf->output());
         $this->info("Career report generated: storage/app/public/reports/{$fileName}");
