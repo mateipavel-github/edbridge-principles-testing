@@ -65,7 +65,6 @@ class PrinciplesService
     public function __construct()
     {
         $this->baseUrl = config('principles.baseUrl');
-        $this->bearerToken = $this->getBearerToken();
     }
 
     /**
@@ -76,13 +75,18 @@ class PrinciplesService
      */
     private function getBearerToken(): string
     {
+        // Return the token if it's already been fetched.
+        if (!empty($this->bearerToken)) {
+            return $this->bearerToken;
+        }
+
         try {
             Log::info('Checking for existing token in cache.');
             $token = Cache::get('principles-bearer-token');
 
             if ($token !== null) {
                 Log::info('Token found in cache.');
-                return $token;
+                return $this->bearerToken = $token;
             }
 
             Log::info('No token found in cache, requesting new token from API.');
@@ -109,7 +113,7 @@ class PrinciplesService
 
             Log::info('New token stored in cache.');
 
-            return $decodedResponse['access_token'];
+            return $this->bearerToken = $decodedResponse['access_token'];
         } catch (\Exception $exception) {
             Log::error("Failed to get the bearer token: {$exception->getMessage()}");
             throw new PrinciplesApiException("Failed to get the bearer token from the Principles API: {$exception->getMessage()}");
@@ -128,7 +132,7 @@ class PrinciplesService
     public function createStudent(string $email, string $displayName): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)->post(
+            $response = Http::withToken($this->getBearerToken())->post(
                 "{$this->baseUrl}/api/v1/integration_account_tenants/{$this->getTenant()}/users",
                 [
                     'email' => $email,
@@ -178,7 +182,7 @@ class PrinciplesService
     public function createTenant(string $name): string
     {
         try {
-            $response = Http::withToken($this->bearerToken)->post(
+            $response = Http::withToken($this->getBearerToken())->post(
                 "{$this->baseUrl}/api/v1/integration_account_tenants",
                 [
                     'fields' => [
@@ -210,7 +214,7 @@ class PrinciplesService
     {
 
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -252,7 +256,7 @@ class PrinciplesService
     public function storeAnswers(string $accountUid, array $answers): void
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -281,7 +285,7 @@ class PrinciplesService
     public function getResults(string $accountUid): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -310,7 +314,7 @@ class PrinciplesService
     public function getCareerCompatibilityScore(string $accountUid, array $occupationWeightings): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                     'Accept' => 'application/json',
@@ -343,7 +347,7 @@ class PrinciplesService
     public function getPpmOccupations(string $accountUid): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -364,7 +368,7 @@ class PrinciplesService
     public function getPpmScores(string $accountUid): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -385,7 +389,7 @@ class PrinciplesService
     public function getRiasecOccupations(string $accountUid): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -413,7 +417,7 @@ class PrinciplesService
     public function getRiasecScores(string $accountUid): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -441,7 +445,7 @@ class PrinciplesService
     public function getPdfResults(string $accountUid): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
     {
         try {
-            return Http::withToken($this->bearerToken)
+            return Http::withToken($this->getBearerToken())
                 ->withHeaders([
                     'x-on-behalf-of' => $accountUid,
                 ])
@@ -462,7 +466,7 @@ class PrinciplesService
     public function info(): array
     {
         try {
-            $response = Http::withToken($this->bearerToken)
+            $response = Http::withToken($this->getBearerToken())
                 ->get("{$this->baseUrl}/api/v2/me");
 
             if ($response->status() !== 200) {

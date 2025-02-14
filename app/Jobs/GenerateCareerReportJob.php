@@ -43,7 +43,7 @@ class GenerateCareerReportJob implements ShouldQueue
         }
     }
 
-    public function failed(\Throwable $exception)
+    public function failed(\Throwable $exception): void
     {
         $this->report->updateStatus('failed');
         Log::error("JOB {$this->job->getJobId()} failed: {$exception->getMessage()}");
