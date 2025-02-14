@@ -97,17 +97,17 @@ class OpenAIService
 
         // Upload JSON file and get file ID if JSON data is provided
         $attachments = [];
-//        if ($jsonData) {
-//            $fileId = $this->uploadJsonToOpenAI($jsonData);
-//            if ($fileId) {
-//                $attachments[] = [
-//                    'file_id' => $fileId,
-//                    'tools' => [
-//                        ['type' => 'code_interpreter'] // Correct structure: tools should be an array of objects
-//                    ],
-//                ];
-//            }
-//        }
+        if ($jsonData) {
+            $fileId = $this->uploadJsonToOpenAI($jsonData);
+            if ($fileId) {
+                $attachments[] = [
+                    'file_id' => $fileId,
+                    'tools' => [
+                        ['type' => 'code_interpreter'] // Correct structure: tools should be an array of objects
+                    ],
+                ];
+            }
+        }
 
         // Send the message with the file attachment (if available)
         $this->client->threads()->messages()->create($threadId, [
