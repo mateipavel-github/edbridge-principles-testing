@@ -95,7 +95,12 @@ class OpenAIService
         $filePath = storage_path('app/' . $fileName);
 
         // Save JSON data to the file.
-        Storage::disk('local')->put($fileName, json_encode($jsonData));
+        Storage::disk('local')->put($fileName, '{
+  "name": "Jane Doe",
+  "skills": ["communication", "problem-solving"],
+  "experience": "5 years in marketing",
+  "interests": ["data analysis", "creative design"]
+}');
 
         $fileId = null;
         $fileResource = null;
