@@ -163,7 +163,9 @@ class OpenAIService
         $rateLimitCount = 0; // Track consecutive rate limit failures
 
         do {
+            Log::info("Sleeping for $waitTime seconds...");
             sleep($waitTime);
+            Log::info("Woke up. Let get to work!");
             $attempt++;
 
             try {
