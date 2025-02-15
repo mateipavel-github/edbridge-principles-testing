@@ -157,7 +157,7 @@ class GenerateCareerReport extends Command
 
         $this->data = [
             'knowledge' => $knowledge,
-            'personality_profile' => json_encode($this->personality_profile),
+            'personality_profile' => "(see the attached file)",
             'related_occupations' => $relatedOccupations,
             'education' => $education,
             'tasks' => $tasks,
