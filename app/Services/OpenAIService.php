@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -91,22 +92,17 @@ class OpenAIService
 
     public function uploadJsonToOpenAIFresh(array $jsonData): ?string
     {
-        // Use .txt extension to ensure the file is recognized as a plain text document.
-        // Change to '.json' if the API specifically requires JSON.
-        $fileName = 'json_upload_' . uniqid() . '.txt';
+        $fileName = 'json_upload_' . uniqid() . '.json';
         $filePath = storage_path('app/' . $fileName);
 
-        // Convert provided JSON data to a pretty-printed JSON string.
+        // Convert provided JSON data to pretty-printed JSON.
         $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
-
-        // Log the JSON content for debugging purposes.
         Log::info("Uploading JSON content: " . $jsonContent);
 
-        // Save the JSON string as a text file.
+        // Save the JSON content to the file.
         Storage::disk('local')->put($fileName, $jsonContent);
 
         $fileId = null;
-        $fileResource = null;
 
         try {
             // Ensure the file exists and is readable.
@@ -115,35 +111,35 @@ class OpenAIService
                 return null;
             }
 
-            // (Optional) Check file encoding to ensure it's UTF-8 without BOM.
-            $content = file_get_contents($filePath);
-            $encoding = mb_detect_encoding($content, mb_list_encodings(), true);
-            Log::info("File encoding: " . $encoding);
-
-            // Open the file as a resource.
-            $fileResource = fopen($filePath, 'r');
-            if ($fileResource === false) {
-                Log::error("Failed to open file for reading: $filePath");
+            // Read the file content.
+            $fileContent = file_get_contents($filePath);
+            if ($fileContent === false) {
+                Log::error("Failed to read file content: $filePath");
                 return null;
             }
 
-            // Upload the file using the resource.
+            // (Optional) Log the file encoding.
+            $encoding = mb_detect_encoding($fileContent, mb_list_encodings(), true);
+            Log::info("File encoding: " . $encoding);
+
+            // Create a PSR-7 stream from the file content.
+            $stream = Utils::streamFor($fileContent);
+
+            // Upload the file using the stream.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants', // Ensure this purpose is the one expected by the API.
-                'file' => $fileResource,
+                'purpose' => 'assistants', // Ensure this matches the API's expected purpose.
+                'file' => $stream,
+                'filename' => $fileName,
+                'content_type' => 'application/json',
             ]);
 
             $fileId = $uploadedFile->id ?? null;
 
             // Increase delay to allow OpenAI extra time to process the file.
-            sleep(3);
+            sleep(5);
         } catch (\Exception $e) {
             Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
         } finally {
-            // Close the file resource if it's open.
-            if (is_resource($fileResource)) {
-                fclose($fileResource);
-            }
             // Clean up the temporary file.
             Storage::disk('local')->delete($fileName);
         }
