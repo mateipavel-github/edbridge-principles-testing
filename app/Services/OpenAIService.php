@@ -122,8 +122,9 @@ class OpenAIService
         $attachments = [];
         $reuploadAttempted = false;
 
-        if ($jsonData && strpos($message, '{{personality_profile}}') !== false) {
+        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
             $fileId = $this->uploadJsonToOpenAIFresh($jsonData);
+            Log::info("Upload fileID $fileId");
             if ($fileId) {
                 $attachments[] = [
                     'file_id' => $fileId,
@@ -133,6 +134,8 @@ class OpenAIService
                 ];
             }
         }
+
+        Log::info("Attachments: " . json_encode($attachments, JSON_PRETTY_PRINT));
 
         // Send the message with the file attachment (if available)
         $this->client->threads()->messages()->create($threadId, [
@@ -146,36 +149,39 @@ class OpenAIService
             'assistant_id' => $this->assistantId,
         ]);
 
+        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
+            Log::info("--------------------\n\n");
+            Log::info(json_encode($run, JSON_PRETTY_PRINT));
+            Log::info("--------------------\n\n");
+        }
+
         // Check if the response contains an error about file access.
         if (isset($run->lastError) && str_contains($run->lastError->message, 'does not have access')) {
-            if (!$reuploadAttempted) {
-                Log::warning("Uploaded file expired or inaccessible. Reuploading the JSON data...");
-                $reuploadAttempted = true;
+            Log::warning("Uploaded file expired or inaccessible. Reuploading the JSON data...");
 
-                // Clear the cached file ID.
-                $cacheKey = 'openai_file_' . md5(json_encode($jsonData));
-                Cache::forget($cacheKey);
+            // Clear the cached file ID.
+            $cacheKey = 'openai_file_' . md5(json_encode($jsonData));
+            Cache::forget($cacheKey);
 
-                // Reupload the file to get a new file ID.
-                $newFileId = $this->uploadJsonToOpenAIFresh($jsonData);
-                if ($newFileId) {
-                    $attachments = [[
-                        'file_id' => $newFileId,
-                        'tools' => [['type' => 'code_interpreter']],
-                    ]];
+            // Reupload the file to get a new file ID.
+            $newFileId = $this->uploadJsonToOpenAIFresh($jsonData);
+            if ($newFileId) {
+                $attachments = [[
+                    'file_id' => $newFileId,
+                    'tools' => [['type' => 'code_interpreter']],
+                ]];
 
-                    // Resend the message with the new attachment.
-                    $this->client->threads()->messages()->create($threadId, [
-                        'role' => 'user',
-                        'content' => $message,
-                        'attachments' => $attachments,
-                    ]);
+                // Resend the message with the new attachment.
+                $this->client->threads()->messages()->create($threadId, [
+                    'role' => 'user',
+                    'content' => $message,
+                    'attachments' => $attachments,
+                ]);
 
-                    // Create a new run for the re-sent message.
-                    $run = $this->client->threads()->runs()->create($threadId, [
-                        'assistant_id' => $this->assistantId,
-                    ]);
-                }
+                // Create a new run for the re-sent message.
+                $run = $this->client->threads()->runs()->create($threadId, [
+                    'assistant_id' => $this->assistantId,
+                ]);
             }
         }
 
