@@ -50,45 +50,6 @@ class OpenAIService
         }
     }
 
-    public function uploadJsonToOpenAI(array $jsonData): ?string
-    {
-        $cacheKey = 'openai_file_' . md5(json_encode($jsonData)); // Unique cache key based on file content
-
-        Cache::forget($cacheKey);
-
-        // Check if file is already uploaded
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
-        // Define a temporary file path in Laravel's storage
-        $fileName = 'json_upload_' . uniqid() . '.json';
-        $filePath = storage_path('app/' . $fileName);
-
-        // Save JSON data to the file
-        Storage::disk('local')->put($fileName, json_encode($jsonData));
-
-        try {
-            // Upload the file to OpenAI
-            $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants',
-                'file' => fopen($filePath, 'r'),
-            ]);
-
-            // Get the file ID
-            $fileId = $uploadedFile->id ?? null;
-
-            // Store file ID in cache for reuse (expire after 20 minutes)
-            if ($fileId) {
-                Cache::put($cacheKey, $fileId, now()->addMinutes(20));
-            }
-        } finally {
-            // Remove the temporary file
-            Storage::disk('local')->delete($fileName);
-        }
-
-        return $fileId;
-    }
 
     public function uploadJsonToOpenAIFresh(array $jsonData): ?string
     {
@@ -111,24 +72,13 @@ class OpenAIService
                 return null;
             }
 
-            // Read the file content.
-            $fileContent = file_get_contents($filePath);
-            if ($fileContent === false) {
-                Log::error("Failed to read file content: $filePath");
-                return null;
-            }
+            // Create a CURLFile instance.
+            $curlFile = new \CURLFile($filePath, 'application/json', $fileName);
 
-            // (Optional) Log the file encoding.
-            $encoding = mb_detect_encoding($fileContent, mb_list_encodings(), true);
-            Log::info("File encoding: " . $encoding);
-
-            // Create a PSR-7 stream from the file content.
-            $stream = Utils::streamFor($fileContent);
-
-            // Upload the file using only the required properties.
+            // Upload the file to OpenAI. Adjust the purpose parameter if needed.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants', // Must match the API's expected purpose.
-                'file' => $stream,
+                'purpose' => 'fine-tune',  // or 'assistants' if that's required for your use case
+                'file' => $curlFile,
             ]);
 
             $fileId = $uploadedFile->id ?? null;
