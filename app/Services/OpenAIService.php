@@ -30,7 +30,7 @@ class OpenAIService
         $thread = $this->client->threads()->create([
             'messages' => [
                 [
-                    'role'    => 'user',
+                    'role' => 'user',
                     'content' => $enhancedContext
                 ]
             ]
@@ -81,22 +81,12 @@ class OpenAIService
 
     public function sendMessageToThread($threadId, $message, array $jsonData = null): string
     {
-        // Ensure any previous run is completed before sending a new message
-        do {
-            sleep(2);
-            $latestRun = $this->client->threads()->runs()->list($threadId)->data[0] ?? null;
-            if ($latestRun) {
-                Log::info("Waited for 2 seconds before checking again. Status: {$latestRun->status} \n
-            Current prompt: {$message}
-            ");
-            } else {
-                Log::info("No active runs found.");
-            }
-
-        } while ($latestRun && $latestRun->status !== 'completed');
 
         // Upload JSON file and get file ID if JSON data is provided
         $attachments = [];
+        $reuploadAttempted = false;
+
+        // If JSON data is provided, get the file ID and attach it.
         if ($jsonData) {
             $fileId = $this->uploadJsonToOpenAI($jsonData);
             if ($fileId) {
@@ -113,13 +103,52 @@ class OpenAIService
         $this->client->threads()->messages()->create($threadId, [
             'role' => 'user',
             'content' => $message,
-            'attachments' => $attachments, // Attach the file here
+            'attachments' => $attachments,
         ]);
 
-        // Start a new run (without file_ids)
+        // Create a run to get the AI's response.
         $run = $this->client->threads()->runs()->create($threadId, [
             'assistant_id' => $this->assistantId,
         ]);
+
+        // Check if the response contains an error about file access.
+        if (isset($run->lastError) && str_contains($run->lastError->message, 'does not have access')) {
+            if (!$reuploadAttempted) {
+                Log::warning("Uploaded file expired or inaccessible. Reuploading the JSON data...");
+                $reuploadAttempted = true;
+
+                // Clear the cached file ID.
+                $cacheKey = 'openai_file_' . md5(json_encode($jsonData));
+                Cache::forget($cacheKey);
+
+                // Reupload the file to get a new file ID.
+                $newFileId = $this->uploadJsonToOpenAI($jsonData);
+                if ($newFileId) {
+                    $attachments = [[
+                        'file_id' => $newFileId,
+                        'tools' => [['type' => 'code_interpreter']],
+                    ]];
+
+                    // Resend the message with the new attachment.
+                    $this->client->threads()->messages()->create($threadId, [
+                        'role' => 'user',
+                        'content' => $message,
+                        'attachments' => $attachments,
+                    ]);
+
+                    // Create a new run for the re-sent message.
+                    $run = $this->client->threads()->runs()->create($threadId, [
+                        'assistant_id' => $this->assistantId,
+                    ]);
+                }
+            }
+        }
+
+        // After reupload, if the error still exists, cancel the job.
+        if (isset($run->lastError) && str_contains($run->lastError->message, 'does not have access')) {
+            Log::error("File reupload attempt did not resolve file access issue. Cancelling job.");
+            throw new \Exception("Job cancelled: File still not accessible after reupload.");
+        }
 
         Log::info(json_encode($run, JSON_PRETTY_PRINT));
 
