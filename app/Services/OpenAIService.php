@@ -94,29 +94,44 @@ class OpenAIService
         $fileName = 'json_upload_' . uniqid() . '.json';
         $filePath = storage_path('app/' . $fileName);
 
-        // Save JSON data to the file
+        // Save JSON data to the file.
         Storage::disk('local')->put($fileName, json_encode($jsonData));
 
-        try {
-            // Create a CURLFile instance for proper multipart/form-data handling.
-            $curlFile = new \CURLFile($filePath, 'application/json', $fileName);
+        $fileId = null;
+        $fileResource = null;
 
-            // Upload the file to OpenAI with the correct purpose.
+        try {
+            // Ensure the file exists and is readable.
+            if (!file_exists($filePath) || !is_readable($filePath)) {
+                Log::error("File not found or not readable: $filePath");
+                return null;
+            }
+
+            // Open the file as a resource.
+            $fileResource = fopen($filePath, 'r');
+            if ($fileResource === false) {
+                Log::error("Failed to open file for reading: $filePath");
+                return null;
+            }
+
+            // Upload the file using a resource.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants', // Ensure this purpose matches the API requirements.
-                'file' => $curlFile,
+                'purpose' => 'assistants', // Ensure this matches the API's expected purpose.
+                'file' => $fileResource,
             ]);
 
-            // Optionally, add a short delay to ensure the file is fully processed.
-            sleep(1);
-
-            // Retrieve the file ID from the response.
             $fileId = $uploadedFile->id ?? null;
+
+            // Optionally, wait a moment to allow OpenAI to process the file.
+            sleep(1);
         } catch (\Exception $e) {
             Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
-            $fileId = null;
         } finally {
-            // Always remove the temporary file after uploading.
+            // Close the file resource if it's open.
+            if (is_resource($fileResource)) {
+                fclose($fileResource);
+            }
+            // Clean up the temporary file.
             Storage::disk('local')->delete($fileName);
         }
 
