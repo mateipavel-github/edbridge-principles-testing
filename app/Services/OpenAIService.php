@@ -122,6 +122,17 @@ class OpenAIService
         $attachments = [];
         $reuploadAttempted = false;
 
+        Log::info("Message: " . $message);
+        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
+            Log::info("--------------------\n\n");
+            Log::info("Placeholder found!");
+            Log::info("--------------------\n\n");
+
+        } else {
+            Log::info("Placeholder not found or jsonData is empty.");
+        }
+
+
         if ($jsonData && str_contains($message, '{{personality_profile}}')) {
             $fileId = $this->uploadJsonToOpenAIFresh($jsonData);
             Log::info("Upload fileID $fileId");
