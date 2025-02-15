@@ -70,7 +70,7 @@ class GenerateCareerReport extends Command
 
         // Prepare sections
         $preparedSections = $this->prepareSections($careerTitle, $accountId);
-        $this->personality_profile = array_merge($this->personality_profile, $student);
+        $this->personality_profile = array_merge($this->personality_profile, $student->toArray());
         $report->update(['processed_template' => $preparedSections]);
 //        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
 
