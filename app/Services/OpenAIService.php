@@ -39,6 +39,17 @@ class OpenAIService
         return $thread->id;
     }
 
+    public function closeThread($threadId): void
+    {
+        try {
+            // Assuming the API supports closing the thread
+            $this->client->threads()->close($threadId);
+            Log::info("Thread $threadId closed successfully.");
+        } catch (\Exception $e) {
+            Log::error("Error closing thread $threadId: " . $e->getMessage());
+        }
+    }
+
     public function uploadJsonToOpenAI(array $jsonData): ?string
     {
         $cacheKey = 'openai_file_' . md5(json_encode($jsonData)); // Unique cache key based on file content
@@ -79,21 +90,46 @@ class OpenAIService
         return $fileId;
     }
 
+    public function uploadJsonToOpenAIFresh(array $jsonData): ?string
+    {
+        // Fresh upload: do not use caching.
+        $fileName = 'json_upload_' . uniqid() . '.json';
+        $filePath = storage_path('app/' . $fileName);
+
+        // Save JSON data to the file
+        Storage::disk('local')->put($fileName, json_encode($jsonData));
+
+        try {
+            // Upload the file to OpenAI
+            $uploadedFile = $this->client->files()->upload([
+                'purpose' => 'assistants',
+                'file' => fopen($filePath, 'r'),
+            ]);
+
+            // Get the file ID
+            $fileId = $uploadedFile->id ?? null;
+        } finally {
+            // Remove the temporary file
+            Storage::disk('local')->delete($fileName);
+        }
+
+        return $fileId;
+    }
+
     public function sendMessageToThread($threadId, $message, array $jsonData = null): string
     {
 
-        // Upload JSON file and get file ID if JSON data is provided
+        // Fresh attach the file only if the prompt contains {{personality_profile}} in it.
         $attachments = [];
         $reuploadAttempted = false;
 
-        // If JSON data is provided, get the file ID and attach it.
-        if ($jsonData) {
-            $fileId = $this->uploadJsonToOpenAI($jsonData);
+        if ($jsonData && strpos($message, '{{personality_profile}}') !== false) {
+            $fileId = $this->uploadJsonToOpenAIFresh($jsonData);
             if ($fileId) {
                 $attachments[] = [
                     'file_id' => $fileId,
                     'tools' => [
-                        ['type' => 'code_interpreter'] // Correct structure: tools should be an array of objects
+                        ['type' => 'code_interpreter']
                     ],
                 ];
             }
@@ -122,7 +158,7 @@ class OpenAIService
                 Cache::forget($cacheKey);
 
                 // Reupload the file to get a new file ID.
-                $newFileId = $this->uploadJsonToOpenAI($jsonData);
+                $newFileId = $this->uploadJsonToOpenAIFresh($jsonData);
                 if ($newFileId) {
                     $attachments = [[
                         'file_id' => $newFileId,

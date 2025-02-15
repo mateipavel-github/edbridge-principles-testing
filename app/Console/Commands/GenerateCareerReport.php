@@ -74,8 +74,6 @@ class GenerateCareerReport extends Command
 //        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
 
         // Store sections
-        $threadId = $this->openAIService->createThread();
-
         $responses = [];
 
         Log::info("Report has " . count($preparedSections) . " entries");
@@ -94,8 +92,12 @@ class GenerateCareerReport extends Command
 
             // Handle prompt-based response
             if (!empty($sectionData['prompt'])) {
+                // Create a new thread for each prompt
+                $threadId = $this->openAIService->createThread($this->context);
                 $runId = $this->openAIService->sendMessageToThread($threadId, $sectionData['prompt'], $this->personality_profile);
                 $response = $this->openAIService->getResponse($threadId, $runId);
+                // Close the thread after processing the prompt
+                $this->openAIService->closeThread($threadId);
                 Log::info("Response: " . $response);
             }
             // Trim JSON code block markers and whitespace if present
@@ -311,14 +313,12 @@ Seniority and Experience: Entry-level professionals typically earn less, while t
                 'prompt' => "Calculate and generate a 'Future safety score' for the {{career_title}} career, assessing long-term stability and demand. The score must take into account the Projected Growth Rate (2022-2033) {{Projected Growth Rate (2022-2033) %}} for the career {{career_title}}.
 
 Response Structure:
-Future Safety Score:
 	•	Assign a score from 1 to 10 (1 = Low stability, 10 = Very high stability).
 	•	This score must be based on the Projected Growth Rate (2022-2033) {{Projected Growth Rate (2022-2033) %}} for the career of {{career_title}} and considering factors such as demand, automation risks, and industry trends.
 Explanation: After assigning the score, explain why it's appropriate by addressing each factor:
 	•	Industry trends: Detail how 'industry trends' impact the career's stability. Clearly state the Projected Growth Rate (2022-2033) {{Projected Growth Rate (2022-2033) %}} for the {{career_title}} career. Explain briefly if the career is expanding, stable, or shrinking and in which industries it is most relevant.
 	•	Impact of automation: Assess whether AI or automation pose risks to this career. Explain the role automation might play in replacing or complementing tasks.
 	•	Demand across industries: Highlight industries where demand is strong and any shifts in opportunities (e.g., transitioning from print to digital in design). Mention any emerging specializations that could increase job security.
-
 Ensure the explanation is user-friendly and provides actionable insights for the user to understand the career's long-term viability and any challenges they might face.
 
 Example Output Format:
