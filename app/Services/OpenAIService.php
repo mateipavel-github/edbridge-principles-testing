@@ -94,13 +94,9 @@ class OpenAIService
         $fileName = 'json_upload_' . uniqid() . '.json';
         $filePath = storage_path('app/' . $fileName);
 
-        // Save JSON data to the file.
-        Storage::disk('local')->put($fileName, '{
-  "name": "Jane Doe",
-  "skills": ["communication", "problem-solving"],
-  "experience": "5 years in marketing",
-  "interests": ["data analysis", "creative design"]
-}');
+        // Use the provided JSON data rather than a hardcoded sample.
+        $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
+        Storage::disk('local')->put($fileName, $jsonContent);
 
         $fileId = null;
         $fileResource = null;
@@ -127,8 +123,8 @@ class OpenAIService
 
             $fileId = $uploadedFile->id ?? null;
 
-            // Optionally, wait a moment to allow OpenAI to process the file.
-            sleep(1);
+            // Increase delay to allow OpenAI extra time to process the file.
+            sleep(2);
         } catch (\Exception $e) {
             Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
         } finally {
