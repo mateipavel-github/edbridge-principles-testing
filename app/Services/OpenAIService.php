@@ -101,7 +101,7 @@ class OpenAIService
         try {
             // Upload the file to OpenAI
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants',
+                'purpose' => 'fine-tune',
                 'file' => fopen($filePath, 'r'),
             ]);
 
@@ -109,7 +109,6 @@ class OpenAIService
             $fileId = $uploadedFile->id ?? null;
         } finally {
             // Remove the temporary file
-            dd($filePath);
             Storage::disk('local')->delete($fileName);
         }
 
