@@ -95,7 +95,7 @@ class OpenAIService
         $fileName = 'json_upload_' . uniqid() . '.json';
         $filePath = storage_path('app/' . $fileName);
 
-        // Convert provided JSON data to pretty-printed JSON.
+        // Convert the provided JSON data to a pretty-printed JSON string.
         $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
         Log::info("Uploading JSON content: " . $jsonContent);
 
@@ -125,12 +125,10 @@ class OpenAIService
             // Create a PSR-7 stream from the file content.
             $stream = Utils::streamFor($fileContent);
 
-            // Upload the file using the stream.
+            // Upload the file using only the required properties.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants', // Ensure this matches the API's expected purpose.
+                'purpose' => 'assistants', // Must match the API's expected purpose.
                 'file' => $stream,
-                'filename' => $fileName,
-                'content_type' => 'application/json',
             ]);
 
             $fileId = $uploadedFile->id ?? null;
