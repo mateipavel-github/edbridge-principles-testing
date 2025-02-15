@@ -91,11 +91,18 @@ class OpenAIService
 
     public function uploadJsonToOpenAIFresh(array $jsonData): ?string
     {
-        $fileName = 'json_upload_' . uniqid() . '.json';
+        // Use .txt extension to ensure the file is recognized as a plain text document.
+        // Change to '.json' if the API specifically requires JSON.
+        $fileName = 'json_upload_' . uniqid() . '.txt';
         $filePath = storage_path('app/' . $fileName);
 
-        // Use the provided JSON data rather than a hardcoded sample.
+        // Convert provided JSON data to a pretty-printed JSON string.
         $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
+
+        // Log the JSON content for debugging purposes.
+        Log::info("Uploading JSON content: " . $jsonContent);
+
+        // Save the JSON string as a text file.
         Storage::disk('local')->put($fileName, $jsonContent);
 
         $fileId = null;
@@ -108,6 +115,11 @@ class OpenAIService
                 return null;
             }
 
+            // (Optional) Check file encoding to ensure it's UTF-8 without BOM.
+            $content = file_get_contents($filePath);
+            $encoding = mb_detect_encoding($content, mb_list_encodings(), true);
+            Log::info("File encoding: " . $encoding);
+
             // Open the file as a resource.
             $fileResource = fopen($filePath, 'r');
             if ($fileResource === false) {
@@ -115,16 +127,16 @@ class OpenAIService
                 return null;
             }
 
-            // Upload the file using a resource.
+            // Upload the file using the resource.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'assistants', // Ensure this matches the API's expected purpose.
+                'purpose' => 'assistants', // Ensure this purpose is the one expected by the API.
                 'file' => $fileResource,
             ]);
 
             $fileId = $uploadedFile->id ?? null;
 
             // Increase delay to allow OpenAI extra time to process the file.
-            sleep(2);
+            sleep(3);
         } catch (\Exception $e) {
             Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
         } finally {
