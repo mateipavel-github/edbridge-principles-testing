@@ -91,25 +91,32 @@ class OpenAIService
 
     public function uploadJsonToOpenAIFresh(array $jsonData): ?string
     {
-        // Fresh upload: do not use caching.
-        $fileName = 'json_upload_' . uniqid() . '.txt';
+        $fileName = 'json_upload_' . uniqid() . '.json';
         $filePath = storage_path('app/' . $fileName);
 
         // Save JSON data to the file
         Storage::disk('local')->put($fileName, json_encode($jsonData));
 
         try {
-            // Upload the file to OpenAI
+            // Create a CURLFile instance for proper multipart/form-data handling.
+            $curlFile = new \CURLFile($filePath, 'application/json', $fileName);
+
+            // Upload the file to OpenAI with the correct purpose.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'fine-tune',
-                'file' => fopen($filePath, 'r'),
+                'purpose' => 'assistants', // Ensure this purpose matches the API requirements.
+                'file' => $curlFile,
             ]);
 
-            // Get the file ID
+            // Optionally, add a short delay to ensure the file is fully processed.
+            sleep(1);
+
+            // Retrieve the file ID from the response.
             $fileId = $uploadedFile->id ?? null;
+        } catch (\Exception $e) {
+            Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
+            $fileId = null;
         } finally {
-            // Remove the temporary file
-            Log::info("JSON: ", json_decode(Storage::disk('local')->get($fileName), true));
+            // Always remove the temporary file after uploading.
             Storage::disk('local')->delete($fileName);
         }
 
