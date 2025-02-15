@@ -120,20 +120,8 @@ class OpenAIService
 
         // Fresh attach the file only if the prompt contains {{personality_profile}} in it.
         $attachments = [];
-        $reuploadAttempted = false;
 
-        Log::info("Message: " . $message);
-        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
-            Log::info("--------------------\n\n");
-            Log::info("Placeholder found!");
-            Log::info("--------------------\n\n");
-
-        } else {
-            Log::info("Placeholder not found or jsonData is empty.");
-        }
-
-
-        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
+        if ($jsonData && str_contains($message, 'personality_profile')) {
             $fileId = $this->uploadJsonToOpenAIFresh($jsonData);
             Log::info("Upload fileID $fileId");
             if ($fileId) {
@@ -160,7 +148,7 @@ class OpenAIService
             'assistant_id' => $this->assistantId,
         ]);
 
-        if ($jsonData && str_contains($message, '{{personality_profile}}')) {
+        if ($jsonData && str_contains($message, 'personality_profile')) {
             Log::info("--------------------\n\n");
             Log::info(json_encode($run, JSON_PRETTY_PRINT));
             Log::info("--------------------\n\n");
