@@ -109,6 +109,7 @@ class OpenAIService
             $fileId = $uploadedFile->id ?? null;
         } finally {
             // Remove the temporary file
+            Log::info("JSON: ", json_decode(Storage::disk('local')->get($fileName)));
             Storage::disk('local')->delete($fileName);
         }
 
