@@ -141,6 +141,13 @@ class OpenAIService
                 $run = $this->client->threads()->runs()->retrieve($threadId, $runId);
                 Log::info("Waiting for OpenAI response... Attempt: $attempt, Status: {$run->status}");
 
+                // Check if the error message indicates that the request is too large
+                if (isset($run->lastError) && str_contains($run->lastError->message, 'Request too large for')) {
+                    Log::error("Job cancelled because the request is too large: " . $run->lastError->message);
+                    // Throw an exception to cancel the job immediately.
+                    throw new \Exception("Job cancelled: Request too large.");
+                }
+
                 if ($run->status === 'failed' || $run->status === 'cancelled') {
                     Log::warning("OpenAI request failed/cancelled. Attempting to rerun...");
                     Log::info(json_encode($run, JSON_PRETTY_PRINT));
