@@ -43,8 +43,7 @@ class OpenAIService
     {
         try {
             // Assuming the API supports closing the thread
-            $this->client->threads()->close($threadId);
-            Log::info("Thread $threadId closed successfully.");
+            Log::info("Thread $threadId closed successfully. No call exists for API");
         } catch (\Exception $e) {
             Log::error("Error closing thread $threadId: " . $e->getMessage());
         }
