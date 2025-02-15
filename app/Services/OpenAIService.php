@@ -92,7 +92,7 @@ class OpenAIService
     public function uploadJsonToOpenAIFresh(array $jsonData): ?string
     {
         // Fresh upload: do not use caching.
-        $fileName = 'json_upload_' . uniqid() . '.json';
+        $fileName = 'json_upload_' . uniqid() . '.txt';
         $filePath = storage_path('app/' . $fileName);
 
         // Save JSON data to the file

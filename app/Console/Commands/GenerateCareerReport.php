@@ -101,8 +101,8 @@ class GenerateCareerReport extends Command
                 $runId = $this->openAIService->sendMessageToThread($threadId, $sectionData['prompt'], $this->personality_profile);
                 $response = $this->openAIService->getResponse($threadId, $runId);
                 // Close the thread after processing the prompt
-                $this->openAIService->closeThread($threadId);
                 Log::info("Response: " . $response);
+                $this->openAIService->closeThread($threadId);
             }
             // Trim JSON code block markers and whitespace if present
             if (str_starts_with($response, '```json')) {
