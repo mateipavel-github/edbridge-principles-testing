@@ -109,6 +109,7 @@ class OpenAIService
             $fileId = $uploadedFile->id ?? null;
         } finally {
             // Remove the temporary file
+            dd($filePath);
             Storage::disk('local')->delete($fileName);
         }
 
