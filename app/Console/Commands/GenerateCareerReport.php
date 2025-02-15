@@ -77,9 +77,11 @@ class GenerateCareerReport extends Command
         $responses = [];
 
         Log::info("Report has " . count($preparedSections) . " entries");
+        $sectionCount = 1;
 
         foreach ($preparedSections as $sectionId => $sectionData) {
-            Log::info("Section $sectionId of " . count($preparedSections));
+            Log::info("Section $sectionId of $sectionCount/" . count($preparedSections));
+            $sectionCount++;
 
             $response = '';
 
