@@ -27,7 +27,6 @@
 
                     @if($sectionId === 'compatibility_score' && isset($section['response']['content']))
                         <div class="bg-gray-100 p-4 rounded-lg">
-                            <p class="text-xl font-medium text-gray-900">{{ $section['title'] }}</p>
                             <p class="mt-2 text-gray-800">{{ $section['response']['content'] }}</p>
                         </div>
                     @endif
