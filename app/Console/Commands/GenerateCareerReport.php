@@ -16,7 +16,7 @@ use App\Models\CareerReport;
 
 class GenerateCareerReport extends Command
 {
-    protected $signature = 'app:generate-career-report {reportId}';
+    protected $signature = 'app:generate-career-report';
     protected $description = 'Generates a career report based on a CareerReport record ID';
 
     public PrinciplesService $principlesService;
@@ -163,7 +163,7 @@ class GenerateCareerReport extends Command
 
         $this->data = [
             'knowledge' => $knowledge,
-            'personality_profile' => "(see the content of the attached file personality_profile)",
+            'personality_profile' => json_encode($this->personality_profile),
             'related_occupations' => $relatedOccupations,
             'education' => $education,
             'tasks' => $tasks,

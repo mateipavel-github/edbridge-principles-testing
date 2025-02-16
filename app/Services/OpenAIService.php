@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -13,10 +14,13 @@ class OpenAIService
     protected OpenAI\Client $client;
     protected mixed $assistantId;
 
-    public function __construct()
+    protected PrinciplesService $principlesService;
+
+    public function __construct(PrinciplesService $principlesService)
     {
         $this->client = OpenAI::client(config('services.openai.api_key'));
         $this->assistantId = config('services.openai.assistant_id');
+        $this->principlesService = $principlesService;
     }
 
     public function createThread(string $context = "You are a helpful assistant."): string
@@ -50,18 +54,22 @@ class OpenAIService
         }
     }
 
-
-    public function uploadJsonToOpenAIFresh(array $jsonData): ?string
+    public function uploadDocumentToOpenAIFresh(array $uid): ?string
     {
-        $fileName = 'json_upload_' . uniqid() . '.json';
+        // Retrieve the PDF results using the principlesService.
+        // Here, we're assuming that the $uid array contains the unique identifier needed.
+        // You may adjust this if you expect a single UID value.
+        $pdfResults = $this->principlesService->getPdfResults($uid);
+        $pdfContent = $pdfResults->body(); // Extract the raw PDF content
+
+        // Use a .pdf extension for the PDF file.
+        $fileName = 'pdf_upload_' . uniqid() . '.pdf';
         $filePath = storage_path('app/' . $fileName);
 
-        // Convert the provided JSON data to a pretty-printed JSON string.
-        $jsonContent = json_encode($jsonData, JSON_PRETTY_PRINT);
-        Log::info("Uploading JSON content: " . $jsonContent);
+        Log::info("Uploading PDF document: " . $fileName);
 
-        // Save the JSON content to the file.
-        Storage::disk('local')->put($fileName, $jsonContent);
+        // Save the PDF content to a local file.
+        Storage::disk('local')->put($fileName, $pdfContent);
 
         $fileId = null;
 
@@ -72,21 +80,31 @@ class OpenAIService
                 return null;
             }
 
-            // Create a CURLFile instance.
-            $curlFile = new \CURLFile($filePath, 'application/json', $fileName);
+            // Open the file for reading.
+            $handle = fopen($filePath, 'r');
+            if (!$handle) {
+                Log::error("Failed to open file: $filePath");
+                return null;
+            }
 
-            // Upload the file to OpenAI. Adjust the purpose parameter if needed.
+            // Upload the file to OpenAI.
+            // The file is uploaded with a purpose of 'assistants'.
             $uploadedFile = $this->client->files()->upload([
-                'purpose' => 'fine-tune',  // or 'assistants' if that's required for your use case
-                'file' => $curlFile,
+                'purpose' => 'assistants',
+                'file' => $handle,
             ]);
+
+            Log::info("Message after upload: ", $uploadedFile->toArray());
 
             $fileId = $uploadedFile->id ?? null;
 
-            // Increase delay to allow OpenAI extra time to process the file.
-            sleep(5);
+            if (is_resource($handle)) {
+                fclose($handle);
+            } else {
+                Log::warning("File handle is not a valid resource. Skipping fclose.");
+            }
         } catch (\Exception $e) {
-            Log::error("Error uploading JSON to OpenAI: " . $e->getMessage());
+            Log::error("Error uploading PDF to OpenAI: " . $e->getMessage());
         } finally {
             // Clean up the temporary file.
             Storage::disk('local')->delete($fileName);
@@ -95,29 +113,21 @@ class OpenAIService
         return $fileId;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function sendMessageToThread($threadId, $message, array $jsonData = null): string
     {
-
-        // Fresh attach the file only if the prompt contains {{personality_profile}} in it.
         $attachments = [];
 
-        if ($jsonData && str_contains($message, 'personality_profile')) {
-            $fileId = $this->uploadJsonToOpenAIFresh($jsonData);
-            Log::info("Upload fileID $fileId");
-            if ($fileId) {
-                $attachments[] = [
-                    'file_id' => $fileId,
-                    'tools' => [
-                        ['type' => 'code_interpreter']
-                    ],
-                ];
-            }
-        }
-
-        Log::info("Attachments: " . json_encode($attachments, JSON_PRETTY_PRINT));
-
-        // Send the message with the file attachment (if available)
+        // Send the message with the file attachment (if available).
         $this->client->threads()->messages()->create($threadId, [
+            'role' => 'user',
+            'content' => $message,
+            'attachments' => $attachments,
+        ]);
+
+        Log::info("Full message sent log", [
             'role' => 'user',
             'content' => $message,
             'attachments' => $attachments,
@@ -128,48 +138,6 @@ class OpenAIService
             'assistant_id' => $this->assistantId,
         ]);
 
-        if ($jsonData && str_contains($message, 'personality_profile')) {
-            Log::info("--------------------\n\n");
-            Log::info(json_encode($run, JSON_PRETTY_PRINT));
-            Log::info("--------------------\n\n");
-        }
-
-        // Check if the response contains an error about file access.
-        if (isset($run->lastError) && str_contains($run->lastError->message, 'does not have access')) {
-            Log::warning("Uploaded file expired or inaccessible. Reuploading the JSON data...");
-
-            // Clear the cached file ID.
-            $cacheKey = 'openai_file_' . md5(json_encode($jsonData));
-            Cache::forget($cacheKey);
-
-            // Reupload the file to get a new file ID.
-            $newFileId = $this->uploadJsonToOpenAIFresh($jsonData);
-            if ($newFileId) {
-                $attachments = [[
-                    'file_id' => $newFileId,
-                    'tools' => [['type' => 'code_interpreter']],
-                ]];
-
-                // Resend the message with the new attachment.
-                $this->client->threads()->messages()->create($threadId, [
-                    'role' => 'user',
-                    'content' => $message,
-                    'attachments' => $attachments,
-                ]);
-
-                // Create a new run for the re-sent message.
-                $run = $this->client->threads()->runs()->create($threadId, [
-                    'assistant_id' => $this->assistantId,
-                ]);
-            }
-        }
-
-        // After reupload, if the error still exists, cancel the job.
-        if (isset($run->lastError) && str_contains($run->lastError->message, 'does not have access')) {
-            Log::error("File reupload attempt did not resolve file access issue. Cancelling job.");
-            throw new \Exception("Job cancelled: File still not accessible after reupload.");
-        }
-
         Log::info(json_encode($run, JSON_PRETTY_PRINT));
 
         return $run->id;
@@ -177,7 +145,7 @@ class OpenAIService
 
     public function getResponse($threadId, $runId): string
     {
-        $maxRetries = 20; // Stop retrying after 10 attempts
+        $maxRetries = 20; // Stop retrying after 20 attempts
         $attempt = 0;
         $waitTime = 5; // Start polling at 5s
         $rateLimitCount = 0; // Track consecutive rate limit failures
@@ -199,31 +167,55 @@ class OpenAIService
                     throw new \Exception("Job cancelled: Request too large.");
                 }
 
+                // If we hit a rate limit, check for the Retry-After header.
+                if ($run->lastError && $run->lastError->code === 'rate_limit_exceeded') {
+                    $retryAfter = null;
+                    // Attempt to read the header if available.
+                    if (isset($run->lastError->headers) && is_array($run->lastError->headers)) {
+                        $retryAfterHeader = $run->lastError->headers['Retry-After'] ?? null;
+                        if ($retryAfterHeader) {
+                            $retryAfter = (int)$retryAfterHeader[0];
+                        }
+                    }
+                    // Fallback if the header is missing.
+                    if (!$retryAfter) {
+                        $retryAfter = pow(2, $attempt);
+                    }
+
+                    Log::warning("Rate limit hit! Waiting {$retryAfter} seconds before retrying...");
+                    $rateLimitCount++;
+
+                    if ($rateLimitCount >= 3) { // Stop retrying after 3 consecutive rate limits
+                        Log::error("Rate limit exceeded 3 times in a row. Waiting 5 minutes before retrying...");
+                        sleep(300); // 5-minute cooldown
+                        $rateLimitCount = 0; // Reset counter
+                    } else {
+                        sleep($retryAfter);
+                    }
+
+                    continue;
+                }
+
                 if ($run->status === 'failed' || $run->status === 'cancelled') {
                     Log::warning("OpenAI request failed/cancelled. Attempting to rerun...");
                     Log::info(json_encode($run, JSON_PRETTY_PRINT));
 
-                    // Handle rate limits
-                    if ($run->lastError && $run->lastError->code === 'rate_limit_exceeded') {
-                        preg_match('/Please try again in ([0-9.]+)s/', $run->lastError->message, $matches);
-                        $retryAfter = isset($matches[1]) ? ceil($matches[1]) : pow(2, $attempt);
-                        Log::warning("Rate limit hit! Waiting {$retryAfter} seconds before retrying...");
-
-                        $rateLimitCount++;
-
-                        if ($rateLimitCount >= 3) { // Stop retrying after 3 consecutive rate limits
-                            Log::error("Rate limit exceeded 3 times in a row. Waiting 5 minutes before retrying...");
-                            sleep(300); // 5-minute cooldown
-                            $rateLimitCount = 0; // Reset counter
-                        } else {
-                            sleep($retryAfter);
-                        }
-
-                        continue;
-                    }
-
                     return "Failed due to OpenAI restrictions.";
                 }
+            } catch (RequestException $e) {
+                // If a Guzzle request exception is caught, try to get the Retry-After header
+                if ($e->hasResponse()) {
+                    $response = $e->getResponse();
+                    $retryAfterHeader = $response->getHeader('Retry-After');
+                    if (!empty($retryAfterHeader)) {
+                        $retryAfter = (int)$retryAfterHeader[0];
+                        Log::warning("Rate limit reached (RequestException). Waiting for {$retryAfter} seconds before retrying...");
+                        sleep($retryAfter);
+                        continue;
+                    }
+                }
+                Log::error("Error retrieving OpenAI response: " . $e->getMessage());
+                return "Error retrieving response. Please try again later.";
             } catch (\Exception $e) {
                 Log::error("Error retrieving OpenAI response: " . $e->getMessage());
                 return "Error retrieving response. Please try again later.";
@@ -240,7 +232,6 @@ class OpenAIService
 
         return $this->fetchAssistantResponse($threadId);
     }
-
 
     /**
      * Fetches the last user message from the thread.
@@ -280,13 +271,17 @@ class OpenAIService
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
 
-            // Handle rate limits
+            // Handle rate limits from exceptions directly
             if (str_contains($errorMessage, 'rate limit')) {
-                preg_match('/Please try again in ([0-9.]+)s/', $errorMessage, $matches);
-                $waitTime = isset($matches[1]) ? ceil($matches[1]) : 10; // Default 10s if not found
-
-                Log::warning("Rate limit hit! Waiting for {$waitTime} seconds before retrying...");
-                sleep($waitTime);
+                if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                    $response = $e->getResponse();
+                    $retryAfterHeader = $response->getHeader('Retry-After');
+                    $waitTime = !empty($retryAfterHeader) ? (int)$retryAfterHeader[0] : 10;
+                    Log::warning("Rate limit hit! Waiting for {$waitTime} seconds before retrying...");
+                    sleep($waitTime);
+                } else {
+                    sleep(10);
+                }
 
                 return $this->rerunAssistant($threadId, $assistantId);
             }
