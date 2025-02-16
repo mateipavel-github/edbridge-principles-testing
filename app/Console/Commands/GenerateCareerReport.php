@@ -155,8 +155,8 @@ class GenerateCareerReport extends Command
         $occupationWeightings = DataTransformer::transformRecords(Onet::getOnetJobWeights($onetsocCode));
         $careerCompatibilityScore = $this->principlesService->getCareerCompatibilityScore($accountId, $occupationWeightings);
 
-        $careerCompatibilityScorePercentage = round((($careerCompatibilityScore['customOccupationsErrorMargins']["errorMargins"]["ea_"]["value"] + 1) / 2) * 100, 2);
-        
+        $careerCompatibilityScorePercentage = round((($careerCompatibilityScore['customOccupationsErrorMargins']["errorMargins"]["ea_"]["value"] + 1) / 2) * 100, 0);
+
         $this->personality_profile = $personalityProfile;
 
         $this->data = [
