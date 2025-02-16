@@ -116,7 +116,7 @@ class OpenAIService
     /**
      * @throws \Exception
      */
-    public function sendMessageToThread($threadId, $message, array $jsonData = null): string
+    public function sendMessageToThread($threadId, $message): string
     {
         $attachments = [];
 
