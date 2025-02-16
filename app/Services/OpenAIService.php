@@ -127,12 +127,6 @@ class OpenAIService
             'attachments' => $attachments,
         ]);
 
-        Log::info("Full message sent log", [
-            'role' => 'user',
-            'content' => $message,
-            'attachments' => $attachments,
-        ]);
-
         // Create a run to get the AI's response.
         $run = $this->client->threads()->runs()->create($threadId, [
             'assistant_id' => $this->assistantId,
@@ -145,9 +139,9 @@ class OpenAIService
 
     public function getResponse($threadId, $runId): string
     {
-        $maxRetries = 20; // Stop retrying after 20 attempts
+        $maxRetries = 5; // Stop retrying after 5 attempts
         $attempt = 0;
-        $waitTime = 5; // Start polling at 5s
+        $waitTime = 3; // Start polling at 5s
         $rateLimitCount = 0; // Track consecutive rate limit failures
 
         do {
@@ -187,7 +181,7 @@ class OpenAIService
 
                     if ($rateLimitCount >= 3) { // Stop retrying after 3 consecutive rate limits
                         Log::error("Rate limit exceeded 3 times in a row. Waiting 5 minutes before retrying...");
-                        sleep(300); // 5-minute cooldown
+                        sleep(30); // 30 seconds cooldown
                         $rateLimitCount = 0; // Reset counter
                     } else {
                         sleep($retryAfter);
@@ -280,7 +274,7 @@ class OpenAIService
                     Log::warning("Rate limit hit! Waiting for {$waitTime} seconds before retrying...");
                     sleep($waitTime);
                 } else {
-                    sleep(10);
+                    sleep(5);
                 }
 
                 return $this->rerunAssistant($threadId, $assistantId);

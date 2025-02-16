@@ -119,8 +119,6 @@ class GenerateCareerReport extends Command
                 'description' => $description,
                 'response' => json_decode($response, true)
             ]);
-
-            sleep(30);
         }
 
         // $this->generatePdf($careerTitle, $accountId, $responses);
