@@ -42,6 +42,7 @@ class GenerateCareerReport extends Command
         $this->principlesService = $principlesService;
         $this->openAIService = $openAIService;
         $this->context = "You are an expert career coach and researcher with 20 years of experience helping young people discover careers they enjoy and can thrive in. ";
+        $this->careerTitle = "";
         $this->reportSections = [];
     }
 
@@ -61,10 +62,10 @@ class GenerateCareerReport extends Command
         $accountId = $student->principles_account_uid;
         $studentName = $student->first_name . ' ' . $student->last_name;
 
-        $careerTitle = $report->onet_soc_code;
-        $careerTitle = str_replace("_", " ", $careerTitle);
 
-        Log::info("Career title: " . $careerTitle );
+        $this->careerTitle = Onet::getOnetJobTitleByCode($report->onet_soc_code);
+
+        Log::info("Career title: " . $this->careerTitle);
 
         Log::info("Report ID: $reportId for Student: " . $report->student->first_name . " " . $report->student->last_name);
         // Check if uploaded JSON exists
@@ -73,7 +74,7 @@ class GenerateCareerReport extends Command
 //        Log::info(json_encode($this->reportSections , JSON_PRETTY_PRINT));
 
         // Prepare sections
-        $preparedSections = $this->prepareSections($careerTitle, $accountId);
+        $preparedSections = $this->prepareSections($report->onet_soc_code, $accountId);
         $this->personality_profile = array_merge($this->personality_profile, $student->toArray());
         $report->update(['processed_template' => $preparedSections]);
 //        Log::info(json_encode($preparedSections , JSON_PRETTY_PRINT));
@@ -132,32 +133,26 @@ class GenerateCareerReport extends Command
     /**
      * @throws PrinciplesApiException
      */
-    protected function prepareSections(string $careerTitle, string $accountId): array
+    protected function prepareSections(string $onetsocCode, string $accountId): array
     {
+//        $salary = Onet::getSalaryInfo($this->careerTitle);
+        $tasks = Onet::getTasks($onetsocCode)->implode(', ');
+        $workActivities = Onet::getWorkActivities($onetsocCode)->implode(', ');
+        $detailedWorkActivities = Onet::getDetailedWorkActivities($onetsocCode)->implode(',');
+        $workContext = Onet::getWorkContext($onetsocCode)->implode(',');
+        $skills = Onet::getSkills($onetsocCode)->implode(', ');
+        $abilities = Onet::getAbilities($onetsocCode)->implode(',');
+        $workValues = Onet::getWorkValues($onetsocCode)->implode(',');
+        $workStyles = Onet::getWorkStyles($onetsocCode)->implode(',');
+//        $projectedGrowthRate = Onet::getProjectedGrowthRate($this->careerTitle);
+        $relatedOccupations = Onet::getRelatedOccupations($onetsocCode)->implode(',');
+        $knowledge = Onet::getKnowledge($onetsocCode);
+        $education = Onet::getEducation($onetsocCode);
 
-//        $salary = Onet::getSalaryInfo($careerTitle);
-        $tasks = Onet::getTasks($careerTitle)->implode(', ');
-        $workActivities = Onet::getWorkActivities($careerTitle)->implode(', ');
-        $detailedWorkActivities = Onet::getDetailedWorkActivities($careerTitle)->implode(',');
-        $workContext = Onet::getWorkContext($careerTitle)->implode(',');
-        $skills = Onet::getSkills($careerTitle)->implode(', ');
-        $abilities = Onet::getAbilities($careerTitle)->implode(',');
-        $workValues = Onet::getWorkValues($careerTitle)->implode(',');
-        $workStyles = Onet::getWorkStyles($careerTitle)->implode(',');
-//        $projectedGrowthRate = Onet::getProjectedGrowthRate($careerTitle);
-        $relatedOccupations = Onet::getRelatedOccupations($careerTitle)->implode(',');
-        $knowledge = Onet::getKnowledge($careerTitle);
-        $education = Onet::getEducation($careerTitle);
-
-        $interests = Onet::getInterests($careerTitle)->implode(', ');
+        $interests = Onet::getInterests($onetsocCode)->implode(', ');
         $ppmScores = $this->principlesService->getPpmScores($accountId);
         $personalityProfile = $this->principlesService->getResults($accountId);
-        $occupationWeightings = DataTransformer::extractNestedValues(
-            $ppmScores,      // Source array
-            'ppmScore',    // Key where the values exist
-            'ea_',         // Key to store transformed values under
-            'rawScore'     // Value to extract from each item
-        );
+        $occupationWeightings = DataTransformer::transformRecords(Onet::getOnetJobWeights($onetsocCode));
         $careerCompatibilityScore = $this->principlesService->getCareerCompatibilityScore($accountId, $occupationWeightings);
 
         $careerCompatibilityScorePercentage = (($careerCompatibilityScore['customOccupationsErrorMargins']["errorMargins"]["ea_"]["value"] + 1) / 2) * 100;
@@ -181,7 +176,7 @@ class GenerateCareerReport extends Command
             'occupation_weightings' => json_encode($occupationWeightings, JSON_PRETTY_PRINT),
             'career_compatibility_score' => json_encode($careerCompatibilityScore, JSON_PRETTY_PRINT),
             'career_compatibility_score_percentage' => $careerCompatibilityScorePercentage,
-            'career_title' => $careerTitle,
+            'career_title' => $this->careerTitle,
         ];
 
         return array_map(function ($sectionData) {

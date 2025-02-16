@@ -321,9 +321,7 @@ class PrinciplesService
                 ])
                 ->post(
                     "{$this->baseUrl}/api/v1/ppm/accounts/{$accountUid}/custom_occupations_error_margins",
-                    [
-                        'occupationWeightings' => $occupationWeightings
-                    ]
+                    $occupationWeightings
                 );
 
             if ($response->status() !== 200) {

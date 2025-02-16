@@ -46,6 +46,13 @@ class Onet
             ->value('onetsoc_code');
     }
 
+    public static function getOnetJobTitleByCode(string $onetSocCode)
+    {
+        return DB::table('onet__occupation_data')
+            ->where('onetsoc_code', $onetSocCode)
+            ->value('title');
+    }
+
     public static function getCareerInfo(string $careerTitle): Builder|null
     {
         return DB::table('onet__occupation_data')
@@ -54,29 +61,30 @@ class Onet
             ->first();
     }
 
-    public static function getInterests(string $careerTitle): Collection
+    public static function getInterests(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__interests as i')
             ->join('onet__content_model_reference as cmr', 'i.element_id', '=', 'cmr.element_id')
             ->where('i.onetsoc_code', $onetsocCode)
             ->get(['cmr.element_name as interest_title', 'cmr.description as interest_description']);
     }
 
-    public static function getTasks(string $careerTitle): Collection
+    public static function getOnetJobWeights(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
+        return DB::table('onet__interests as i')
+            ->where('i.onetsoc_code', $onetsocCode)
+            ->get(['element_id', 'data_value']);
+    }
 
+    public static function getTasks(string $onetsocCode): Collection
+    {
         return DB::table('onet__task_statements')
             ->where('onetsoc_code', $onetsocCode)
             ->pluck('task');
     }
 
-    public static function getWorkActivities(string $careerTitle): Collection
+    public static function getWorkActivities(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__work_activities as wa')
             ->join('onet__content_model_reference as cmr', 'wa.element_id', '=', 'cmr.element_id')
             ->where('wa.onetsoc_code', $onetsocCode)
@@ -85,10 +93,8 @@ class Onet
             ->values();
     }
 
-    public static function getDetailedWorkActivities(string $careerTitle): Collection
+    public static function getDetailedWorkActivities(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__dwa_reference')
             ->whereIn('element_id', function ($query) use ($onetsocCode) {
                 $query->select('element_id')
@@ -98,19 +104,15 @@ class Onet
             ->pluck('dwa_title');
     }
 
-    public static function getSalaryInfo(string $careerTitle): Builder|null
+    public static function getSalaryInfo(string $onetsocCode): Builder|null
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__salary_data')
             ->where('onetsoc_code', $onetsocCode)
             ->first(['median_wage_hourly', 'median_wage_annual']);
     }
 
-    public static function getWorkContext(string $careerTitle): Collection
+    public static function getWorkContext(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__work_context as wc')
             ->join('onet__content_model_reference as cmr', 'wc.element_id', '=', 'cmr.element_id')
             ->where('wc.onetsoc_code', $onetsocCode)
@@ -119,10 +121,8 @@ class Onet
             ->values();
     }
 
-    public static function getSkills(string $careerTitle): Collection
+    public static function getSkills(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__skills as s')
             ->join('onet__content_model_reference as cmr', 's.element_id', '=', 'cmr.element_id')
             ->where('s.onetsoc_code', $onetsocCode)
@@ -131,10 +131,8 @@ class Onet
             ->values();
     }
 
-    public static function getAbilities(string $careerTitle): Collection
+    public static function getAbilities(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__abilities as a')
             ->join('onet__content_model_reference as cmr', 'a.element_id', '=', 'cmr.element_id')
             ->where('a.onetsoc_code', $onetsocCode)
@@ -143,10 +141,8 @@ class Onet
             ->values();
     }
 
-    public static function getWorkValues(string $careerTitle): Collection
+    public static function getWorkValues(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__work_values as wv')
             ->join('onet__content_model_reference as cmr', 'wv.element_id', '=', 'cmr.element_id')
             ->where('wv.onetsoc_code', $onetsocCode)
@@ -155,10 +151,8 @@ class Onet
             ->values();
     }
 
-    public static function getWorkStyles(string $careerTitle): Collection
+    public static function getWorkStyles(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__work_styles as ws')
             ->join('onet__content_model_reference as cmr', 'ws.element_id', '=', 'cmr.element_id')
             ->where('ws.onetsoc_code', $onetsocCode)
@@ -174,10 +168,8 @@ class Onet
             ->value('growth_rate');
     }
 
-    public static function getRelatedOccupations(string $careerTitle): Collection
+    public static function getRelatedOccupations(string $onetsocCode): Collection
     {
-        $onetsocCode = self::getOnetSocCode($careerTitle);
-
         return DB::table('onet__related_occupations as ro')
             ->join('onet__occupation_data as o2', 'ro.related_onetsoc_code', '=', 'o2.onetsoc_code')
             ->where('ro.onetsoc_code', $onetsocCode)
