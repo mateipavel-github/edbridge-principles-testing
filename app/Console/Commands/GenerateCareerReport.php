@@ -16,7 +16,7 @@ use App\Models\CareerReport;
 
 class GenerateCareerReport extends Command
 {
-    protected $signature = 'app:generate-career-report';
+    protected $signature = 'app:generate-career-report {reportId}';
     protected $description = 'Generates a career report based on a CareerReport record ID';
 
     public PrinciplesService $principlesService;
