@@ -64,7 +64,7 @@ class GenerateCareerReport extends Command
         $careerTitle = $report->onet_soc_code;
         $careerTitle = str_replace("_", " ", $careerTitle);
 
-        Log::info("Career title", $careerTitle);
+        Log::info("Career title: " . $careerTitle );
 
         Log::info("Report ID: $reportId for Student: " . $report->student->first_name . " " . $report->student->last_name);
         // Check if uploaded JSON exists
