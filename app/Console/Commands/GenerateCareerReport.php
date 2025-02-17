@@ -19,6 +19,8 @@ class GenerateCareerReport extends Command
     protected $signature = 'app:generate-career-report {reportId}';
     protected $description = 'Generates a career report based on a CareerReport record ID';
 
+    private string $careerTitle;
+
     public PrinciplesService $principlesService;
     public array $data;
     /**

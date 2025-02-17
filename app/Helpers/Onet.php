@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\DB;
 class Onet
 {
 
-    public static function getJobTitles(array $socCodes) {
+    public static function getJobTitles(array $socCodes)
+    {
         $alternateTitles = DB::table('onet__alternate_titles')
             ->whereIn('onetsoc_code', $socCodes)
             ->get(['onetsoc_code', 'alternate_title as title'])
             ->groupBy('onetsoc_code')
-            ->map(function($titles) {
+            ->map(function ($titles) {
                 return $titles->pluck('title')->toArray();
             });
 
@@ -22,7 +23,7 @@ class Onet
             ->whereIn('onetsoc_code', $socCodes)
             ->get(['onetsoc_code', 'reported_job_title as title'])
             ->groupBy('onetsoc_code')
-            ->map(function($titles) {
+            ->map(function ($titles) {
                 return $titles->pluck('title')->toArray();
             });
 
@@ -190,23 +191,19 @@ class Onet
     public static function getEducation(string $careerTitle): Collection
     {
         return DB::table('onet__education_training_experience AS e')
-            ->join('onet__occupation_data AS o', 'e.onetsoc_code', '=', 'o.onetsoc_code')
-            ->join('onet__ete_categories AS ec', 'e.category', '=', 'ec.category')
-            ->join(
-                DB::raw('(SELECT onetsoc_code, SUM(data_value) AS total_value FROM onet__education_training_experience GROUP BY onetsoc_code) AS t'),
-                'e.onetsoc_code', '=', 't.onetsoc_code'
-            )
-            ->where('o.title', 'LIKE', "%$careerTitle%")
-            ->whereNot(function ($query) {
-                $query->where('ec.category_description', 'LIKE', "%Over % years%")
-                    ->orWhere('ec.category_description', 'LIKE', "%Over % months%");
-            }) // Exclude both "Over X years" and "Over X months"
+            ->join('onet__occupation_data AS o', 'e.onetsoc_code', '=', 'o.onetsoc_code') // Join occupation data
+            ->join('onet__ete_categories AS ec', function ($join) {
+                $join->on('e.category', '=', 'ec.category')
+                    ->where('ec.scale_id', '=', 'RL');
+            })
+            ->where('o.title', 'LIKE', "%$careerTitle%") // Filter by career title
+            ->where('e.scale_id', '=', 'RL')
+            ->where('e.data_value', '>', 0)
             ->select(
                 'ec.category_description AS education_requirement',
-                DB::raw('ROUND(SUM(e.data_value) / MAX(t.total_value) * 100, 2) AS percentage')
+                'e.data_value AS percentage'
             )
-            ->groupBy('ec.category_description')
-            ->orderByDesc('percentage')
+            ->orderByDesc('e.data_value')
             ->get();
     }
 
