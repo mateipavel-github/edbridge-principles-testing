@@ -42,8 +42,13 @@ class DataTransformer
             'organizing' => 'conventional',
         ];
         $riasecScores = [];
-        foreach ($ppmScores as $key => $value) {
-            $riasecScores[$ppmToRiasec[$key]] = $value;
+        try {       
+            foreach ($ppmScores as $key => $value) {
+                $riasecScores[$ppmToRiasec[$key]] = $value;
+            }
+        } catch (\Exception $e) {
+            Log::error("Error transforming PPM scores to RIASEC scores: " . $e->getMessage());
+            return [];
         }
         return $riasecScores;
     }

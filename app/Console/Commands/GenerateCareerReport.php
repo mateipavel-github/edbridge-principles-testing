@@ -226,7 +226,7 @@ class GenerateCareerReport extends Command
 
     protected function formatPpmScore($ppmScores): string
     {
-        return collect($ppmScores['ppmScore'])
+        return collect($ppmScores)
             ->map(fn($values, $key) => (string)$key . " - {$values['rawScore']};")
             ->implode(' ');
     }

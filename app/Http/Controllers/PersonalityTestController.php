@@ -74,7 +74,7 @@ class PersonalityTestController extends Controller
                 'student' => $student,
                 'top50occupations' => $top50,
                 'bottom50occupations' => $bottom50,
-                'ppmScores' => $ppmScores['ppmScore']
+                'ppmScores' => $ppmScores
             ]);
         }
 
