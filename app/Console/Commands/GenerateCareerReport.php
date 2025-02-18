@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\CareerReport;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Student;
-
+use Illuminate\Support\Str;
 class GenerateCareerReport extends Command
 {
     protected $signature = 'app:generate-career-report {reportId}';
@@ -110,7 +110,7 @@ class GenerateCareerReport extends Command
                 $runId = $this->openAIService->sendMessageToThread($threadId, $modifiedPrompt);
                 $response = $this->openAIService->getResponse($threadId, $runId);
                 // Close the thread after processing the prompt
-                Log::info("Response: " . $response);
+                Log::info("Response: " . Str::limit($response, 300));
                 $this->openAIService->closeThread($threadId);
             }
             // Trim JSON code block markers and whitespace if present
