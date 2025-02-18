@@ -78,7 +78,7 @@
     <div class="grid md:grid-cols-2 gap-8 mb-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Career Safety</h2>
-            @if($content['safety_score']['response'] !== null)
+            @if(isset($content['safety_score']['response']))
                 <div class="mb-4">
                     <span class="inline-block px-3 py-1 rounded-full text-white bg-yellow-500">{{ $content['safety_score']['response']['rating'] }}</span>
                 </div>
@@ -96,7 +96,7 @@
 
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Work-Life Balance</h2>
-            @if($content['worklife_balance']['response'] !== null)
+            @if(isset($content['worklife_balance']['response']))
                 <div class="mb-4">
                     <span class="inline-block px-3 py-1 rounded-full text-white bg-red-500">{{ $content['worklife_balance']['response']['rating'] }}</span>
                 </div>
@@ -159,6 +159,7 @@
     <div class="grid md:grid-cols-2 gap-8 mb-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Time to First Paycheck</h2>
+            @if(isset($content['paycheck_time']['response']))
             <div class="mb-4">
                 <span class="inline-block px-3 py-1 rounded-full text-white bg-yellow-500">{{ $content['paycheck_time']['response']['rating'] }}</span>
             </div>
@@ -168,10 +169,14 @@
                     <p class="text-gray-600">{{ $item['description'] }}</p>
                 </div>
             @endforeach
+            @else
+                <p class="text-gray-500 italic">Paycheck time data not available</p>
+            @endif
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Pivot Potential</h2>
+            @if(isset($content['pivot_potential']['response']))
             <div class="mb-4">
                 <span class="inline-block px-3 py-1 rounded-full text-white bg-yellow-500">{{ $content['pivot_potential']['response']['rating'] }}</span>
             </div>
@@ -181,6 +186,9 @@
                     <p class="text-gray-600">{{ $item['description'] }}</p>
                 </div>
             @endforeach
+            @else
+                <p class="text-gray-500 italic">Pivot potential data not available</p>
+            @endif
             <div class="mt-4 p-4 bg-gray-50 rounded-lg">
                 <p class="text-sm text-gray-600">{{ $content['pivot_potential']['response']['explanation'] }}</p>
             </div>
@@ -190,9 +198,13 @@
     {{-- Personal Fit Analysis --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['you_as_a']['title'] }}</h2>
+        @if(isset($content['you_as_a']['response']))
         <div class="prose max-w-none">
             {!! nl2br(e($content['you_as_a']['response']['content'])) !!}
         </div>
+        @else
+            <p class="text-gray-500 italic">Personal fit analysis data not available</p>
+        @endif
     </div>
 
     {{-- Compatibility Table --}}
@@ -368,7 +380,6 @@
                 </div>
                 @endforeach
             </div>
-            @if(isset($content['career_path']['response']))
             <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                 <p class="text-sm text-gray-600">{{ $content['career_path']['response']['growth_note'] }}</p>
             </div>
@@ -494,9 +505,6 @@
                 </div>
             </div>
         </div>
-        @else
-            <p class="text-gray-500 italic">Entrepreneurship data not available</p>
-        @endif
         {{-- How to Succeed --}}
         <div class="mt-8">
             <h3 class="text-xl font-semibold mb-4">How to Succeed</h3>
@@ -509,6 +517,9 @@
                 @endforeach
             </div>
         </div>
+        @else
+            <p class="text-gray-500 italic">Entrepreneurship data not available</p>
+        @endif
     </div>
 
     {{-- First Steps --}}
