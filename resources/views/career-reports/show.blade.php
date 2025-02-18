@@ -15,14 +15,14 @@
                 <div class="text-4xl font-bold text-blue-600 mt-2">60%</div>
             </div>
         </div>
-        @if(isset($content['compatibility_score']['response']['content']))
+        @if(isset($content['compatibility_score']['response']))
             <p class="text-gray-600 mt-4">{{ $content['compatibility_score']['response']['content'] }}</p>
         @endif
         
         {{-- Overview Section --}}
         <div class="mt-6 pt-6 border-t border-gray-200">
             <h2 class="text-xl font-semibold mb-3">Overview</h2>
-            @if(isset($content['overview']['response']['content']))
+            @if(isset($content['overview']['response']))
                 <p class="text-gray-600">{{ $content['overview']['response']['content'] }}</p>
             @else
                 <p class="text-gray-500 italic">Overview not available</p>
@@ -33,7 +33,7 @@
     {{-- Tasks and Responsibilities --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['tasks_and_responsibilities']['title'] }}</h2>
-        @if(isset($content['tasks_and_responsibilities']['response']['responsibilities']))
+        @if(isset($content['tasks_and_responsibilities']['response']))
             <ul class="space-y-3">
                 @foreach($content['tasks_and_responsibilities']['response']['responsibilities'] as $task)
                     <li class="flex items-start">
@@ -50,7 +50,7 @@
     {{-- Salary Information --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['average_salary']['title'] }}</h2>
-        @if(isset($content['average_salary']['response']['average salary']))
+        @if(isset($content['average_salary']['response']))
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div class="bg-gray-50 p-4 rounded-lg text-center">
                     <div class="text-sm text-gray-600">Average Hourly</div>
@@ -78,29 +78,37 @@
     <div class="grid md:grid-cols-2 gap-8 mb-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Career Safety</h2>
-            <div class="mb-4">
-                <span class="inline-block px-3 py-1 rounded-full text-white bg-yellow-500">{{ $content['safety_score']['response']['rating'] }}</span>
-            </div>
-            <p class="mb-4">{{ $content['safety_score']['response']['explanation'] }}</p>
-            @foreach($content['safety_score']['response']['factors'] as $factor)
+            @if($content['safety_score']['response'] !== null)
                 <div class="mb-4">
-                    <h3 class="font-semibold">{{ $factor['title'] }}</h3>
-                    <p class="text-gray-600">{{ $factor['description'] }}</p>
+                    <span class="inline-block px-3 py-1 rounded-full text-white bg-yellow-500">{{ $content['safety_score']['response']['rating'] }}</span>
                 </div>
-            @endforeach
+                <p class="mb-4">{{ $content['safety_score']['response']['explanation'] }}</p>
+                @foreach($content['safety_score']['response']['factors'] as $factor)
+                    <div class="mb-4">
+                        <h3 class="font-semibold">{{ $factor['title'] }}</h3>
+                        <p class="text-gray-600">{{ $factor['description'] }}</p>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-gray-500 italic">Safety score data not available</p>
+            @endif
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">Work-Life Balance</h2>
-            <div class="mb-4">
-                <span class="inline-block px-3 py-1 rounded-full text-white bg-red-500">{{ $content['worklife_balance']['response']['rating'] }}</span>
-            </div>
-            @foreach($content['worklife_balance']['response']['items'] as $item)
+            @if($content['worklife_balance']['response'] !== null)
                 <div class="mb-4">
-                    <h3 class="font-semibold">{{ $item['title'] }}</h3>
-                    <p class="text-gray-600">{{ $item['description'] }}</p>
+                    <span class="inline-block px-3 py-1 rounded-full text-white bg-red-500">{{ $content['worklife_balance']['response']['rating'] }}</span>
                 </div>
-            @endforeach
+                @foreach($content['worklife_balance']['response']['items'] as $item)
+                    <div class="mb-4">
+                        <h3 class="font-semibold">{{ $item['title'] }}</h3>
+                        <p class="text-gray-600">{{ $item['description'] }}</p>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-gray-500 italic">Work-life balance data not available</p>
+            @endif
         </div>
     </div>
 
@@ -109,32 +117,40 @@
         <div class="grid md:grid-cols-2 gap-8">
             <div>
                 <h2 class="text-2xl font-bold mb-4">Work Setting</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center">
-                        <span class="font-semibold mr-2">Type:</span>
-                        <span>{{ $content['work_setting']['response']['typical_setting'] }}</span>
-                    </div>
-                    <div>
-                        <span class="font-semibold">Industries:</span>
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            @foreach($content['work_setting']['response']['industries'] as $industry)
-                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{{ $industry }}</span>
-                            @endforeach
+                @if($content['work_setting']['response'] !== null)
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <span class="font-semibold mr-2">Type:</span>
+                            <span>{{ $content['work_setting']['response']['typical_setting'] }}</span>
                         </div>
+                        <div>
+                            <span class="font-semibold">Industries:</span>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                @foreach($content['work_setting']['response']['industries'] as $industry)
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">{{ $industry }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        <p>{{ $content['work_setting']['response']['summary'] }}</p>
                     </div>
-                    <p>{{ $content['work_setting']['response']['summary'] }}</p>
-                </div>
+                @else
+                    <p class="text-gray-500 italic">Work setting data not available</p>
+                @endif
             </div>
             <div>
                 <h2 class="text-2xl font-bold mb-4">Flexibility</h2>
-                <div class="mb-4">
-                    <span class="inline-block px-3 py-1 rounded-full text-white bg-green-500">{{ $content['flexibility']['response']['rating'] }}</span>
-                </div>
-                <div class="space-y-4">
-                    <p><span class="font-semibold">Freelancing:</span> {{ $content['flexibility']['response']['freelancing'] }}</p>
-                    <p><span class="font-semibold">Schedule:</span> {{ $content['flexibility']['response']['schedule'] }}</p>
-                    <p><span class="font-semibold">Deadlines:</span> {{ $content['flexibility']['response']['deadlines'] }}</p>
-                </div>
+                @if($content['flexibility']['response'] !== null)
+                    <div class="mb-4">
+                        <span class="inline-block px-3 py-1 rounded-full text-white bg-green-500">{{ $content['flexibility']['response']['rating'] }}</span>
+                    </div>
+                    <div class="space-y-4">
+                        <p><span class="font-semibold">Freelancing:</span> {{ $content['flexibility']['response']['freelancing'] }}</p>
+                        <p><span class="font-semibold">Schedule:</span> {{ $content['flexibility']['response']['schedule'] }}</p>
+                        <p><span class="font-semibold">Deadlines:</span> {{ $content['flexibility']['response']['deadlines'] }}</p>
+                    </div>
+                @else
+                    <p class="text-gray-500 italic">Flexibility data not available</p>
+                @endif
             </div>
         </div>
     </div>
