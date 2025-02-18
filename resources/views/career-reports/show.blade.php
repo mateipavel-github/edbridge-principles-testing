@@ -15,49 +15,63 @@
                 <div class="text-4xl font-bold text-blue-600 mt-2">60%</div>
             </div>
         </div>
-        <p class="text-gray-600 mt-4">{{ $content['compatibility_score']['response']['content'] }}</p>
+        @if(isset($content['compatibility_score']['response']['content']))
+            <p class="text-gray-600 mt-4">{{ $content['compatibility_score']['response']['content'] }}</p>
+        @endif
         
         {{-- Overview Section --}}
         <div class="mt-6 pt-6 border-t border-gray-200">
             <h2 class="text-xl font-semibold mb-3">Overview</h2>
-            <p class="text-gray-600">{{ $content['overview']['response']['content'] }}</p>
+            @if(isset($content['overview']['response']['content']))
+                <p class="text-gray-600">{{ $content['overview']['response']['content'] }}</p>
+            @else
+                <p class="text-gray-500 italic">Overview not available</p>
+            @endif
         </div>
     </div>
 
     {{-- Tasks and Responsibilities --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['tasks_and_responsibilities']['title'] }}</h2>
-        <ul class="space-y-3">
-            @foreach($content['tasks_and_responsibilities']['response']['responsibilities'] as $task)
-                <li class="flex items-start">
-                    <span class="text-blue-500 mr-2">•</span>
-                    <span>{{ $task }}</span>
-                </li>
-            @endforeach
-        </ul>
+        @if(isset($content['tasks_and_responsibilities']['response']['responsibilities']))
+            <ul class="space-y-3">
+                @foreach($content['tasks_and_responsibilities']['response']['responsibilities'] as $task)
+                    <li class="flex items-start">
+                        <span class="text-blue-500 mr-2">•</span>
+                        <span>{{ $task }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p class="text-gray-500 italic">Tasks and responsibilities not available</p>
+        @endif
     </div>
 
     {{-- Salary Information --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['average_salary']['title'] }}</h2>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-50 p-4 rounded-lg text-center">
-                <div class="text-sm text-gray-600">Average Hourly</div>
-                <div class="text-2xl font-bold text-gray-800">{{ $content['average_salary']['response']['average salary'][0]['hourly'] }}</div>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-lg text-center">
-                <div class="text-sm text-gray-600">Average Annual</div>
-                <div class="text-2xl font-bold text-gray-800">{{ $content['average_salary']['response']['average salary'][0]['annual'] }}</div>
-            </div>
-        </div>
-        <div class="space-y-4">
-            @foreach($content['average_salary']['response']['description'] as $factor)
-                <div class="border-l-4 border-blue-500 pl-4">
-                    <h3 class="font-semibold">{{ $factor['Factor'] }}</h3>
-                    <p class="text-gray-600">{{ $factor['description'] }}</p>
+        @if(isset($content['average_salary']['response']['average salary']))
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-gray-50 p-4 rounded-lg text-center">
+                    <div class="text-sm text-gray-600">Average Hourly</div>
+                    <div class="text-2xl font-bold text-gray-800">{{ $content['average_salary']['response']['average salary'][0]['hourly'] }}</div>
                 </div>
-            @endforeach
-        </div>
+                <div class="bg-gray-50 p-4 rounded-lg text-center">
+                    <div class="text-sm text-gray-600">Average Annual</div>
+                    <div class="text-2xl font-bold text-gray-800">{{ $content['average_salary']['response']['average salary'][0]['annual'] }}</div>
+                </div>
+            </div>
+            <div class="space-y-4">
+                @foreach($content['average_salary']['response']['description'] as $factor)
+                    <div class="border-l-4 border-blue-500 pl-4">
+                        <h3 class="font-semibold">{{ $factor['Factor'] }}</h3>
+                        <p class="text-gray-600">{{ $factor['description'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-500 italic">Salary information not available</p>
+        @endif
     </div>
 
     {{-- Safety Score and Industry Outlook --}}
@@ -280,17 +294,21 @@
     {{-- Work People --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">Who You'll Work With</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            @foreach($content['work_people']['response']['content'] as $person)
-                <div class="border border-gray-200 rounded-lg p-4">
-                    <h3 class="font-semibold text-lg mb-2">{{ $person['title'] }}</h3>
-                    <p class="text-gray-600 text-sm">{{ $person['description'] }}</p>
-                </div>
-            @endforeach
-        </div>
-        <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p class="text-blue-800">{{ $content['work_people']['response']['closingStatement'] }}</p>
-        </div>
+        @if(!empty($content['work_people']['response']))
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($content['work_people']['response']['content'] as $person)
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h3 class="font-semibold text-lg mb-2">{{ $person['title'] }}</h3>
+                        <p class="text-gray-600 text-sm">{{ $person['description'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p class="text-blue-800">{{ $content['work_people']['response']['closingStatement'] }}</p>
+            </div>
+        @else
+            <p class="text-gray-500 italic">Work people information not available</p>
+        @endif
     </div>
 
     {{-- Career Path --}}
