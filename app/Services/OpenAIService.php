@@ -140,7 +140,7 @@ class OpenAIService
 
     public function getResponse($threadId, $runId): string
     {
-        $maxRetries = 10; // Stop retrying after 5 attempts
+        $maxRetries = 50; // Stop retrying after 5 attempts
         $attempt = 0;
         $waitTime = 2; // Start polling at 5s
         $rateLimitCount = 0; // Track consecutive rate limit failures
