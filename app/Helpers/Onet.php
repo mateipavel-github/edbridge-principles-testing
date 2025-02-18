@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Onet
 {
 
-    public static function getJobTitles(array $socCodes)
+    public static function getJobTitles(array $socCodes): array
     {
         $alternateTitles = DB::table('onet__alternate_titles')
             ->whereIn('onetsoc_code', $socCodes)
@@ -70,7 +70,7 @@ class Onet
             ->where('i.scale_id', 'OI')
             ->select([
                 'cmr.element_name as name',
-                'cmr.description as description', 
+                'cmr.description as description',
                 'i.data_value as score',
                 DB::raw('ROUND(((i.data_value-1) / 6) * 100, 2) as percentage')
             ])
@@ -134,7 +134,7 @@ class Onet
     }
 
     /**
-     * Get a list of most relevant work contexts for the given OnetSocCode 
+     * Get a list of most relevant work contexts for the given OnetSocCode
      * @param string $onetsocCode
      * @return Collection
      */
@@ -233,7 +233,7 @@ class Onet
         return DB::table('onet__abilities as a')
             ->join('onet__content_model_reference as cmr', 'a.element_id', '=', 'cmr.element_id')
             ->where('a.onetsoc_code', $onetsocCode)
-            ->where('a.recommend_suppress', '<>', 'Y') 
+            ->where('a.recommend_suppress', '<>', 'Y')
             ->where('a.not_relevant', '<>', 'Y')
             ->select(
                 'cmr.element_name AS name',
@@ -270,7 +270,7 @@ class Onet
             ->where('i.scale_id', 'EX')
             ->select([
                 'cmr.element_name as name',
-                'cmr.description as description', 
+                'cmr.description as description',
                 'i.data_value as score',
                 DB::raw('ROUND(((i.data_value-1) / 6) * 100, 2) as percentage')
             ])
@@ -308,7 +308,7 @@ class Onet
         return DB::table('onet__knowledge as a')
             ->join('onet__content_model_reference as cmr', 'a.element_id', '=', 'cmr.element_id')
             ->where('a.onetsoc_code', $onetsocCode)
-            ->where('a.recommend_suppress', '<>', 'Y') 
+            ->where('a.recommend_suppress', '<>', 'Y')
             ->where('a.not_relevant', '<>', 'Y')
             ->select(
                 'cmr.element_name AS name',
