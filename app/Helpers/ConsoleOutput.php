@@ -4,9 +4,34 @@ namespace App\Helpers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class ConsoleOutput
 {
+    private static bool $debugMode = false;
+
+    public static function setDebugMode(bool $mode): void
+    {
+        self::$debugMode = $mode;
+    }
+
+    public static function log(string $message, array $context = [], string $level = 'info'): void
+    {
+        if (!self::$debugMode && $level === 'debug') {
+            return;
+        }
+
+        // Truncate long messages
+        $truncatedMessage = Str::limit($message, 500);
+        
+        match ($level) {
+            'error' => Log::error($truncatedMessage, $context),
+            'warning' => Log::warning($truncatedMessage, $context),
+            'debug' => Log::debug($truncatedMessage, $context),
+            default => Log::info($truncatedMessage, $context)
+        };
+    }
+
     /**
      * Convert an array or collection to a formatted console table string
      *

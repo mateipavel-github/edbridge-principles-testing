@@ -32,7 +32,7 @@ class PersonalityTestController extends Controller
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      * @throws PrinciplesApiException
      */
-    public function index(Request $request, string $studentUid, bool $showQuestions = false): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(Request $request, string $studentUid, bool $showQuestions = false): View|Application|Factory
     {
         $student = Student::where('uid', $studentUid)->firstOrFail();
         $nextQuestions = $this->principlesService->getNextQuestions($student->principles_account_uid);
@@ -46,9 +46,6 @@ class PersonalityTestController extends Controller
                 
                 // Get job titles and descriptions from Onet
                 $jobTitles = Onet::getJobTitles(array_column($ppmOccupations, 'socCode'));
-                
-                // Add logging to see what we get from Onet
-                \Log::info('Onet job titles:', ['titles' => $jobTitles]);
 
                 $ppmOccupations = array_map(function($occupation) use ($jobTitles) {
                     $occupation['jobTitles'] = $jobTitles[$occupation['socCode']] ?? [];

@@ -16,6 +16,8 @@ use App\Models\CareerReport;
 use Illuminate\Support\Facades\Blade;
 use App\Models\Student;
 use Illuminate\Support\Str;
+use App\Helpers\ConsoleOutput;
+
 class GenerateCareerReport extends Command
 {
     protected $signature = 'app:generate-career-report {reportId}';
@@ -56,8 +58,7 @@ class GenerateCareerReport extends Command
      */
     public function handle(): void
     {
-
-        Log::info("STARTING CAREER REPORT GENERATION");
+        ConsoleOutput::log("STARTING CAREER REPORT GENERATION");
 
         $reportId = $this->argument('reportId');
         $report = CareerReport::find($reportId);
@@ -69,9 +70,9 @@ class GenerateCareerReport extends Command
 
         $this->careerTitle = Onet::getOnetJobTitleByCode($report->onet_soc_code);
 
-        Log::info("Career title: " . $this->careerTitle);
+        ConsoleOutput::log("Career title: " . $this->careerTitle);
 
-        Log::info("Report ID: $reportId for Student: " . $report->student->first_name . " " . $report->student->last_name);
+        ConsoleOutput::log("Report ID: $reportId for Student: " . $report->student->first_name . " " . $report->student->last_name);
         // Check if uploaded JSON exists
         $this->reportSections = $report->report_template;
 
@@ -86,11 +87,11 @@ class GenerateCareerReport extends Command
         // Store sections
         $responses = [];
 
-        Log::info("Report has " . count($preparedSections) . " entries");
+        ConsoleOutput::log("Report has " . count($preparedSections) . " entries");
         $sectionCount = 1;
 
         foreach ($preparedSections as $sectionId => $sectionData) {
-            Log::info("Section $sectionId  ($sectionCount/" . count($preparedSections).")");
+            ConsoleOutput::log("Section $sectionId  ($sectionCount/" . count($preparedSections).")");
             $sectionCount++;
 
             $response = '';
@@ -104,13 +105,14 @@ class GenerateCareerReport extends Command
 
             // Handle prompt-based response
             if (!empty($sectionData['prompt'])) {
+                ConsoleOutput::log("Prompt: " . $sectionData['prompt']);
                 $threadId = $this->openAIService->createThread($this->context);
 
-                $modifiedPrompt = "Student: {$studentName}\n" . $sectionData['prompt'];
+                $modifiedPrompt = $sectionData['prompt'];
                 $runId = $this->openAIService->sendMessageToThread($threadId, $modifiedPrompt);
                 $response = $this->openAIService->getResponse($threadId, $runId);
                 // Close the thread after processing the prompt
-                Log::info("Response: " . Str::limit($response, 300));
+                ConsoleOutput::log("Response: " . $response);
                 $this->openAIService->closeThread($threadId);
             }
             // Trim JSON code block markers and whitespace if present

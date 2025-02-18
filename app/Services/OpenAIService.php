@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use OpenAI;
+use App\Helpers\ConsoleOutput;
 
 class OpenAIService
 {
@@ -48,9 +49,9 @@ class OpenAIService
     {
         try {
             // Assuming the API supports closing the thread
-            Log::info("Thread $threadId closed successfully. No call exists for API");
+            ConsoleOutput::log("Thread $threadId closed successfully. No call exists for API");
         } catch (\Exception $e) {
-            Log::error("Error closing thread $threadId: " . $e->getMessage());
+            ConsoleOutput::log("Error closing thread $threadId: " . $e->getMessage(), [], 'error');
         }
     }
 
@@ -66,7 +67,7 @@ class OpenAIService
         $fileName = 'pdf_upload_' . uniqid() . '.pdf';
         $filePath = storage_path('app/' . $fileName);
 
-        Log::info("Uploading PDF document: " . $fileName);
+        ConsoleOutput::log("Uploading PDF document: " . $fileName);
 
         // Save the PDF content to a local file.
         Storage::disk('local')->put($fileName, $pdfContent);
@@ -76,14 +77,14 @@ class OpenAIService
         try {
             // Ensure the file exists and is readable.
             if (!file_exists($filePath) || !is_readable($filePath)) {
-                Log::error("File not found or not readable: $filePath");
+                ConsoleOutput::log("File not found or not readable: $filePath", [], 'error');
                 return null;
             }
 
             // Open the file for reading.
             $handle = fopen($filePath, 'r');
             if (!$handle) {
-                Log::error("Failed to open file: $filePath");
+                ConsoleOutput::log("Failed to open file: $filePath", [], 'error');
                 return null;
             }
 
@@ -94,17 +95,17 @@ class OpenAIService
                 'file' => $handle,
             ]);
 
-            Log::info("Message after upload: ", (array)$uploadedFile->toArray());
+            ConsoleOutput::log("Message after upload: ", (array)$uploadedFile->toArray());
 
             $fileId = $uploadedFile->id ?? null;
 
             if (is_resource($handle)) {
                 fclose($handle);
             } else {
-                Log::warning("File handle is not a valid resource. Skipping fclose.");
+                ConsoleOutput::log("File handle is not a valid resource. Skipping fclose.");
             }
         } catch (\Exception $e) {
-            Log::error("Error uploading PDF to OpenAI: " . $e->getMessage());
+            ConsoleOutput::log("Error uploading PDF to OpenAI: " . $e->getMessage(), [], 'error');
         } finally {
             // Clean up the temporary file.
             Storage::disk('local')->delete($fileName);
@@ -132,31 +133,31 @@ class OpenAIService
             'assistant_id' => $this->assistantId,
         ]);
 
-        Log::info(json_encode($run, JSON_PRETTY_PRINT));
+        // Log::info(json_encode($run, JSON_PRETTY_PRINT));
 
         return $run->id;
     }
 
     public function getResponse($threadId, $runId): string
     {
-        $maxRetries = 5; // Stop retrying after 5 attempts
+        $maxRetries = 10; // Stop retrying after 5 attempts
         $attempt = 0;
-        $waitTime = 3; // Start polling at 5s
+        $waitTime = 2; // Start polling at 5s
         $rateLimitCount = 0; // Track consecutive rate limit failures
 
         do {
-            Log::info("Sleeping for $waitTime seconds...");
+            ConsoleOutput::log("Sleeping for $waitTime seconds...");
             sleep($waitTime);
-            Log::info("Woke up. Let get to work!");
+            ConsoleOutput::log("Woke up. Let get to work!");
             $attempt++;
 
             try {
                 $run = $this->client->threads()->runs()->retrieve($threadId, $runId);
-                Log::info("Waiting for OpenAI response... Attempt: $attempt, Status: {$run->status}");
+                ConsoleOutput::log("Waiting for OpenAI response... Attempt: $attempt, Status: {$run->status}");
 
                 // Check if the error message indicates that the request is too large
                 if (isset($run->lastError) && str_contains($run->lastError->message, 'Request too large for')) {
-                    Log::error("Job cancelled because the request is too large: " . $run->lastError->message);
+                    ConsoleOutput::log("Job cancelled because the request is too large: " . $run->lastError->message, [], 'error');
                     // Throw an exception to cancel the job immediately.
                     throw new \Exception("Job cancelled: Request too large.");
                 }
@@ -176,11 +177,11 @@ class OpenAIService
                         $retryAfter = pow(2, $attempt);
                     }
 
-                    Log::warning("Rate limit hit! Waiting {$retryAfter} seconds before retrying...");
+                    ConsoleOutput::log("Rate limit hit! Waiting {$retryAfter} seconds before retrying...");
                     $rateLimitCount++;
 
                     if ($rateLimitCount >= 3) { // Stop retrying after 3 consecutive rate limits
-                        Log::error("Rate limit exceeded 3 times in a row. Waiting 5 minutes before retrying...");
+                        ConsoleOutput::log("Rate limit exceeded 3 times in a row. Waiting 5 minutes before retrying...");
                         sleep(30); // 30 seconds cooldown
                         $rateLimitCount = 0; // Reset counter
                     } else {
@@ -191,8 +192,8 @@ class OpenAIService
                 }
 
                 if ($run->status === 'failed' || $run->status === 'cancelled') {
-                    Log::warning("OpenAI request failed/cancelled. Attempting to rerun...");
-                    Log::info(json_encode($run, JSON_PRETTY_PRINT));
+                    ConsoleOutput::log("OpenAI request failed/cancelled. Attempting to rerun...");
+                    ConsoleOutput::log(json_encode($run, JSON_PRETTY_PRINT));
 
                     return "Failed due to OpenAI restrictions.";
                 }
@@ -203,24 +204,24 @@ class OpenAIService
                     $retryAfterHeader = $response->getHeader('Retry-After');
                     if (!empty($retryAfterHeader)) {
                         $retryAfter = (int)$retryAfterHeader[0];
-                        Log::warning("Rate limit reached (RequestException). Waiting for {$retryAfter} seconds before retrying...");
+                        ConsoleOutput::log("Rate limit reached (RequestException). Waiting for {$retryAfter} seconds before retrying...");
                         sleep($retryAfter);
                         continue;
                     }
                 }
-                Log::error("Error retrieving OpenAI response: " . $e->getMessage());
+                ConsoleOutput::log("Error retrieving OpenAI response: " . $e->getMessage(), [], 'error');
                 return "Error retrieving response. Please try again later.";
             } catch (\Exception $e) {
-                Log::error("Error retrieving OpenAI response: " . $e->getMessage());
+                ConsoleOutput::log("Error retrieving OpenAI response: " . $e->getMessage(), [], 'error');
                 return "Error retrieving response. Please try again later.";
             }
 
-            $waitTime = min($waitTime + 3, 20); // Increase polling interval up to 20s
+            // $waitTime = min($waitTime + 3, 20); // Increase polling interval up to 20s
 
         } while ($run->status !== 'completed' && $attempt < $maxRetries);
 
         if ($run->status !== 'completed') {
-            Log::error("OpenAI response timed out after $maxRetries attempts.");
+            ConsoleOutput::log("OpenAI response timed out after $maxRetries attempts.");
             return "OpenAI rate limits are too strict. Please try again later.";
         }
 
@@ -240,7 +241,7 @@ class OpenAIService
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Error fetching last user message: " . $e->getMessage());
+            ConsoleOutput::log("Error fetching last user message: " . $e->getMessage(), [], 'error');
         }
 
         return null;
@@ -252,14 +253,14 @@ class OpenAIService
     private function rerunAssistant($threadId, $assistantId): string
     {
         try {
-            Log::warning("Retrying assistant due to OpenAI failure...");
+            ConsoleOutput::log("Retrying assistant due to OpenAI failure...");
 
             // Create a new run
             $newRun = $this->client->threads()->runs()->create($threadId, [
                 'assistant_id' => $assistantId
             ]);
 
-            Log::info("Re-running assistant with assistant_id: {$assistantId}");
+            ConsoleOutput::log("Re-running assistant with assistant_id: {$assistantId}");
 
             return $this->getResponse($threadId, $newRun->id);
         } catch (\Exception $e) {
@@ -271,7 +272,7 @@ class OpenAIService
                     $response = $e->getResponse();
                     $retryAfterHeader = $response->getHeader('Retry-After');
                     $waitTime = !empty($retryAfterHeader) ? (int)$retryAfterHeader[0] : 10;
-                    Log::warning("Rate limit hit! Waiting for {$waitTime} seconds before retrying...");
+                    ConsoleOutput::log("Rate limit hit! Waiting for {$waitTime} seconds before retrying...");
                     sleep($waitTime);
                 } else {
                     sleep(5);
@@ -280,7 +281,7 @@ class OpenAIService
                 return $this->rerunAssistant($threadId, $assistantId);
             }
 
-            Log::error("Error re-running assistant: " . $errorMessage);
+            ConsoleOutput::log("Error re-running assistant: " . $errorMessage, [], 'error');
             return "Failed to rerun assistant.";
         }
     }
@@ -303,7 +304,7 @@ class OpenAIService
                 }
             }
         } catch (\Exception $e) {
-            Log::error("Error fetching messages: " . $e->getMessage());
+            ConsoleOutput::log("Error fetching messages: " . $e->getMessage(), [], 'error');
             return "Error retrieving response.";
         }
 
