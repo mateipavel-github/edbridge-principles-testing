@@ -30,6 +30,24 @@ class DataTransformer
         return $transformedData;
     }
 
+
+    public static function ppmToRiasec(array $ppmScores): array
+    {
+        $ppmToRiasec = [
+            'doing' => 'realistic',
+            'thinking' => 'investigative',
+            'engaging' => 'social',
+            'creating' => 'artistic',
+            'persuading' => 'enterprising',
+            'organizing' => 'conventional',
+        ];
+        $riasecScores = [];
+        foreach ($ppmScores as $key => $value) {
+            $riasecScores[$ppmToRiasec[$key]] = $value;
+        }
+        return $riasecScores;
+    }
+
     public static function transformRecords($records): array
     {
         // Map ONET element IDs to your RIASEC labels

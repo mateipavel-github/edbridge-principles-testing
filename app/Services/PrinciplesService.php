@@ -377,7 +377,6 @@ class PrinciplesService
             if ($response->status() !== 200) {
                 throw new PrinciplesApiException("API response: {$response->status()} {$response->json()['message']}");
             }
-
             return $response->json();
         } catch (\Exception $exception) {
             throw new PrinciplesApiException("Failed to get the RIASEC results from the Principles API: {$exception->getMessage()}");

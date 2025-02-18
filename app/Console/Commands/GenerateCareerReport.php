@@ -13,6 +13,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CareerReport;
+use Illuminate\Support\Facades\Blade;
+use App\Models\Student;
 
 class GenerateCareerReport extends Command
 {
@@ -88,7 +90,7 @@ class GenerateCareerReport extends Command
         $sectionCount = 1;
 
         foreach ($preparedSections as $sectionId => $sectionData) {
-            Log::info("Section $sectionId of $sectionCount/" . count($preparedSections));
+            Log::info("Section $sectionId  ($sectionCount/" . count($preparedSections).")");
             $sectionCount++;
 
             $response = '';
@@ -137,22 +139,24 @@ class GenerateCareerReport extends Command
      */
     protected function prepareSections(string $onetsocCode, string $accountId): array
     {
+        $student = Student::where('principles_account_uid', $accountId)->first();
 //        $salary = Onet::getSalaryInfo($this->careerTitle);
-        $tasks = Onet::getTasks($onetsocCode)->implode(', ');
-        $workActivities = Onet::getWorkActivities($onetsocCode)->implode(', ');
-        $detailedWorkActivities = Onet::getDetailedWorkActivities($onetsocCode)->implode(',');
-        $workContext = Onet::getWorkContext($onetsocCode)->implode(',');
-        $skills = Onet::getSkills($onetsocCode)->implode(', ');
-        $abilities = Onet::getAbilities($onetsocCode)->implode(',');
-        $workValues = Onet::getWorkValues($onetsocCode)->implode(',');
-        $workStyles = Onet::getWorkStyles($onetsocCode)->implode(',');
+        $tasks = Onet::getTasks($onetsocCode);
+        $workActivities = Onet::getWorkActivities($onetsocCode);
+        $detailedWorkActivities = Onet::getDetailedWorkActivities($onetsocCode);
+        $workContext = Onet::getWorkContext($onetsocCode);
+        $skills = Onet::getSkills($onetsocCode);
+        $abilities = Onet::getAbilities($onetsocCode);
+        $workValues = Onet::getWorkValues($onetsocCode);
+        $workStyles = Onet::getWorkStyles($onetsocCode);
 //        $projectedGrowthRate = Onet::getProjectedGrowthRate($this->careerTitle);
-        $relatedOccupations = Onet::getRelatedOccupations($onetsocCode)->implode(',');
+        $relatedOccupations = Onet::getRelatedOccupations($onetsocCode);
         $knowledge = Onet::getKnowledge($onetsocCode);
         $education = Onet::getEducation($onetsocCode);
 
         $interests = Onet::getInterests($onetsocCode)->implode(', ');
         $ppmScores = $this->principlesService->getPpmScores($accountId);
+        $riasecScores = DataTransformer::ppmToRiasec($this->principlesService->getPpmScores($accountId));
         $personalityProfile = $this->principlesService->getResults($accountId);
         $occupationWeightings = DataTransformer::transformRecords(Onet::getOnetJobWeights($onetsocCode));
         $careerCompatibilityScore = $this->principlesService->getCareerCompatibilityScore($accountId, $occupationWeightings);
@@ -162,79 +166,62 @@ class GenerateCareerReport extends Command
         $this->personality_profile = $personalityProfile;
 
         $this->data = [
-            'knowledge' => $knowledge,
-            'personality_profile' => json_encode($this->personality_profile),
-            'related_occupations' => $relatedOccupations,
-            'education' => $education,
-            'tasks' => $tasks,
-            'detailed_work_activities' => $detailedWorkActivities,
-            'work_activities' => $workActivities,
-            'work_context' => $workContext,
-            'work_values' => $workValues,
-            'work_styles' => $workStyles,
-            'abilities' => $abilities,
-            'skills' => $skills,
-            'interests' => $interests,
-            'ppmScores' => $this->formatPpmScore($ppmScores),
-            'occupation_weightings' => json_encode($occupationWeightings, JSON_PRETTY_PRINT),
-            'career_compatibility_score' => json_encode($careerCompatibilityScore, JSON_PRETTY_PRINT),
-            'career_compatibility_score_percentage' => $careerCompatibilityScorePercentage,
-            'career_title' => $this->careerTitle,
+            'user'=> array_merge($student->toArray(), [
+                'personality_profile' => $this->personality_profile,
+                'ppmScores' => $this->formatPpmScore($ppmScores),
+                'riasecScores' => $riasecScores,
+                'career_compatibility_score' => $careerCompatibilityScore,
+                'career_compatibility_score_percentage' => $careerCompatibilityScorePercentage,
+            ]),
+            'occupation' => [
+                'knowledge' => $knowledge,
+                'related_occupations' => $relatedOccupations,
+                'education' => $education,
+                'detailed_work_activities' => $detailedWorkActivities,
+                'work_activities' => $workActivities,
+                'work_context' => $workContext,
+                'work_values' => $workValues,
+                'work_styles' => $workStyles,
+                'abilities' => $abilities,
+                'skills' => $skills,
+                'tasks' => $tasks,
+                'interests' => $interests,
+                'occupation_weightings' => $occupationWeightings,
+                'career_title' => $this->careerTitle,
+                'onetsoc_code' => $onetsocCode,
+            ]
         ];
 
         return array_map(function ($sectionData) {
-            $preparedSection = isset($sectionData['prompt']) ? str_replace(
-                array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
-                array_values($this->data),
-                $sectionData['prompt']
-            ) : null;
 
-            $preparedTitle = isset($sectionData['title']) ? str_replace(
-                array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
-                array_values($this->data),
-                $sectionData['title']
-            ) : null;
-
-            // Handle dynamic description from function
-            $preparedDescription = '';
-            if (isset($sectionData['description'])) {
-                $preparedDescription = str_replace(
-                    array_map(fn($key) => "{{{$key}}}", array_keys($this->data)),
-                    array_values($this->data),
-                    $sectionData['description']
-                );
-            } elseif (isset($sectionData['getDescription'])) {
-                $preparedDescription = $sectionData['getDescription']($this->data);
+            // Replace user data placeholders
+            // Process each field that needs placeholder replacement
+            $fields = ['prompt', 'title', 'description'];
+            $processedFields = [];
+            
+            foreach ($fields as $field) {
+                $text = $sectionData[$field] ?? '';
+                
+                // Helper function to format value for placeholder replacement
+                $formatValue = fn($value) => is_array($value) ? json_encode($value, JSON_PRETTY_PRINT) : 
+                                           (is_string($value) ? "\"$value\"" : $value);
+                // Replace both user and occupation placeholders
+                foreach (['user', 'occupation'] as $section) {
+                    foreach ($this->data[$section] as $key => $value) {
+                        $placeholder = "{{{$section}.{$key}}}";
+                        $text = str_replace($placeholder, $formatValue($value), $text);
+                    }
+                }
+                
+                $processedFields[$field] = $text;
             }
 
             return [
-                'title' => $preparedTitle,
-                'description' => $preparedDescription,
-                'prompt' => $preparedSection
+                'title' => $processedFields['title'],
+                'description' => $processedFields['description'],
+                'prompt' => $processedFields['prompt']
             ];
         }, $this->reportSections);
-    }
-
-    protected function generatePdf(string $careerTitle, string $accountId, array $responses): void
-    {
-        $socCode = Onet::getOnetSocCode($careerTitle);
-        $pdfData = ['careerTitle' => $careerTitle, 'responses' => $responses];
-
-        $pdf = PDF\Pdf::loadView('pdfs.career_report', $pdfData)
-            ->setOption('encoding', 'UTF-8')
-            ->setOption('enable-local-file-access', true);
-
-        $fileName = "career_report_{$accountId}_{$socCode}.pdf";
-        Storage::put("public/reports/{$fileName}", $pdf->output());
-        $this->info("Career report generated: storage/app/public/reports/{$fileName}");
-    }
-
-    protected function storeSections(string $careerTitle, string $accountId, array $preparedSections): void
-    {
-        $socCode = Onet::getOnetSocCode($careerTitle);
-        $fileName = "career_report_{$accountId}_{$socCode}.json";
-        $content = json_encode($preparedSections, JSON_PRETTY_PRINT);
-        Storage::put("public/reports/{$fileName}", $content);
     }
 
     protected function formatPpmScore($ppmScores): string

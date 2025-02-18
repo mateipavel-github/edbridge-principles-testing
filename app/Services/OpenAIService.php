@@ -54,7 +54,7 @@ class OpenAIService
         }
     }
 
-    public function uploadDocumentToOpenAIFresh(array $uid): ?string
+    public function uploadDocumentToOpenAIFresh(string $uid): ?string
     {
         // Retrieve the PDF results using the principlesService.
         // Here, we're assuming that the $uid array contains the unique identifier needed.
@@ -94,7 +94,7 @@ class OpenAIService
                 'file' => $handle,
             ]);
 
-            Log::info("Message after upload: ", $uploadedFile->toArray());
+            Log::info("Message after upload: ", (array)$uploadedFile->toArray());
 
             $fileId = $uploadedFile->id ?? null;
 
