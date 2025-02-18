@@ -199,6 +199,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['compatibility_table']['title'] }}</h2>
         <div class="overflow-x-auto">
+            @if(isset($content['compatibility_table']['response']))
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -234,6 +235,9 @@
                     @endforeach
                 </tbody>
             </table>
+            @else
+                <p class="text-gray-500 italic">Compatibility table data not available</p>
+            @endif
         </div>
     </div>
 
@@ -241,47 +245,63 @@
     <div class="grid md:grid-cols-2 gap-8 mb-8">
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">{{  $content['top_enjoy']['title'] }}</h2>
-            @foreach($content['top_enjoy']['response']['items'] as $item)
-                <div class="mb-6">
-                    <h3 class="font-semibold text-lg text-blue-800">{{ $item['title'] }}</h3>
-                    <p class="text-gray-600 mt-2">{{ $item['description'] }}</p>
-                </div>
-            @endforeach
+            @if(isset($content['top_enjoy']['response']))
+                @foreach($content['top_enjoy']['response']['items'] as $item)
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-lg text-blue-800">{{ $item['title'] }}</h3>
+                        <p class="text-gray-600 mt-2">{{ $item['description'] }}</p>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-gray-500 italic">Top enjoy data not available</p>
+            @endif
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-4">{{ $content['top_dislike']['title'] }}</h2>
-            @foreach($content['top_dislike']['response']['items'] as $item)
-                <div class="mb-6">
-                    <h3 class="font-semibold text-lg text-red-800">{{ $item['title'] }}</h3>
+            @if(isset($content['top_dislike']['response']))
+                @foreach($content['top_dislike']['response']['items'] as $item)
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-lg text-red-800">{{ $item['title'] }}</h3>
                     <p class="text-gray-600 mt-2">{{ $item['description'] }}</p>
-                </div>
-            @endforeach
+                    </div>
+                @endforeach
+            @else
+                <p class="text-gray-500 italic">Top dislike data not available</p>
+            @endif
         </div>
     </div>
 
     {{-- A Day in the Life --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4">{{ $content['oneday_life']['title'] }}</h2>
-        <div class="prose max-w-none text-gray-600">
-            {!! nl2br(e($content['oneday_life']['response']['content'])) !!}
-        </div>
+        <h2 class="text-2xl font-bold mb-4">{{ $content['oneday_life']['title'] }}</h2> 
+        @if(isset($content['oneday_life']['response']))
+            <div class="prose max-w-none text-gray-600">
+                {!! nl2br(e($content['oneday_life']['response']['content'])) !!}
+            </div>
+        @else
+            <p class="text-gray-500 italic">One day life data not available</p>
+        @endif  
     </div>
 
     {{-- Daily Activities --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['daily_activities']['title'] }}</h2>
-        <div class="space-y-6">
-            @foreach($content['daily_activities']['response']['activities'] as $activity)
-                <div class="flex items-start">
+        @if(isset($content['daily_activities']['response']))
+            <div class="space-y-6">
+                @foreach($content['daily_activities']['response']['activities'] as $activity)
+                    <div class="flex items-start">
                     <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-blue-500 mr-4"></div>
                     <div>
                         <h3 class="font-semibold text-lg">{{ $activity['title'] }}</h3>
                         <p class="text-gray-600 mt-1">{{ $activity['description'] }}</p>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-500 italic">Daily activities data not available</p>
+        @endif
     </div>
 
     {{-- Professionals Survey (empty but keeping structure) --}}
@@ -297,20 +317,24 @@
     {{-- Perks and Challenges --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['perks_and_challenges']['title'] }}</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-            @foreach($content['perks_and_challenges']['response']['content'] as $item)
-                <div class="bg-gray-50 rounded-lg p-4">
+        @if(isset($content['perks_and_challenges']['response']))
+            <div class="grid md:grid-cols-2 gap-6">
+                @foreach($content['perks_and_challenges']['response']['content'] as $item)
+                    <div class="bg-gray-50 rounded-lg p-4">
                     <h3 class="font-semibold text-lg text-blue-800 mb-2">{{ $item['title'] }}</h3>
                     <p class="text-gray-600">{{ $item['description'] }}</p>
-                </div>
-            @endforeach
-        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-500 italic">Perks and challenges data not available</p>
+        @endif
     </div>
 
     {{-- Work People --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">Who You'll Work With</h2>
-        @if(!empty($content['work_people']['response']))
+        @if(isset($content['work_people']['response']))
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach($content['work_people']['response']['content'] as $person)
                     <div class="border border-gray-200 rounded-lg p-4">
@@ -330,8 +354,9 @@
     {{-- Career Path --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['career_path']['title'] }}</h2>
-        <div class="space-y-6">
-            @foreach($content['career_path']['response']['path'] as $step)
+        @if(isset($content['career_path']['response']))
+            <div class="space-y-6"> 
+                @foreach($content['career_path']['response']['path'] as $step)
                 <div class="relative pl-8 pb-6 border-l-2 border-blue-200 last:border-l-0">
                     <div class="absolute left-0 top-0 w-4 h-4 rounded-full bg-blue-500 -translate-x-[9px]"></div>
                     <div class="mb-2">
@@ -341,17 +366,21 @@
                     </div>
                     <p class="text-gray-600">{{ $step['responsibilities'] }}</p>
                 </div>
-            @endforeach
-        </div>
-        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p class="text-sm text-gray-600">{{ $content['career_path']['response']['growth_note'] }}</p>
-        </div>
+                @endforeach
+            </div>
+            @if(isset($content['career_path']['response']))
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                <p class="text-sm text-gray-600">{{ $content['career_path']['response']['growth_note'] }}</p>
+            </div>
+        @else
+            <p class="text-gray-500 italic">Career path data not available</p>
+        @endif
     </div>
 
     {{-- Education (empty but keeping structure) --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['education']['title'] }}</h2>
-        @if($content['education']['response'])
+        @if(isset($content['education']['response']))
             {{-- Content would go here if response wasn't null --}}
         @else
             <p class="text-gray-500 italic">Education data not available</p>
@@ -362,7 +391,8 @@
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">Educational Pathways</h2>
         <div class="grid md:grid-cols-2 gap-8">
-            {{-- Alternative Pathways --}}
+            @if(isset($content['educational_path']['response']))
+            {{-- Alternative Pathways --}}  
             <div>
                 <h3 class="text-xl font-semibold mb-4">Alternative Pathways</h3>
                 <div class="space-y-4">
@@ -385,8 +415,9 @@
                             <p class="text-gray-600">{{ $path['description'] }}</p>
                         </div>
                     @endforeach
-                </div>
-            </div>
+                    </div>
+                    </div>
+            @endif
         </div>
     </div>
 
@@ -433,7 +464,8 @@
     {{-- Entrepreneurship --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">Entrepreneurship Opportunities</h2>
-        <p class="text-gray-600 mb-6">{{ $content['entrepreneurship']['response']['overview'] }}</p>
+        @if(isset($content['entrepreneurship']['response']))
+            <p class="text-gray-600 mb-6">{{ $content['entrepreneurship']['response']['overview'] }}</p>
 
         <div class="grid md:grid-cols-2 gap-8">
             {{-- Freelancing Opportunities --}}
@@ -462,7 +494,9 @@
                 </div>
             </div>
         </div>
-
+        @else
+            <p class="text-gray-500 italic">Entrepreneurship data not available</p>
+        @endif
         {{-- How to Succeed --}}
         <div class="mt-8">
             <h3 class="text-xl font-semibold mb-4">How to Succeed</h3>
@@ -480,7 +514,7 @@
     {{-- First Steps --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['first_steps']['title'] }}</h2>
-        
+        @if(isset($content['first_steps']['response']))
         {{-- Courses --}}
         <div class="mb-8">
             <h3 class="text-xl font-semibold mb-4">Recommended Courses</h3>
@@ -567,12 +601,15 @@
                 </div>
             </div>
         </div>
+        @else
+            <p class="text-gray-500 italic">First steps data not available</p>
+        @endif
     </div>
 
     {{-- Successful Requirements (empty but keeping structure) --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['successful_requirements']['title'] }}</h2>
-        @if($content['successful_requirements']['response'])
+        @if(isset($content['successful_requirements']['response']))
             {{-- Content would go here if response wasn't null --}}
         @else
             <p class="text-gray-500 italic">Requirements data not available</p>
@@ -626,6 +663,7 @@
     {{-- Famous People --}}
     <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
         <h2 class="text-2xl font-bold mb-4">{{ $content['famous_people']['title'] }}</h2>
+        @if(isset($content['famous_people']['response']))
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($content['famous_people']['response']['items'] as $person)
                 <div class="bg-gray-50 rounded-lg p-6">
@@ -634,6 +672,9 @@
                 </div>
             @endforeach
         </div>
+        @else
+            <p class="text-gray-500 italic">Famous people data not available</p>
+        @endif
     </div>
 </div>
 @endsection
